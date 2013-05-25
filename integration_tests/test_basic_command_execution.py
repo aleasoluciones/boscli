@@ -15,4 +15,6 @@ class BasicCommandExecutionTest(unittest.TestCase):
 		interpreter.add_command(command1)
 		interpreter.eval(IRRELEVANT_KEYWORD1 + ' ' + IRRELEVANT_KEYWORD2)
 
-		assert_that(commands.command1, called().with_args())
+		assert_that(commands.command1, 
+			called().with_args(line=IRRELEVANT_KEYWORD1 + ' ' +  IRRELEVANT_KEYWORD2, 
+							   interpreter=interpreter))
