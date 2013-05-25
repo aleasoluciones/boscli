@@ -12,4 +12,5 @@ class Interpreter(object):
 			if command.match(line_text):
 				return command.execute(line=line_text, interpreter=self)
 
-		raise exceptions.NotMatchingCommandFound(line_text)
+		if line_text:
+			raise exceptions.NotMatchingCommandFound(line_text)

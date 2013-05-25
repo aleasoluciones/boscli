@@ -4,10 +4,6 @@ from doublex import *
 import boscli
 from boscli import exceptions
 
-# Initial tests:
-# Eval empty line
-# Eval line matching a command
-
 IRRELEVANT_LINE = 'irrelevant_line'
 IRRELEVANT_RESULT = 'irrelevant_result'
 
@@ -29,3 +25,6 @@ class InterpreterTest(unittest.TestCase):
 		
 		assert_that(command.execute, called().with_args(line=IRRELEVANT_LINE, interpreter=self.interpreter))
 		assert_that(command_return_value, is_(IRRELEVANT_RESULT))
+
+	def test_empty_line_evaluation_returns_none(self):
+		assert_that(self.interpreter.eval(''), is_(None))
