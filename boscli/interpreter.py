@@ -10,6 +10,6 @@ class Interpreter(object):
 	def eval(self, line_text):
 		for command in self._commands:
 			if command.match(line_text):
-				return command.execute()
+				return command.execute(line=line_text, interpreter=self)
 
 		raise exceptions.NotMatchingCommandFound(line_text)

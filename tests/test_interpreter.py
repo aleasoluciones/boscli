@@ -21,11 +21,11 @@ class InterpreterTest(unittest.TestCase):
 	def test_execute_the_command_when_match_found(self):
 		with Spy() as command:
 			command.match(IRRELEVANT_LINE).returns(True)
-			command.execute().returns(IRRELEVANT_RESULT)
-			
+			command.execute(ANY_ARG).returns(IRRELEVANT_RESULT)
+
 		self.interpreter.add_command(command)
 			
 		command_return_value = self.interpreter.eval(IRRELEVANT_LINE)
 		
-		assert_that(command.execute, called())
+		assert_that(command.execute, called().with_args(line=IRRELEVANT_LINE, interpreter=self.interpreter))
 		assert_that(command_return_value, is_(IRRELEVANT_RESULT))
