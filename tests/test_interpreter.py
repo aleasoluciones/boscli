@@ -15,7 +15,7 @@ class InterpreterTest(unittest.TestCase):
 		self.assertRaises(exceptions.NotMatchingCommandFound, self.interpreter.eval, IRRELEVANT_LINE)
 
 	def test_execute_the_command_when_match_found(self):
-		with Spy() as command:
+		with Spy(boscli.Command) as command:
 			command.match(IRRELEVANT_LINE).returns(True)
 			command.execute(ANY_ARG).returns(IRRELEVANT_RESULT)
 

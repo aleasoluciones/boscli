@@ -1,2 +1,2 @@
 from boscli.interpreter import Interpreter
-from boscli.command_definition import Command
+from boscli.command import Command
