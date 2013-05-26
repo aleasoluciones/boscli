@@ -1,4 +1,4 @@
-
+import six
 
 class Command(object):
 	def __init__(self, keywords, command_function = None):
@@ -7,7 +7,7 @@ class Command(object):
 		
 	def _match_word(self, index, word, partial_line):
 		definition_for_that_index = self.keywords[index]
-		if isinstance(definition_for_that_index, basestring):
+		if isinstance(definition_for_that_index, six.string_types):
 			return definition_for_that_index == word
 		else:
 			return definition_for_that_index.match(word, partial_line=partial_line)
