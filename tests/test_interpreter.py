@@ -28,3 +28,17 @@ class InterpreterTest(unittest.TestCase):
 
 	def test_empty_line_evaluation_returns_none(self):
 		assert_that(self.interpreter.eval(''), is_(None))
+
+	def test_exception_raised_when_more_than_one_command_match(self):
+		with Spy(boscli.Command) as command1:
+			command1.match(IRRELEVANT_LINE).returns(True)
+		with Spy(boscli.Command) as command2:
+			command2.match(IRRELEVANT_LINE).returns(True)
+
+		self.interpreter.add_command(command1)
+		self.interpreter.add_command(command2)
+
+		self.assertRaises(exceptions.AmbiguousCommandError, self.interpreter.eval, IRRELEVANT_LINE)
+			
+
+
