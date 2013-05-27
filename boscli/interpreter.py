@@ -18,4 +18,4 @@ class Interpreter(object):
 			raise exceptions.AmbiguousCommandError(matching_commands)
 
 		if line_text:
-			raise exceptions.NotMatchingCommandFound(line_text)
+			raise exceptions.NotMatchingCommandFoundError(line_text)

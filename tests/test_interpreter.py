@@ -12,7 +12,7 @@ class InterpreterTest(unittest.TestCase):
 		self.interpreter = boscli.Interpreter()
 
 	def test_exception_raised_when_evaluating_a_line_not_matching_any_command(self):
-		self.assertRaises(exceptions.NotMatchingCommandFound, self.interpreter.eval, IRRELEVANT_LINE)
+		self.assertRaises(exceptions.NotMatchingCommandFoundError, self.interpreter.eval, IRRELEVANT_LINE)
 
 	def test_execute_the_command_when_match_found(self):
 		with Spy(boscli.Command) as command:

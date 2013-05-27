@@ -2,7 +2,7 @@
 class EvalError(Exception):
 	pass
 
-class NotMatchingCommandFound(EvalError):
+class NotMatchingCommandFoundError(EvalError):
 	pass
 
 class AmbiguousCommandError(EvalError):
