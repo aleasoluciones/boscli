@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from boscli import exceptions
 
 class Interpreter(object):
