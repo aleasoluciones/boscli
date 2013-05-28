@@ -37,6 +37,7 @@ class BasicCommandExecutionTest(unittest.TestCase):
 		interpreter.eval(line)
 
 		assert_that(commands.command1, 
-					called().with_args(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_OP1],
+					called().with_args(IRRELEVANT_OP1, tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_OP1],
 		 							   interpreter=interpreter))
+
 
