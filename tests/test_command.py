@@ -30,7 +30,17 @@ class CommandTest(unittest.TestCase):
 			command_implementation.command(ANY_ARG).returns(IRRELEVANT_RESULT)
 
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], command_implementation.command)
-		command_return_value = command.execute(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], interpreter=IRRELEVANT_INTERPRETER)
+		command_return_value = command.execute(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], 
+											   interpreter=IRRELEVANT_INTERPRETER)
 
 		assert_that(command_implementation.command, called().with_args(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], interpreter=IRRELEVANT_INTERPRETER))
 		assert_that(command_return_value, is_(IRRELEVANT_RESULT))
+
+	def test_select_matching_parameters_from_tokens_corresponding_to_types(self):
+		line_to_eval = IRRELEVANT_KEYWORD1 + ' ' + IRRELEVANT_KEYWORD2 + ' ' + IRRELEVANT_VALUE
+		with Stub() as parameter_type:
+			parameter_type.match(IRRELEVANT_VALUE, partial_line=line_to_eval.split()).returns(True)
+
+		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, parameter_type])
+		assert_that(command.matching_parameters([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_VALUE]), 
+			is_([IRRELEVANT_VALUE]))
