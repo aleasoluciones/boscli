@@ -22,7 +22,7 @@ class BasicCommandExecutionTest(unittest.TestCase):
 		interpreter.eval(IRRELEVANT_KEYWORD1 + ' ' + IRRELEVANT_KEYWORD2)
 
 		assert_that(commands.command1, 
-			called().with_args(line=IRRELEVANT_KEYWORD1 + ' ' +  IRRELEVANT_KEYWORD2, 
+			called().with_args(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], 
 							   interpreter=interpreter))
 
 	def test_execute_command_with_option_type(self):
@@ -36,4 +36,7 @@ class BasicCommandExecutionTest(unittest.TestCase):
 		line = IRRELEVANT_KEYWORD1 + ' ' + IRRELEVANT_KEYWORD2 + ' ' + IRRELEVANT_OP1
 		interpreter.eval(line)
 
-		assert_that(commands.command1, called().with_args(line=line, interpreter=interpreter))		
+		assert_that(commands.command1, 
+					called().with_args(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_OP1],
+		 							   interpreter=interpreter))
+

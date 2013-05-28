@@ -13,14 +13,15 @@ class Interpreter(object):
 		if not line_text:
 			return
 		
-		matching_commands = self._select_matching_commands(line_text)
+		tokens = line_text.split()
+		matching_commands = self._select_matching_commands(tokens)
 		
 		if len(matching_commands) == 1:
-			return matching_commands[0].execute(line=line_text, interpreter=self)
+			return matching_commands[0].execute(tokens=tokens, interpreter=self)
 		if len(matching_commands) > 0:
 			raise exceptions.AmbiguousCommandError(matching_commands)
 		raise exceptions.NotMatchingCommandFoundError(line_text)
 
-	def _select_matching_commands(self, line_text):
-		return [command for command in self._commands if command.match(line_text)]
+	def _select_matching_commands(self, tokens):
+		return [command for command in self._commands if command.match(tokens)]
 

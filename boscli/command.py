@@ -7,19 +7,19 @@ class Command(object):
 		self.keywords = keywords
 		self.command_function = command_function
 		
-	def _match_word(self, index, word, partial_line):
+	def _match_word(self, index, token, partial_line):
 		definition_for_that_index = self.keywords[index]
 		if isinstance(definition_for_that_index, six.string_types):
-			return definition_for_that_index == word
+			return definition_for_that_index == token
 		else:
-			return definition_for_that_index.match(word, partial_line=partial_line)
+			return definition_for_that_index.match(token, partial_line=partial_line)
 
-	def match(self, line):
-		for index, word in enumerate(line.split()):
-			if not self._match_word(index, word, partial_line=line.split()):
+	def match(self, tokens):
+		for index, word in enumerate(tokens):
+			if not self._match_word(index, word, partial_line=tokens):
 				return False
 		return True
 
-	def execute(self, interpreter=None, line=None):
+	def execute(self, interpreter=None, tokens=None):
 		if self.command_function:
-			return self.command_function(line=line, interpreter=interpreter)
+			return self.command_function(tokens=tokens, interpreter=interpreter)
