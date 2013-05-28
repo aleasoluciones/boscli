@@ -28,6 +28,6 @@ class Command(object):
 				parameters.append(token)
 		return parameters
 
-	def execute(self, interpreter=None, tokens=None):
+	def execute(self, *args, **kwargs):
 		if self.command_function:
-			return self.command_function(tokens=tokens, interpreter=interpreter)
+			return self.command_function(*args, **kwargs)

@@ -9,6 +9,8 @@ from boscli import exceptions
 IRRELEVANT_KEY = 'irrelevant_key'
 IRRELEVANT_LINE = 'irrelevant_line'
 IRRELEVANT_RESULT = 'irrelevant_result'
+IRRELEVANT_VALUE1 = 'irrelevant_value1'
+IRRELEVANT_VALUE2 = 'irrelevant_value2'
 
 class InterpreterTest(unittest.TestCase):
 	def setUp(self):
@@ -20,6 +22,7 @@ class InterpreterTest(unittest.TestCase):
 	def test_execute_the_command_when_match_found(self):
 		with Spy(boscli.Command) as command:
 			command.match([IRRELEVANT_KEY]).returns(True)
+			command.matching_parameters(ANY_ARG).returns([])
 			command.execute(ANY_ARG).returns(IRRELEVANT_RESULT)
 
 		self.interpreter.add_command(command)
@@ -35,13 +38,30 @@ class InterpreterTest(unittest.TestCase):
 	def test_exception_raised_when_more_than_one_command_match(self):
 		with Spy(boscli.Command) as command1:
 			command1.match([IRRELEVANT_KEY]).returns(True)
+			command1.matching_parameters(ANY_ARG).returns([])
 		with Spy(boscli.Command) as command2:
 			command2.match([IRRELEVANT_KEY]).returns(True)
+			command2.matching_parameters(ANY_ARG).returns([])
 
 		self.interpreter.add_command(command1)
 		self.interpreter.add_command(command2)
 
 		self.assertRaises(exceptions.AmbiguousCommandError, self.interpreter.eval, IRRELEVANT_KEY)
+
+	def test_foo(self):
+		with Spy(boscli.Command) as command:
+			command.match(ANY_ARG).returns(True)
+			command.matching_parameters([IRRELEVANT_KEY, IRRELEVANT_VALUE1, IRRELEVANT_VALUE2]).returns([IRRELEVANT_VALUE1, IRRELEVANT_VALUE2])
+		
+		self.interpreter.add_command(command)
+
+		self.interpreter.eval(IRRELEVANT_KEY + ' ' +  IRRELEVANT_VALUE1 + ' ' + IRRELEVANT_VALUE2)
+		
+		assert_that(command.execute, 
+					called().with_args(IRRELEVANT_VALUE1, IRRELEVANT_VALUE2,
+						               tokens=[IRRELEVANT_KEY, IRRELEVANT_VALUE1, IRRELEVANT_VALUE2],
+						               interpreter=self.interpreter))
+					
 
 
 			
