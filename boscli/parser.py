@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import token, tokenize, StringIO
+import six
+import token, tokenize
 
 
 class Parser(object):
 
 	def parse(self, input_line):
 		tokens = []
-		rawstr = StringIO.StringIO(input_line)
+		rawstr = six.StringIO(input_line)
 		for i, item in enumerate(tokenize.generate_tokens(rawstr.readline)):
 			_, token_text, (_, _), (_, _), _ = item
 			if token_text:
