@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from boscli import exceptions
+from boscli import parser
 
 class Interpreter(object):
-	def __init__(self):
+	def __init__(self, parser=parser.Parser()):
 		self._commands = []
+		self.parser = parser
 
 	def add_command(self, command):
 		self._commands.append(command)
@@ -13,7 +15,7 @@ class Interpreter(object):
 		if not line_text:
 			return
 		
-		tokens = line_text.split()
+		tokens = self.parser.parse(line_text)
 		matching_commands = self._select_matching_commands(tokens)
 		
 		if len(matching_commands) == 1:

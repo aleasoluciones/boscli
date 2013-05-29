@@ -8,7 +8,7 @@ from boscli import basic_types
 
 IRRELEVANT_KEYWORD1 = 'key1'
 IRRELEVANT_KEYWORD2 = 'key2'
-IRRELEVANT_OP1 = 'op1'
+IRRELEVANT_OP1_WITH_SPACES = 'op 1'
 IRRELEVANT_OP2 = 'op2'
 
 class BasicCommandExecutionTest(unittest.TestCase):
@@ -29,15 +29,16 @@ class BasicCommandExecutionTest(unittest.TestCase):
 		commands = Spy()
 		interpreter = boscli.Interpreter()
 
-		option_type = basic_types.OptionsType([IRRELEVANT_OP1, IRRELEVANT_OP2])
+		option_type = basic_types.OptionsType([IRRELEVANT_OP1_WITH_SPACES, IRRELEVANT_OP2])
 		command1 = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, option_type], commands.command1)
 		interpreter.add_command(command1)
 		
-		line = IRRELEVANT_KEYWORD1 + ' ' + IRRELEVANT_KEYWORD2 + ' ' + IRRELEVANT_OP1
+		line = IRRELEVANT_KEYWORD1 + ' ' + IRRELEVANT_KEYWORD2 + ' ' + '"' + IRRELEVANT_OP1_WITH_SPACES + '"'
 		interpreter.eval(line)
 
 		assert_that(commands.command1, 
-					called().with_args(IRRELEVANT_OP1, tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_OP1],
+					called().with_args(IRRELEVANT_OP1_WITH_SPACES, 
+									   tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_OP1_WITH_SPACES],
 		 							   interpreter=interpreter))
 
 
