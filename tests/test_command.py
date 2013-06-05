@@ -16,6 +16,7 @@ class CommandTest(unittest.TestCase):
 	
 	def test_a_command_match_if_all_the_keywords_match(self):
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2])
+		assert_that(command.match([IRRELEVANT_KEYWORD1]), is_(False))
 		assert_that(command.match([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2]), is_(True))
 		assert_that(command.match([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_KEYWORD3]), is_(False))
 
@@ -46,3 +47,9 @@ class CommandTest(unittest.TestCase):
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, parameter_type])
 		assert_that(command.matching_parameters([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_VALUE]), 
 			is_([IRRELEVANT_VALUE]))
+
+	def test_a_command_partialy_match_if_all_the_given_tokens_match(self):
+		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2])
+
+		assert_that(command.partial_match([IRRELEVANT_KEYWORD1]), is_(True))
+		
