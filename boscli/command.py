@@ -15,7 +15,10 @@ class Command(object):
 			return definition_for_that_index.match(token, partial_line=partial_line)
 
 	def partial_match(self, tokens):
-		pass
+		for index, word in enumerate(tokens):
+			if not self._match_word(index, word, partial_line=tokens):
+				return False
+		return True
 
 	def match(self, tokens):
 		if len(tokens) != len(self.keywords):
