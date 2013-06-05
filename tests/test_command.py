@@ -6,6 +6,7 @@ import boscli
 
 IRRELEVANT_KEYWORD1 = 'irrelevant_keyword1'
 IRRELEVANT_KEYWORD2 = 'irrelevant_keyword2'
+IRRELEVANT_KEYWORD3 = 'irrelevant_keyword3'
 IRRELEVANT_LINE = 'irrelevant_line'
 IRRELEVANT_INTERPRETER = 'irrelevant_interpreter'
 IRRELEVANT_RESULT = 'irrelevant_result'
@@ -16,6 +17,7 @@ class CommandTest(unittest.TestCase):
 	def test_a_command_match_if_all_the_keywords_match(self):
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2])
 		assert_that(command.match([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2]), is_(True))
+		assert_that(command.match([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_KEYWORD3]), is_(False))
 
 	def test_a_command_match_if_all_the_keywords_and_types_match(self):
 		line_to_eval = IRRELEVANT_KEYWORD1 + ' ' + IRRELEVANT_KEYWORD2 + ' ' + IRRELEVANT_VALUE
