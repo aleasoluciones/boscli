@@ -23,10 +23,7 @@ class Command(object):
 	def match(self, tokens):
 		if len(tokens) != len(self.keywords):
 			return False
-		for index, word in enumerate(tokens):
-			if not self._match_word(index, word, partial_line=tokens):
-				return False
-		return True
+		return self.partial_match(tokens)
 
 	def matching_parameters(self, tokens):
 		assert(self.match(tokens))
