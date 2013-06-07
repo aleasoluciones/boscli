@@ -36,3 +36,6 @@ class Command(object):
 	def execute(self, *args, **kwargs):
 		if self.command_function:
 			return self.command_function(*args, **kwargs)
+
+	def complete(self, tokens):
+		raise NotImplementedError()
