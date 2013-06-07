@@ -6,6 +6,7 @@ from hamcrest import *
 
 import boscli
 from boscli import exceptions
+from boscli import parser
 
 IRRELEVANT_KEY = 'irrelevant_key'
 IRRELEVANT_LINE = 'irrelevant_line'
@@ -20,7 +21,7 @@ IRRELEVANT_COMMAND2 = 'irrelevant_command2'
 class InterpreterTest(unittest.TestCase):
 
     def setUp(self):
-        self.parser = Spy()
+        self.parser = Spy(parser.Parser)
         self.interpreter = boscli.Interpreter(self.parser)
 
     def test_exception_raised_when_evaluating_a_line_not_matching_any_command(self):
