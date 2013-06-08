@@ -60,8 +60,8 @@ class CommandTest(unittest.TestCase):
 	def test_partial_keyword_complete_with_the_rest_of_the_keyword_and_a_space(self):
 		command = boscli.Command(['keyword1', 'keyword2'])
 
-		assert_that(command.complete(['key']), is_(['word1 ']))
-		assert_that(command.complete(['keyword1', 'key']), is_(['word2 ']))
+		assert_that(command.complete(['key']), is_(['keyword1 ']))
+		assert_that(command.complete(['keyword1', 'key']), is_(['keyword2 ']))
 
 	def test_complete_all_the_keyword(self):
 		command = boscli.Command(['keyword1', 'keyword2'])
