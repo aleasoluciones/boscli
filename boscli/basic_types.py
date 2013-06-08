@@ -1,7 +1,17 @@
 # -*- coding: utf-8 -*-
 
 
-class OptionsType(object):
+
+class BaseType(object):
+
+	def complete(self, tokens):
+		raise NotImplementedError()
+		
+	def match(self, word, partial_line=None):
+		raise NotImplementedError()
+
+
+class OptionsType(BaseType):
 
 	def __init__(self, valid_options):
 		self.valid_options = valid_options
