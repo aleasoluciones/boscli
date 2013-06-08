@@ -52,4 +52,27 @@ class CommandTest(unittest.TestCase):
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2])
 
 		assert_that(command.partial_match([IRRELEVANT_KEYWORD1]), is_(True))
+	
+	def test_partial_keyword_complete_with_the_rest_of_the_keyword_and_a_space(self):
+		command = boscli.Command(['keyword1', 'keyword2'])
+
+		assert_that(command.complete(['key']), is_(['word1 ']))
+		assert_that(command.complete(['keyword1', 'key']), is_(['word2 ']))
+
+	def test_complete_all_the_keyword(self):
+		command = boscli.Command(['keyword1', 'keyword2'])
+
+		assert_that(command.complete(['keyword1', '']), is_(['keyword2 ']))
+
+	def test_complete_with_a_separator(self):
+		command = boscli.Command(['keyword1', 'keyword2'])
+
+		assert_that(command.complete(['keyword1']), is_([' ']))
+
+	def test_when_the_partial_text_dont_match_no_completion_at_all(self):
+		command = boscli.Command(['keyword1'])
+
+		assert_that(command.complete(['unknown_keyword']), is_([]))
 		
+	
+	

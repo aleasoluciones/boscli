@@ -7,9 +7,10 @@ class Command(object):
 		self.keywords = keywords
 		self.command_function = command_function
 		
+
 	def _match_word(self, index, token, partial_line):
 		definition_for_that_index = self.keywords[index]
-		if isinstance(definition_for_that_index, six.string_types):
+		if self._is_keyword(definition_for_that_index):
 			return definition_for_that_index == token
 		else:
 			return definition_for_that_index.match(token, partial_line=partial_line)
@@ -38,4 +39,13 @@ class Command(object):
 			return self.command_function(*args, **kwargs)
 
 	def complete(self, tokens):
-		raise NotImplementedError()
+		token_to_complete_index = len(tokens) -1
+		token_to_complete = tokens[-1]
+		definition_for_that_index = self.keywords[token_to_complete_index]
+		if self._is_keyword(definition_for_that_index):
+			if definition_for_that_index.startswith(token_to_complete):
+				return [definition_for_that_index[len(token_to_complete):] + ' ']
+		return []
+
+	def _is_keyword(self, definition):
+		return isinstance(definition, six.string_types)
