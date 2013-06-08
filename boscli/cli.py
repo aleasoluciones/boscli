@@ -1,26 +1,34 @@
 import boscli
+
+from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
+from boscli import completer as completer_module
 
 import readline
 
 
-class CliInterface(object):
+class ReadlineCli(object):
 
-    def __init__(self, interpreter, readline_module=readline):
+    def __init__(self, interpreter, completer):
         self.interpreter = interpreter
+        self.completer = completer
         self.prompt = 'cli>'
-        self.readline_module = readline_module
 
     def complete(self, prefix, index):
-        line = self.readline_module.get_line_buffer()
-        begin_idx = self.readline_module.get_begidx()
-        end_idx = self.readline_module.get_endidx()
-        print
-        print "P", prefix
-        print "L", line
-        print "Indexes %d %d '%s'" % (begin_idx, end_idx, line[0:begin_idx])
-        print "Completion '%s'" % (line[begin_idx:end_idx])
-        return None
+        try:
+            line = readline.get_line_buffer()
+            begin_idx = readline.get_begidx()
+            end_idx = readline.get_endidx()
+            # print
+            # print "P", prefix
+            # print "Indexes %d %d '%s'" % (begin_idx, end_idx, line[0:begin_idx])
+            # print "Completion '%s'" % (line[begin_idx:end_idx])
+            completions = list(self.completer.complete(line)) + [None]
+            return completions[index]
+        except Exception as exc:
+            print "Error", exc
+            import traceback
+            traceback.print_bt()
 
     def interact(self):
         while True:
@@ -33,11 +41,13 @@ class CliInterface(object):
 
 
 def main():
-    interpreter = interpreter_module.Interpreter()
+    parser = parser_module.Parser()
+    interpreter = interpreter_module.Interpreter(parser)
+    completer = completer_module.Completer(interpreter, parser)
     interpreter.add_command(boscli.Command(['net', 'show'], lambda *args, **kwargs: (args, kwargs)))
     interpreter.add_command(boscli.Command(['net', 'list'], lambda *args, **kwargs: (args, kwargs)))
     interpreter.add_command(boscli.Command(['net', 'add', 'host'], lambda *args, **kwargs: (args, kwargs)))
-    cli = CliInterface(interpreter)
+    cli = ReadlineCli(interpreter, completer)
 
     readline.parse_and_bind("tab: complete")
     readline.set_completer(cli.complete)
