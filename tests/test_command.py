@@ -71,7 +71,7 @@ class CommandTest(unittest.TestCase):
 	def test_complete_with_a_separator(self):
 		command = boscli.Command(['keyword1', 'keyword2'])
 
-		assert_that(command.complete(['keyword1']), is_([' ']))
+		assert_that(command.complete(['keyword1']), is_(['keyword1 ']))
 
 	def test_when_the_partial_text_dont_match_no_completion_at_all(self):
 		command = boscli.Command(['keyword1'])

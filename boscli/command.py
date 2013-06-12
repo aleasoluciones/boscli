@@ -46,7 +46,7 @@ class Command(object):
 		definition_for_that_index = self.keywords[token_to_complete_index]
 		if self._is_keyword(definition_for_that_index):
 			if definition_for_that_index == token_to_complete:
-				return [' ']
+				return [token_to_complete + ' ']
 			if definition_for_that_index.startswith(token_to_complete):
 				return [definition_for_that_index + ' ']
 		else:
