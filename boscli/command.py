@@ -39,6 +39,8 @@ class Command(object):
 			return self.command_function(*args, **kwargs)
 
 	def complete(self, tokens):
+		if self.match(tokens):
+			return []
 		token_to_complete_index = len(tokens) -1
 		token_to_complete = tokens[-1]
 		definition_for_that_index = self.keywords[token_to_complete_index]

@@ -86,4 +86,11 @@ class CommandTest(unittest.TestCase):
 
 		assert_that(command.complete([IRRELEVANT_KEYWORD1, '']), 
 			is_([IRRELEVANT_COMPLETION1, IRRELEVANT_COMPLETION2]))	
+
+	def test_no_completion_generated_when_tokens_match(self):
+		command = boscli.Command(['keyword1', 'keyword2'])
+
+		assert_that(command.complete(['keyword1', 'keyword2']), is_([]))
+
+
 	
