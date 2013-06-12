@@ -19,11 +19,8 @@ class ReadlineCli(object):
             line = readline.get_line_buffer()
             begin_idx = readline.get_begidx()
             end_idx = readline.get_endidx()
-            # print
-            # print "P", prefix
-            # print "Indexes %d %d '%s'" % (begin_idx, end_idx, line[0:begin_idx])
-            # print "Completion '%s'" % (line[begin_idx:end_idx])
-            completions = list(self.completer.complete(line)) + [None]
+            completions = list(self.completer.complete(line)) 
+            completions = completions + [None]
             return completions[index]
         except Exception as exc:
             print "Error", exc
