@@ -22,17 +22,23 @@ class Command(object):
 		return True
 
 	def match(self, tokens):
+		tokens = self.remove_empty_final_tokens(tokens)
 		if len(tokens) != len(self.keywords):
 			return False
 		return self.partial_match(tokens)
 
 	def matching_parameters(self, tokens):
-		assert(self.match(tokens))
+		tokens = self.remove_empty_final_tokens(tokens)
 		parameters=[]
 		for index, token in enumerate(tokens):
 			if not isinstance(self.keywords[index], six.string_types):
 				parameters.append(token)
 		return parameters
+
+	def remove_empty_final_tokens(self, tokens):
+		if tokens[-1] == '':
+			tokens = tokens[:-1]
+		return tokens
 
 	def execute(self, *args, **kwargs):
 		if self.command_function:

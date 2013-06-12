@@ -31,4 +31,4 @@ class CompleterTest(unittest.TestCase):
 		assert_that(result, has_items('completion1', 'completion2'))
 		assert_that(command2.complete, never(called()))
 		assert_that(parser.parse, called())
-
+	
