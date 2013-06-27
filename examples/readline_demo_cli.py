@@ -19,7 +19,7 @@ class ReadlineCli(object):
             line = readline.get_line_buffer()
             begin_idx = readline.get_begidx()
             end_idx = readline.get_endidx()
-            completions = list(self.completer.complete(line)) 
+            completions = list(self.completer.complete(line))
             completions = completions + [None]
             return completions[index]
         except Exception as exc:

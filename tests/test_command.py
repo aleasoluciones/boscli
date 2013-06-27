@@ -17,7 +17,7 @@ IRRELEVANT_COMPLETION1 = 'irrelevant_completion1'
 IRRELEVANT_COMPLETION2 = 'irrelevant_completion2'
 
 class CommandTest(unittest.TestCase):
-	
+
 	def test_a_command_match_if_all_the_keywords_match(self):
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2])
 		assert_that(command.match([IRRELEVANT_KEYWORD1]), is_(False))
@@ -33,12 +33,16 @@ class CommandTest(unittest.TestCase):
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, type_definition])
 		assert_that(command.match([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_VALUE]), is_(True))
 
+	def test_the_empty_line_never_match(self):
+		command = boscli.Command(['keyword1', 'keyword2'])
+		assert_that(command.match([]), is_(False))
+
 	def test_execute_a_command_excute_the_configured_implementation(self):
 		with Spy() as command_implementation:
 			command_implementation.command(ANY_ARG).returns(IRRELEVANT_RESULT)
 
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], command_implementation.command)
-		command_return_value = command.execute(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], 
+		command_return_value = command.execute(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2],
 											   interpreter=IRRELEVANT_INTERPRETER)
 
 		assert_that(command_implementation.command, called().with_args(tokens=[IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2], interpreter=IRRELEVANT_INTERPRETER))
@@ -50,9 +54,9 @@ class CommandTest(unittest.TestCase):
 			type_definition.match(IRRELEVANT_VALUE, partial_line=line_to_eval.split()).returns(True)
 
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, type_definition])
-		assert_that(command.matching_parameters([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_VALUE]), 
+		assert_that(command.matching_parameters([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_VALUE]),
 			is_([IRRELEVANT_VALUE]))
-		assert_that(command.matching_parameters([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_VALUE, '']), 
+		assert_that(command.matching_parameters([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2, IRRELEVANT_VALUE, '']),
 			is_([IRRELEVANT_VALUE]))
 
 
@@ -60,7 +64,7 @@ class CommandTest(unittest.TestCase):
 		command = boscli.Command([IRRELEVANT_KEYWORD1, IRRELEVANT_KEYWORD2])
 
 		assert_that(command.partial_match([IRRELEVANT_KEYWORD1]), is_(True))
-	
+
 	def test_partial_keyword_complete_with_the_rest_of_the_keyword_and_a_space(self):
 		command = boscli.Command(['keyword1', 'keyword2'])
 
@@ -81,20 +85,22 @@ class CommandTest(unittest.TestCase):
 		command = boscli.Command(['keyword1'])
 
 		assert_that(command.complete(['unknown_keyword']), is_([]))
-		
-	def test_use_the_var_type_to_complete(self):		
+
+	def test_use_the_var_type_to_complete(self):
 		with Stub(basic_types.BaseType) as type_definition:
 			type_definition.complete([IRRELEVANT_KEYWORD1, '']).returns([IRRELEVANT_COMPLETION1, IRRELEVANT_COMPLETION2])
 
 		command = boscli.Command([IRRELEVANT_KEYWORD1, type_definition])
 
-		assert_that(command.complete([IRRELEVANT_KEYWORD1, '']), 
-			is_([IRRELEVANT_COMPLETION1, IRRELEVANT_COMPLETION2]))	
+		assert_that(command.complete([IRRELEVANT_KEYWORD1, '']),
+			is_([IRRELEVANT_COMPLETION1, IRRELEVANT_COMPLETION2]))
 
 	def test_no_completion_generated_when_tokens_match(self):
 		command = boscli.Command(['keyword1', 'keyword2'])
 
 		assert_that(command.complete(['keyword1', 'keyword2']), is_([]))
 
+	def test_complete_the_the_empty_line(self):
+		command = boscli.Command(['keyword1', 'keyword2'])
 
-	
+		assert_that(command.complete([]), is_(['keyword1 ']))
