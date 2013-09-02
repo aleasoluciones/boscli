@@ -8,9 +8,6 @@ class Completer(object):
 	def complete(self, line_to_complete):
 		completions = set()
 		tokens = self.parser.parse(line_to_complete)
-		previous_tokens = tokens[:-1]
-		
-		for command in self.interpreter.active_commands():
-			if command.partial_match(previous_tokens):
-				completions.update(command.complete(tokens))
+		for command in self.interpreter.partial_match(line_to_complete):
+			completions.update(command.complete(tokens))
 		return completions

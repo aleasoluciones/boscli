@@ -15,20 +15,14 @@ class CompleterTest(unittest.TestCase):
 			parser.parse('keyword1 partial_keyword2').returns(['keyword1', 'partial_keyword2'])
 		
 		with Stub(boscli.Command) as command1:
-			command1.partial_match(['keyword1']).returns(True)
 			command1.complete(['keyword1', 'partial_keyword2']).returns(['completion1', 'completion2'])
 
-		with Spy(boscli.Command) as command2:
-			command2.partial_match(['keyword1']).returns(False)
-		
-		interpreter = Stub(boscli.Interpreter)
-		with interpreter:
-			interpreter.active_commands().returns([command1, command2])
-
+		with Stub(boscli.Interpreter) as interpreter:
+			interpreter.partial_match('keyword1 partial_keyword2').returns([command1])
+			
 		completer = completer_module.Completer(interpreter, parser)
 		result = completer.complete('keyword1 partial_keyword2')
 
 		assert_that(result, has_items('completion1', 'completion2'))
-		assert_that(command2.complete, never(called()))
 		assert_that(parser.parse, called())
 	
