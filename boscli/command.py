@@ -7,6 +7,8 @@ class Command(object):
 		self.keywords = keywords
 		self.command_function = command_function
 
+	def __str__(self):
+		return " ".join(str(token_definition) for token_definition in self.keywords)
 
 	def _match_word(self, index, token, partial_line):
 		definition_for_that_index = self.keywords[index]

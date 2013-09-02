@@ -2,6 +2,7 @@
 
 import unittest
 from doublex import *
+from hamcrest import all_of, contains_string
 import boscli
 from boscli import basic_types
 
@@ -15,6 +16,7 @@ IRRELEVANT_VALUE = 'irrelevant_value'
 
 IRRELEVANT_COMPLETION1 = 'irrelevant_completion1'
 IRRELEVANT_COMPLETION2 = 'irrelevant_completion2'
+
 
 class CommandTest(unittest.TestCase):
 
@@ -104,3 +106,8 @@ class CommandTest(unittest.TestCase):
 		command = boscli.Command(['keyword1', 'keyword2'])
 
 		assert_that(command.complete([]), is_(['keyword1 ']))
+
+	def test_command_to_string(self):
+		assert_that(str(boscli.Command(['keyword1', 'keyword2'])), 
+			all_of(contains_string('keyword1'),
+				contains_string('keyword2')))
