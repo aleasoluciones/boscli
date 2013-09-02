@@ -38,3 +38,10 @@ class Interpreter(object):
 		tokens = self.parser.parse(line_text)
 		previous_tokens = tokens[:-1]
 		return [command for command in self.active_commands() if command.partial_match(previous_tokens)]
+
+	def help(self, line_text):
+		result = {}
+		for command in self.partial_match(line_text):
+			result[command] = command.help
+		return result
+

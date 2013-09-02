@@ -111,3 +111,13 @@ class CommandTest(unittest.TestCase):
 		assert_that(str(boscli.Command(['keyword1', 'keyword2'])), 
 			all_of(contains_string('keyword1'),
 				contains_string('keyword2')))
+
+	def test_by_default_a_command_has_no_help(self):
+		command = boscli.Command(['keyword1'])
+
+		assert_that(command.help, is_(None))
+
+	def test_command_help(self):
+		command = boscli.Command(['keyword1'], help='irrelevant_help')
+		
+		assert_that(command.help, is_('irrelevant_help'))

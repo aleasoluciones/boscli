@@ -30,19 +30,28 @@ class ReadlineCli(object):
     def interact(self):
         while True:
             try:
-                val = self.interpreter.eval(raw_input(self.prompt))
-                if val is not None:
-                    print str(val)
+                line = raw_input(self.prompt)
+                if line.endswith('?'):
+                    line = line[:-1]
+                    for command, help in self.interpreter.help(line).iteritems():
+                        print str(command), ' ==> ', help
+                else:
+                    val = self.interpreter.eval(line)
+                    if val is not None:
+                        print str(val)
             except boscli.exceptions.NotMatchingCommandFoundError:
                 print "Not matching command found"
+            except Exception as exc:
+                import traceback
+                traceback.print_exc()
 
 
 def main():
     parser = parser_module.Parser()
     interpreter = interpreter_module.Interpreter(parser)
     completer = completer_module.Completer(interpreter, parser)
-    interpreter.add_command(boscli.Command(['net', 'show'], lambda *args, **kwargs: (args, kwargs)))
-    interpreter.add_command(boscli.Command(['net', 'list'], lambda *args, **kwargs: (args, kwargs)))
+    interpreter.add_command(boscli.Command(['net', 'show'], lambda *args, **kwargs: (args, kwargs), help="net show help"))
+    interpreter.add_command(boscli.Command(['net', 'list'], lambda *args, **kwargs: (args, kwargs), help="net list help"))
     interpreter.add_command(boscli.Command(['net', 'add', 'host'], lambda *args, **kwargs: (args, kwargs)))
     cli = ReadlineCli(interpreter, completer)
 

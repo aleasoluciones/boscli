@@ -3,9 +3,10 @@
 import six
 
 class Command(object):
-	def __init__(self, keywords, command_function = None):
+	def __init__(self, keywords, command_function = None, help=None):
 		self.keywords = keywords
 		self.command_function = command_function
+		self.help = help
 
 	def __str__(self):
 		return " ".join(str(token_definition) for token_definition in self.keywords)
