@@ -5,6 +5,7 @@ from boscli import interpreter as interpreter_module
 from boscli import completer as completer_module
 
 import readline
+import six
 
 
 class ReadlineCli(object):
@@ -33,7 +34,7 @@ class ReadlineCli(object):
                 line = raw_input(self.prompt)
                 if line.endswith('?'):
                     line = line[:-1]
-                    for command, help in self.interpreter.help(line).iteritems():
+                    for command, help in six.iteritems(self.interpreter.help(line)):
                         print str(command), ' ==> ', help
                 else:
                     val = self.interpreter.eval(line)
