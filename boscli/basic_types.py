@@ -18,3 +18,11 @@ class OptionsType(BaseType):
 
 	def match(self, word, partial_line=None):
 		return word in self.valid_options
+
+class StringType(BaseType):
+
+	def __init__(self):
+		pass
+
+	def match(self, word, partial_line=None):
+		return True
