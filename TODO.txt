@@ -1,0 +1,4 @@
+ * migrate all isolation tests to unit tests (using unit tests as documentation)
+ * change interpreter.add_command to hide Command class
+ * remove active_commands
+ * type autocompletion
