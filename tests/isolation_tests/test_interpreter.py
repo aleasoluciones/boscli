@@ -50,7 +50,7 @@ class InterpreterTest(unittest.TestCase):
 
         assert_that(self.interpreter.active_commands(),
                     contains_inanyorder(IRRELEVANT_COMMAND1, IRRELEVANT_COMMAND2))
-        
+
     def test_partial_match_commands_selects_active_commands_that_does_partial_match(self):
         with self.parser:
             self.parser.parse(IRRELEVANT_LINE).returns(['k1', 'k2', 'k3'])
@@ -72,7 +72,7 @@ class InterpreterTest(unittest.TestCase):
     def test_active_commands_help(self):
         with self.parser:
             self.parser.parse(IRRELEVANT_LINE).returns(['k1', 'k2', 'k3'])
-            
+
         with Spy(boscli.Command) as command1:
             command1.partial_match(['k1', 'k2']).returns(True)
             command1.help = IRRELEVANT_HELP1
@@ -91,6 +91,3 @@ class InterpreterTest(unittest.TestCase):
 
         assert_that(result, has_entries(command1, IRRELEVANT_HELP1, command2, IRRELEVANT_HELP2))
         assert_that(result, is_not(has_entries(command3, None)))
-
-
-
