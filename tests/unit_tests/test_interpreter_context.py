@@ -32,6 +32,7 @@ class InterpreterContextTest(unittest.TestCase):
         self._add_command(['ip', 'address', basic_types.StringType()], self.eth_configurator.ip_address)
         self._add_command(['netmask', basic_types.StringType()], self.eth_configurator.netmask)
         self._add_command(['gateway', basic_types.StringType()], self.eth_configurator.gateway)
+        self._add_command(['description', basic_types.StringType()], self.eth_configurator.description)
         self._add_command(['exit'], self.eth_configurator.commit)
 
     def _add_command(self, tokens, func):
@@ -41,9 +42,11 @@ class InterpreterContextTest(unittest.TestCase):
         self.interpreter.eval('ip address 192.168.5.6')
         self.interpreter.eval('netmask 255.255.255.0')
         self.interpreter.eval('gateway 192.168.5.1')
+        self.interpreter.eval('description "Private lan vlan100"')
         self.interpreter.eval('exit')
 
         assert_that(self.eth_configurator.ip_address, called().with_args('192.168.5.6', ANY_ARG))
         assert_that(self.eth_configurator.netmask, called().with_args('255.255.255.0', ANY_ARG))
         assert_that(self.eth_configurator.gateway, called().with_args('192.168.5.1', ANY_ARG))
+        assert_that(self.eth_configurator.description, called().with_args('Private lan vlan100', ANY_ARG))
         assert_that(self.eth_configurator.commit, called().with_args(ANY_ARG))
