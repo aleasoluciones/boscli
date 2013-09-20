@@ -5,7 +5,6 @@ from hamcrest import *
 from doublex import *
 
 import boscli
-from boscli import exceptions, basic_types
 from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 from boscli import completer as completer_module
