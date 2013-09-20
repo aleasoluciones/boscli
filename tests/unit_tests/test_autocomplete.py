@@ -28,3 +28,4 @@ class AutoCompletionTest(unittest.TestCase):
         assert_that(self.completer.complete('sys'), has_items('sys '))
         assert_that(self.completer.complete('sys r'), has_items('reboot '))
         assert_that(self.completer.complete('sys reboot'), has_length(0))
+        assert_that(self.completer.complete('unknown command'), has_length(0))
