@@ -56,7 +56,7 @@ class InterpreterBasicCommandExecutionTest(unittest.TestCase):
                                        interpreter=self.interpreter))
 
     def test_invalid_option_not_match_for_a_options_parameter(self):
-        self.assertRaises(exceptions.NotMatchingCommandFoundError, 
+        self.assertRaises(exceptions.NotMatchingCommandFoundError,
                           self.interpreter.eval, 'cmd_with_ops invalid_op')
 
     def test_empty_line_evaluation_returns_none(self):

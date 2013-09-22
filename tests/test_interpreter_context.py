@@ -30,6 +30,7 @@ class InterpreterContextTest(unittest.TestCase):
 
         assert_that(self.context_commands.cmd1, called().with_args(ANY_ARG))
         assert_that(self.context_commands.cmd2, called().with_args(ANY_ARG))
+        assert_that(self.interpreter.actual_context().has_name('context1'), is_(True))
 
     def test_no_context_commands_execution_when_the_interpreter_not_at_the_requiered_context(self):
         self.assertRaises(exceptions.NotMatchingCommandFoundError, self.interpreter.eval, "cmd1")
@@ -39,10 +40,17 @@ class InterpreterContextTest(unittest.TestCase):
         self.interpreter.eval('exit')
 
         assert_that(self.main_commands.exit, called().with_args(ANY_ARG))
-        
+
     def test_more_priority_to_the_command_with_the_matching_context(self):
         self.interpreter.push_context('context1')
         self.interpreter.eval('exit')
 
         assert_that(self.context_commands.exit, called().with_args(ANY_ARG))
 
+    def test_attach_info_to_the_actual_context(self):
+        self.interpreter.push_context('context1')
+        context_data = self.interpreter.actual_context().data
+        context_data['key1'] = 'data1'
+        context_data['key2'] = 'data2'
+
+        assert_that(self.interpreter.actual_context().data, is_({'key1':'data1', 'key2':'data2'}))

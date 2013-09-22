@@ -6,10 +6,11 @@ from boscli import parser
 class Context(object):
     def __init__(self, context_name):
         self.context_name = context_name
+        self.data = {}
 
     def has_name(self, context_name):
         return self.context_name == context_name
-    
+
     def __str__(self):
         return "Context%s"%self.context_name
 
@@ -21,7 +22,7 @@ class Interpreter(object):
 
     def add_command(self, command):
         self._commands.append(command)
-    
+
     def push_context(self, context_name):
         self.context.append(Context(context_name))
 
