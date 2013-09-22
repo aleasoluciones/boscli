@@ -1,3 +1,4 @@
+ * Allow associate data with the context (using Context object)
  * change interpreter.add_command to hide Command class
  * remove active_commands
  * type autocompletion
