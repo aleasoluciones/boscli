@@ -26,15 +26,24 @@ class Command(object):
         return True
 
     def match(self, tokens, context):
-        if self.context_name and self.context_name != context:
+        if self.context_name and not context:
             return False
+        if self.context_name and context and not context.has_name(self.context_name):
+            return False
+
         tokens = self.remove_empty_final_tokens(tokens)
         if len(tokens) != len(self.keywords):
             return False
         return self.partial_match(tokens)
 
     def exact_match(self, tokens, context):
-        return self.match(tokens, context) and self.context_name and self.context_name == context
+        if not self.match(tokens, context):
+            return False
+        if self.context_name and not context:
+            return False
+        if  context and not context.has_name(self.context_name):
+            return False
+        return True
 
     def matching_parameters(self, tokens):
         tokens = self.remove_empty_final_tokens(tokens)

@@ -3,6 +3,16 @@
 from boscli import exceptions
 from boscli import parser
 
+class Context(object):
+    def __init__(self, context_name):
+        self.context_name = context_name
+
+    def has_name(self, context_name):
+        return self.context_name == context_name
+    
+    def __str__(self):
+        return "Context%s"%self.context_name
+
 class Interpreter(object):
     def __init__(self, parser=parser.Parser()):
         self._commands = []
@@ -12,8 +22,8 @@ class Interpreter(object):
     def add_command(self, command):
         self._commands.append(command)
     
-    def push_context(self, context):
-        self.context.append(context)
+    def push_context(self, context_name):
+        self.context.append(Context(context_name))
 
     def eval(self, line_text):
         if not line_text:
@@ -21,7 +31,6 @@ class Interpreter(object):
 
         tokens = self.parser.parse(line_text)
         matching_commands = self._select_matching_commands(tokens)
-
         if len(matching_commands) == 1:
             return self._execute_command(matching_commands[0], tokens)
         if len(matching_commands) > 0:
