@@ -7,9 +7,13 @@ class Interpreter(object):
     def __init__(self, parser=parser.Parser()):
         self._commands = []
         self.parser = parser
+        self.context = []
 
     def add_command(self, command):
         self._commands.append(command)
+    
+    def push_context(self, context):
+        self.context.append(context)
 
     def eval(self, line_text):
         if not line_text:
@@ -29,7 +33,12 @@ class Interpreter(object):
         return command.execute(*arguments, tokens=tokens, interpreter=self)
 
     def _select_matching_commands(self, tokens):
-        return [command for command in self._commands if command.match(tokens)]
+        return [command for command in self._commands if command.match(tokens, self.actual_context())]
+
+    def actual_context(self):
+        if len(self.context) > 0:
+            return self.context[-1]
+        return None
 
     def active_commands(self):
         return self._commands

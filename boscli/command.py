@@ -3,10 +3,11 @@
 import six
 
 class Command(object):
-    def __init__(self, keywords, command_function = None, help=None):
+    def __init__(self, keywords, command_function = None, help=None, context=None):
         self.keywords = keywords
         self.command_function = command_function
         self.help = help
+        self.context = context
 
     def __str__(self):
         return " ".join(str(token_definition) for token_definition in self.keywords)
@@ -24,7 +25,9 @@ class Command(object):
                 return False
         return True
 
-    def match(self, tokens):
+    def match(self, tokens, context):
+        if self.context and self.context != context:
+            return False
         tokens = self.remove_empty_final_tokens(tokens)
         if len(tokens) != len(self.keywords):
             return False
@@ -49,8 +52,8 @@ class Command(object):
         if self.command_function:
             return self.command_function(*args, **kwargs)
 
-    def complete(self, tokens):
-        if self.match(tokens):
+    def complete(self, tokens, context):
+        if self.match(tokens, context):
             return []
 
         if not len(tokens):

@@ -9,44 +9,28 @@ from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 
 
-# cli# config
-# cli (config)# interface eth 0/0
-# cli (config-eth 0/0)# ip address 192.168.5.6
-# cli (config-eth 0/0)# netmask 255.255.255.0
-# cli (config-eth 0/0)# gateway 192.168.5.1
-# cli (config-eth 0/0)# exit
-# cli (config)#
-
-# cli# config
-# cli (config)#
-# cli (config)# ip address 192.168.5.6
-# cli (config)# ERROR unknown command
-
-
-
 class InterpreterContextTest(unittest.TestCase):
     def setUp(self):
         parser = parser_module.Parser()
         self.interpreter = interpreter_module.Interpreter(parser)
-        self.eth_configurator = Spy()
-        self._add_command(['ip', 'address', basic_types.StringType()], self.eth_configurator.ip_address)
-        self._add_command(['netmask', basic_types.StringType()], self.eth_configurator.netmask)
-        self._add_command(['gateway', basic_types.StringType()], self.eth_configurator.gateway)
-        self._add_command(['description', basic_types.StringType()], self.eth_configurator.description)
-        self._add_command(['exit'], self.eth_configurator.commit)
+        self.main_commands = Spy()
+        self.context_commands = Spy()
+        self._add_command(['exit'], self.main_commands.exit)
+        self._add_command(['cmd1'], self.context_commands.cmd1, context='context1')
+        self._add_command(['cmd2'], self.context_commands.cmd2, context='context1')
+        self._add_command(['exit'], self.context_commands.exit, context='context1')
 
-    def _add_command(self, tokens, func):
-        self.interpreter.add_command(boscli.Command(tokens, func))
+    def _add_command(self, tokens, func, context=None):
+        self.interpreter.add_command(boscli.Command(tokens, func, context=context))
 
-    def test_normal_execution(self):
-        self.interpreter.eval('ip address 192.168.5.6')
-        self.interpreter.eval('netmask 255.255.255.0')
-        self.interpreter.eval('gateway 192.168.5.1')
-        self.interpreter.eval('description "Private lan vlan100"')
-        self.interpreter.eval('exit')
+    def test_execute_context_commands_with_the_interpreter_at_the_requiered_context(self):
+        self.interpreter.push_context('context1')
+        self.interpreter.eval('cmd1')
+        self.interpreter.eval('cmd2')
 
-        assert_that(self.eth_configurator.ip_address, called().with_args('192.168.5.6', ANY_ARG))
-        assert_that(self.eth_configurator.netmask, called().with_args('255.255.255.0', ANY_ARG))
-        assert_that(self.eth_configurator.gateway, called().with_args('192.168.5.1', ANY_ARG))
-        assert_that(self.eth_configurator.description, called().with_args('Private lan vlan100', ANY_ARG))
-        assert_that(self.eth_configurator.commit, called().with_args(ANY_ARG))
+        assert_that(self.context_commands.cmd1, called().with_args(ANY_ARG))
+        assert_that(self.context_commands.cmd2, called().with_args(ANY_ARG))
+
+    def test_no_context_commands_execution_when_the_interpreter_not_at_the_requiered_context(self):
+        self.assertRaises(exceptions.NotMatchingCommandFoundError, self.interpreter.eval, "cmd1")
+        self.assertRaises(exceptions.NotMatchingCommandFoundError, self.interpreter.eval, "cmd2")

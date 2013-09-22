@@ -9,5 +9,5 @@ class Completer(object):
         completions = set()
         tokens = self.parser.parse(line_to_complete)
         for command in self.interpreter.partial_match(line_to_complete):
-            completions.update(command.complete(tokens))
+            completions.update(command.complete(tokens, self.interpreter.actual_context()))
         return completions
