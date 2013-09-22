@@ -25,12 +25,18 @@ class Interpreter(object):
         if len(matching_commands) == 1:
             return self._execute_command(matching_commands[0], tokens)
         if len(matching_commands) > 0:
+            perfects_matchs = self._select_exact_matching_commands(tokens)
+            if len(perfects_matchs) == 1:
+                return self._execute_command(perfects_matchs[0], tokens)
             raise exceptions.AmbiguousCommandError(matching_commands)
         raise exceptions.NotMatchingCommandFoundError(line_text)
 
     def _execute_command(self, command, tokens):
         arguments = command.matching_parameters(tokens)
         return command.execute(*arguments, tokens=tokens, interpreter=self)
+
+    def _select_exact_matching_commands(self, tokens):
+        return [command for command in self._commands if command.exact_match(tokens, self.actual_context())]
 
     def _select_matching_commands(self, tokens):
         return [command for command in self._commands if command.match(tokens, self.actual_context())]

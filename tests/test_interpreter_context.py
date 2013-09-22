@@ -34,3 +34,10 @@ class InterpreterContextTest(unittest.TestCase):
     def test_no_context_commands_execution_when_the_interpreter_not_at_the_requiered_context(self):
         self.assertRaises(exceptions.NotMatchingCommandFoundError, self.interpreter.eval, "cmd1")
         self.assertRaises(exceptions.NotMatchingCommandFoundError, self.interpreter.eval, "cmd2")
+
+    def test_more_priority_to_the_command_with_the_matching_context(self):
+        self.interpreter.push_context('context1')
+        self.interpreter.eval('exit')
+
+        assert_that(self.context_commands.exit, called().with_args(ANY_ARG))
+

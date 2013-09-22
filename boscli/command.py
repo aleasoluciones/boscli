@@ -33,6 +33,9 @@ class Command(object):
             return False
         return self.partial_match(tokens)
 
+    def exact_match(self, tokens, context):
+        return self.match(tokens, context) and self.context and self.context == context
+
     def matching_parameters(self, tokens):
         tokens = self.remove_empty_final_tokens(tokens)
         parameters=[]
