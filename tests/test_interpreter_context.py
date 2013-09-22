@@ -16,12 +16,12 @@ class InterpreterContextTest(unittest.TestCase):
         self.main_commands = Spy()
         self.context_commands = Spy()
         self._add_command(['exit'], self.main_commands.exit)
-        self._add_command(['cmd1'], self.context_commands.cmd1, context='context1')
-        self._add_command(['cmd2'], self.context_commands.cmd2, context='context1')
-        self._add_command(['exit'], self.context_commands.exit, context='context1')
+        self._add_command(['cmd1'], self.context_commands.cmd1, context_name='context1')
+        self._add_command(['cmd2'], self.context_commands.cmd2, context_name='context1')
+        self._add_command(['exit'], self.context_commands.exit, context_name='context1')
 
-    def _add_command(self, tokens, func, context=None):
-        self.interpreter.add_command(boscli.Command(tokens, func, context=context))
+    def _add_command(self, tokens, func, context_name=None):
+        self.interpreter.add_command(boscli.Command(tokens, func, context_name=context_name))
 
     def test_execute_context_commands_with_the_interpreter_at_the_requiered_context(self):
         self.interpreter.push_context('context1')
