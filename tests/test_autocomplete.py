@@ -8,6 +8,7 @@ import boscli
 from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 from boscli import completer as completer_module
+from boscli import basic_types
 
 class AutoCompletionTest(unittest.TestCase):
 
@@ -28,3 +29,16 @@ class AutoCompletionTest(unittest.TestCase):
         assert_that(self.completer.complete('sys r'), has_items('reboot '))
         assert_that(self.completer.complete('sys reboot'), has_length(0))
         assert_that(self.completer.complete('unknown command'), has_length(0))
+
+
+    def test_options_autocompletion(self):
+        self.interpreter.add_command(boscli.Command(['cmd', basic_types.OptionsType(['op1', 'op2'])],
+            self.implementation.show_net_conf))
+
+        assert_that(self.completer.complete('cmd o'), has_items('op1', 'op2'))
+
+    def test_basic_types_has_no_completions(self):
+        self.interpreter.add_command(boscli.Command(['cmd', basic_types.StringType()],
+            self.implementation.show_net_conf))
+
+        assert_that(self.completer.complete('cmd '), has_length(0))

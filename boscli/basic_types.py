@@ -5,7 +5,7 @@
 class BaseType(object):
 
     def complete(self, tokens):
-        raise NotImplementedError()
+        return []
 
     def match(self, word, partial_line=None):
         raise NotImplementedError()
@@ -18,6 +18,10 @@ class OptionsType(BaseType):
 
     def match(self, word, partial_line=None):
         return word in self.valid_options
+
+    def complete(self, tokens):
+        return [option for option in self.valid_options if option.startswith(tokens[-1])]
+
 
 class StringType(BaseType):
 
