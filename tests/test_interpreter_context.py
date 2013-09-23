@@ -54,3 +54,14 @@ class InterpreterContextTest(unittest.TestCase):
         context_data['key2'] = 'data2'
 
         assert_that(self.interpreter.actual_context().data, is_({'key1':'data1', 'key2':'data2'}))
+
+    def test_context_are_stackables(self):
+        self.interpreter.push_context('context1')
+        self.interpreter.push_context('context2')
+        assert_that(self.interpreter.actual_context().context_name, is_('context2'))
+        self.interpreter.pop_context()
+        assert_that(self.interpreter.actual_context().context_name, is_('context1'))
+
+    def test_raise_error_when_pop_context_and_no_context_defined(self):
+        self.assertRaises(exceptions.NotContextDefinedError, self.interpreter.pop_context)
+

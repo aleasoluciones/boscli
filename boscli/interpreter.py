@@ -26,6 +26,12 @@ class Interpreter(object):
     def push_context(self, context_name):
         self.context.append(Context(context_name))
 
+    def pop_context(self):
+        try:
+            self.context.pop()
+        except IndexError:
+            raise exceptions.NotContextDefinedError()
+
     def eval(self, line_text):
         if not line_text:
             return
