@@ -15,26 +15,26 @@ class InterpreterHelpTest(unittest.TestCase):
     def setUp(self):
         parser = parser_module.Parser()
         self.interpreter = interpreter_module.Interpreter(parser)
-        self.eth_configurator = Spy()
-        self.ip_address_cmd = boscli.Command(['ip', 'address', basic_types.StringType()], self.eth_configurator.ip_address, help='set address')
-        self.netmask_cmd = boscli.Command(['ip', 'netmask', basic_types.StringType()], self.eth_configurator.netmask, help='set netmask')
-        self.description_cmd = boscli.Command(['description', basic_types.StringType()], self.eth_configurator.description)
+        self.command_implementation = Spy()
+        self.cmd1 = boscli.Command(['cmd', 'key1'], self.command_implementation.cmd1, help='help_cmd1')
+        self.cmd2 = boscli.Command(['cmd', 'key2'], self.command_implementation.netmask, help='help_cmd2')
+        self.cmd_no_help = boscli.Command(['description', basic_types.StringType()], self.command_implementation.description)
 
-        self.interpreter.add_command(self.ip_address_cmd)
-        self.interpreter.add_command(self.netmask_cmd)
-        self.interpreter.add_command(self.description_cmd)
+        self.interpreter.add_command(self.cmd1)
+        self.interpreter.add_command(self.cmd2)
+        self.interpreter.add_command(self.cmd_no_help)
 
 
     def test_help_for_emptyline_returns_help_for_all_active_commands(self):
         result = self.interpreter.help('')
         assert_that(result,
-            has_entries(self.ip_address_cmd, contains_string('address'),
-                        self.netmask_cmd, contains_string('netmask'),
-                        self.description_cmd, None))
+            has_entries(self.cmd1, contains_string('help_cmd1'),
+                        self.cmd2, contains_string('help_cmd2'),
+                        self.cmd_no_help, None))
 
     def test_help_for_line_ontly_returns_help_for_partial_matching_commands(self):
-        result = self.interpreter.help('ip ')
+        result = self.interpreter.help('cmd ')
         assert_that(result,
-            has_entries(self.ip_address_cmd, contains_string('address'),
-                        self.netmask_cmd, contains_string('netmask')))
-        assert_that(result, is_not(has_entries(self.description_cmd, None)))
+            has_entries(self.cmd1, contains_string('help_cmd1'),
+                        self.cmd2, contains_string('help_cmd2')))
+        assert_that(result, is_not(has_entries(self.cmd_no_help, None)))
