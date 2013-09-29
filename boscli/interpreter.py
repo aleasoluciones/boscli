@@ -63,7 +63,7 @@ class Interpreter(object):
         return None
 
     def active_commands(self):
-        return self._commands
+        return [command for command in self._commands if command.context_match(self.actual_context())]
 
     def partial_match(self, line_text):
         tokens = self.parser.parse(line_text)

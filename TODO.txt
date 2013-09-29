@@ -1,5 +1,4 @@
  * regexp basic_type
- * help only for commands with the correct context
  * exit command
  * context with a textual representation for using at the prompt
  * change interpreter.add_command to hide Command class

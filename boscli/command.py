@@ -25,12 +25,16 @@ class Command(object):
                 return False
         return True
 
-    def match(self, tokens, context):
+    def context_match(self, context):
         if self.context_name and not context:
             return False
         if self.context_name and context and not context.has_name(self.context_name):
             return False
+        return True
 
+    def match(self, tokens, context):
+        if not self.context_match(context):
+            return False
         tokens = self.remove_empty_final_tokens(tokens)
         if len(tokens) != len(self.keywords):
             return False
