@@ -19,10 +19,21 @@ class Command(object):
         else:
             return definition_for_that_index.match(token, partial_line=partial_line)
 
+    def _partial_match_last_word(self, index, word, partial_line):
+        definition_for_that_index = self.keywords[index]
+        if self._is_keyword(definition_for_that_index):
+            return definition_for_that_index.startswith(word)
+        else:
+            return definition_for_that_index.partial_match(word, partial_line=partial_line)
+
     def partial_match(self, tokens):
         for index, word in enumerate(tokens):
-            if not self._match_word(index, word, partial_line=tokens):
-                return False
+            if index == len(tokens) -1:
+                if not self._partial_match_last_word(index, word, partial_line=tokens):
+                    return False
+            else:
+                if not self._match_word(index, word, partial_line=tokens):
+                    return False
         return True
 
     def context_match(self, context):
@@ -35,10 +46,12 @@ class Command(object):
     def match(self, tokens, context):
         if not self.context_match(context):
             return False
-        tokens = self.remove_empty_final_tokens(tokens)
         if len(tokens) != len(self.keywords):
             return False
-        return self.partial_match(tokens)
+        for index, word in enumerate(tokens):
+            if not self._match_word(index, word, partial_line=tokens):
+                return False
+        return True
 
     def exact_match(self, tokens, context):
         if not self.match(tokens, context):
@@ -50,19 +63,11 @@ class Command(object):
         return True
 
     def matching_parameters(self, tokens):
-        tokens = self.remove_empty_final_tokens(tokens)
         parameters=[]
         for index, token in enumerate(tokens):
             if not isinstance(self.keywords[index], six.string_types):
                 parameters.append(token)
         return parameters
-
-    def remove_empty_final_tokens(self, tokens):
-        if len(tokens) == 0:
-            return tokens
-        if tokens[-1] == '':
-            tokens = tokens[:-1]
-        return tokens
 
     def execute(self, *args, **kwargs):
         if self.command_function:

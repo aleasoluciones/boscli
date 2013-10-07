@@ -30,7 +30,6 @@ class AutoCompletionTest(unittest.TestCase):
         assert_that(self.completer.complete('sys reboot'), has_length(0))
         assert_that(self.completer.complete('unknown command'), has_length(0))
 
-
     def test_options_autocompletion(self):
         self.interpreter.add_command(boscli.Command(['cmd', basic_types.OptionsType(['op1', 'op2'])],
             self.implementation.show_net_conf))
