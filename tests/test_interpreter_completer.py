@@ -26,6 +26,7 @@ class AutoCompletionTest(unittest.TestCase):
         assert_that(self.interpreter.complete('sys'), has_items('sys '))
         assert_that(self.interpreter.complete('sys r'), has_items('reboot '))
         assert_that(self.interpreter.complete('sys reboot'), has_length(0))
+        assert_that(self.interpreter.complete('sys reboot '), has_length(0))
         assert_that(self.interpreter.complete('unknown command'), has_length(0))
 
     def test_options_autocompletion(self):

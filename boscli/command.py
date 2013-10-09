@@ -27,6 +27,9 @@ class Command(object):
             return definition_for_that_index.partial_match(word, partial_line=partial_line)
 
     def partial_match(self, tokens):
+        if len(tokens) > len(self.keywords):
+            return False
+
         for index, word in enumerate(tokens):
             if index == len(tokens) -1:
                 if not self._partial_match_last_word(index, word, partial_line=tokens):

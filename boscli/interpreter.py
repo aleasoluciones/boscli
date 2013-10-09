@@ -67,7 +67,6 @@ class Interpreter(object):
 
     def partial_match(self, line_text):
         tokens = self.parser.parse(line_text)
-        previous_tokens = tokens[:-1]
         return [command for command in self.active_commands() if command.partial_match(tokens)]
 
     def help(self, line_text):
@@ -82,4 +81,3 @@ class Interpreter(object):
         for command in self.partial_match(line_to_complete):
             completions.update(command.complete(tokens, self.actual_context()))
         return completions
-    
