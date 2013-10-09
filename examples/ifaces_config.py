@@ -2,7 +2,6 @@ import boscli
 
 from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
-from boscli import completer as completer_module
 from boscli import basic_types
 
 import readline
@@ -11,15 +10,14 @@ import six
 
 class ReadlineCli(object):
 
-    def __init__(self, interpreter, completer):
+    def __init__(self, interpreter):
         self.interpreter = interpreter
-        self.completer = completer
         self.prompt = 'cli>'
 
     def complete(self, prefix, index):
         try:
             line = readline.get_line_buffer()
-            completions = list(self.completer.complete(line))
+            completions = list(self.interpreter.complete(line))
             completions = completions + [None]
             return completions[index]
         except Exception as exc:
@@ -75,7 +73,6 @@ def add_command(interpreter, keys, func, context_name=None):
 def main():
     parser = parser_module.Parser()
     interpreter = interpreter_module.Interpreter(parser)
-    completer = completer_module.Completer(interpreter, parser)
     interface_configurator = InterfaceConfigurator()
 
     add_command(interpreter, ['iface', basic_types.OptionsType(['eth0', 'eth1', 'eth2'])], interface_configurator.init_iface_conf)
@@ -85,7 +82,7 @@ def main():
     add_command(interpreter, ['gateway', basic_types.StringType()], interface_configurator.gateway, context_name='iface_conf')
     add_command(interpreter, ['iface', 'commit'], interface_configurator.commit_iface_conf, context_name='iface_conf')
 
-    cli = ReadlineCli(interpreter, completer)
+    cli = ReadlineCli(interpreter)
 
     readline.parse_and_bind("tab: complete")
     readline.set_completer(cli.complete)

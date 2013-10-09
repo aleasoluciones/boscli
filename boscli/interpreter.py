@@ -75,3 +75,11 @@ class Interpreter(object):
         for command in self.partial_match(line_text):
             result[command] = command.help
         return result
+
+    def complete(self, line_to_complete):
+        completions = set()
+        tokens = self.parser.parse(line_to_complete)
+        for command in self.partial_match(line_to_complete):
+            completions.update(command.complete(tokens, self.actual_context()))
+        return completions
+    
