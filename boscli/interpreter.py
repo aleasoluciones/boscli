@@ -32,6 +32,9 @@ class Interpreter(object):
         except IndexError:
             raise exceptions.NotContextDefinedError()
 
+    def exit(self):
+        raise exceptions.EndOfProgram()
+
     def eval(self, line_text):
         if not line_text:
             return

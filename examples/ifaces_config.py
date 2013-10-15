@@ -39,6 +39,9 @@ class ReadlineCli(object):
                         print str(val)
             except boscli.exceptions.NotMatchingCommandFoundError:
                 print "Not matching command found"
+            except (boscli.exceptions.EndOfProgram, EOFError, KeyboardInterrupt):
+                print "Exit"
+                break
             except Exception:
                 import traceback
                 traceback.print_exc()
@@ -75,6 +78,7 @@ def main():
     interpreter = interpreter_module.Interpreter(parser)
     interface_configurator = InterfaceConfigurator()
 
+    add_command(interpreter, ['exit'], lambda *args, **kwargs: interpreter.exit())
     add_command(interpreter, ['iface', basic_types.OptionsType(['eth0', 'eth1', 'eth2'])], interface_configurator.init_iface_conf)
     add_command(interpreter, ['address', basic_types.StringType()], interface_configurator.address, context_name='iface_conf')
     add_command(interpreter, ['netmask', basic_types.StringType()], interface_configurator.netmask, context_name='iface_conf')
