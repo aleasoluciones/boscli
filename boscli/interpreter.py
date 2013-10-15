@@ -36,6 +36,7 @@ class Interpreter(object):
         raise exceptions.EndOfProgram()
 
     def eval(self, line_text):
+        line_text = line_text.strip()
         if not line_text:
             return
 

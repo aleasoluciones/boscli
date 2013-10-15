@@ -31,6 +31,13 @@ class InterpreterBasicCommandExecutionTest(unittest.TestCase):
         assert_that(self.cmds_implementation.cmd,
                     called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
 
+    def test_a_command_match_even_with_spaces_at_the_end(self):
+        self.interpreter.eval('cmd key ')
+
+        assert_that(self.cmds_implementation.cmd,
+                    called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+    
+
     def test_execute_a_command_with_two_parameters(self):
         self.interpreter.eval('cmd_with_parameters param1 param2')
 
