@@ -1,4 +1,1 @@
-pyhamcrest
-doublex
-nose
 six
