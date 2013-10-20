@@ -1,0 +1,4 @@
+pyhamcrest
+doublex
+nose
+coverage
