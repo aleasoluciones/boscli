@@ -13,3 +13,6 @@ class AmbiguousCommandError(EvalError):
 
 class NotContextDefinedError(Exception):
     pass
+
+class EndOfProgram(Exception):
+    pass

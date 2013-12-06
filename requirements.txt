@@ -1,5 +1,2 @@
-pyhamcrest
-doublex
-nose
 six
-mamba
+

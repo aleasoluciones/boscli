@@ -32,7 +32,11 @@ class Interpreter(object):
         except IndexError:
             raise exceptions.NotContextDefinedError()
 
+    def exit(self):
+        raise exceptions.EndOfProgram()
+
     def eval(self, line_text):
+        line_text = line_text.strip()
         if not line_text:
             return
 
@@ -67,11 +71,17 @@ class Interpreter(object):
 
     def partial_match(self, line_text):
         tokens = self.parser.parse(line_text)
-        previous_tokens = tokens[:-1]
-        return [command for command in self.active_commands() if command.partial_match(previous_tokens)]
+        return [command for command in self.active_commands() if command.partial_match(tokens)]
 
     def help(self, line_text):
         result = {}
         for command in self.partial_match(line_text):
             result[command] = command.help
         return result
+
+    def complete(self, line_to_complete):
+        completions = set()
+        tokens = self.parser.parse(line_to_complete)
+        for command in self.partial_match(line_to_complete):
+            completions.update(command.complete(tokens, self.actual_context()))
+        return completions

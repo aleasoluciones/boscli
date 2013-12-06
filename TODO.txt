@@ -1,5 +1,4 @@
  * regexp basic_type
- * exit command
  * context with a textual representation for using at the prompt
  * change interpreter.add_command to hide Command class
  * remove active_commands
