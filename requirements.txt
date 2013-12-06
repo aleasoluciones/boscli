@@ -2,4 +2,4 @@ pyhamcrest
 doublex
 nose
 six
-mamba==0.5
+mamba
