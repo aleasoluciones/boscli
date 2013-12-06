@@ -4,7 +4,7 @@ python:
   - "2.7"
   - "3.2"
   - "3.3"
-# command to install dependencies
 install: "pip install -r requirements.txt -r requirements-dev.txt --use-mirrors"
-# command to run tests
-script: mamba specs
+before_script: python setup.py develop
+script: mamba --enable-coverage
+after_success: 'coverage report --include="boscli/*","spec/*"'
