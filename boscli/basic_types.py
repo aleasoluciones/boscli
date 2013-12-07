@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 
 
 class BaseType(object):
@@ -43,3 +44,13 @@ class StringType(BaseType):
 
     def partial_match(self, word, partial_line=None):
         return True
+
+class RegexType(BaseType):
+    def __init__(self, regex):
+        self.regex = re.compile(regex)
+
+    def match(self, word, partial_line=None):
+        return not self.regex.match(word) is None
+
+    def partial_match(self, word, partial_line=None):
+        return self.partial_match(word, partial_line)

@@ -19,9 +19,11 @@ with describe('Interpreter') as _:
 		_.cmds_implementation = Spy()
 		_add_command(['cmd', 'key'], _.cmds_implementation.cmd)
 		_add_command(['cmd_with_parameters', basic_types.StringType(), basic_types.StringType()],
-		_.cmds_implementation.cmd_with_parameters)
+					_.cmds_implementation.cmd_with_parameters)
 		_add_command(['cmd_with_ops', basic_types.OptionsType(['op1', 'op2'])],
-		_.cmds_implementation.cmd_with_ops)
+					_.cmds_implementation.cmd_with_ops)
+		_add_command(['cmd_with_regex', basic_types.RegexType('^start.*')],
+					_.cmds_implementation.cmd_with_regex)
 
 	def _add_command(tokens, func):
 		_.interpreter.add_command(boscli.Command(tokens, func))
@@ -93,3 +95,25 @@ with describe('Interpreter') as _:
 
 					except exceptions.NotMatchingCommandFoundError:
 						pass
+
+		with context('regex parameter'):
+
+			with describe('when parameter match with defined regex'):
+				def it_execute_the_command_passing_the_given_regex():
+
+					_.interpreter.eval('cmd_with_regex start_whatever')
+					
+					assert_that(_.cmds_implementation.cmd_with_regex,
+								called().with_args('start_whatever',
+													tokens=['cmd_with_regex', 'start_whatever'],
+													interpreter=_.interpreter))
+
+			with describe('when parameter does not match with defined regex'):
+				def it_not_execute_any_command():
+
+					try:
+						_.interpreter.eval('cmd_with_regex not_matching_parameter')
+						pass
+					except exceptions.NotMatchingCommandFoundError:
+						pass
+					
