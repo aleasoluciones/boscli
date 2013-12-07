@@ -12,7 +12,6 @@ class ReadlineCli(object):
 
     def __init__(self, interpreter):
         self.interpreter = interpreter
-        self.prompt = 'cli>'
 
     def complete(self, prefix, index):
         try:
@@ -28,7 +27,7 @@ class ReadlineCli(object):
     def interact(self):
         while True:
             try:
-                line = raw_input(self.prompt)
+                line = raw_input(self.interpreter.prompt + '>')
                 if line.endswith('?'):
                     line = line[:-1]
                     for command, help in six.iteritems(self.interpreter.help(line)):
@@ -48,8 +47,8 @@ class ReadlineCli(object):
 
 class InterfaceConfigurator(object):
     def init_iface_conf(self, iface, interpreter, **kwargs):
-        interpreter.push_context('iface_conf')
-        print "init_iface_conf", iface, kwargs
+        interpreter.push_context('iface_conf', prompt='conf %s' % iface)
+        print "init_iface_conf"
 
     def address(self, address, interpreter, **kwargs):
         interpreter.actual_context().data['address'] = address

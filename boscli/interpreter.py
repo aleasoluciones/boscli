@@ -4,12 +4,19 @@ from boscli import exceptions
 from boscli import parser
 
 class Context(object):
-    def __init__(self, context_name):
+    def __init__(self, context_name, prompt=None):
         self.context_name = context_name
+        self._prompt = prompt
         self.data = {}
 
     def has_name(self, context_name):
         return self.context_name == context_name
+
+    @property
+    def prompt(self):
+        if self._prompt:
+            return self._prompt
+        return self.context_name
 
     def __str__(self):
         return "Context%s"%self.context_name
@@ -23,8 +30,8 @@ class Interpreter(object):
     def add_command(self, command):
         self._commands.append(command)
 
-    def push_context(self, context_name):
-        self.context.append(Context(context_name))
+    def push_context(self, context_name, prompt=None):
+        self.context.append(Context(context_name, prompt))
 
     def pop_context(self):
         try:
@@ -85,3 +92,7 @@ class Interpreter(object):
         for command in self.partial_match(line_to_complete):
             completions.update(command.complete(tokens, self.actual_context()))
         return completions
+
+    @property
+    def prompt(self):
+        return self.actual_context().prompt if self.actual_context() else ''

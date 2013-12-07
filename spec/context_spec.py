@@ -76,7 +76,25 @@ with context('Interpreter context') as _:
             assert_that(_.interpreter.actual_context().context_name, is_('context2'))
             
             _.interpreter.pop_context()
+
             assert_that(_.interpreter.actual_context().context_name, is_('context1'))
+
+        def the_default_prompt_is_empty():
+            assert_that(_.interpreter.prompt, is_(''))
+
+        def the_default_context_prompt_is_the_context_name():
+            _.interpreter.push_context('context1')
+
+            assert_that(_.interpreter.prompt, is_('context1'))
+
+    with describe('when pushing a context with a prompt'):
+        def it_assign_the_prompt_to_the_context():
+            _.interpreter.push_context('context1', prompt='prompt1')
+
+            assert_that(_.interpreter.prompt, is_('prompt1'))
+
+
+
 
     
 
