@@ -80,10 +80,10 @@ def main():
 
     add_command(interpreter, ['exit'], lambda *args, **kwargs: interpreter.exit())
     add_command(interpreter, ['iface', basic_types.OptionsType(['eth0', 'eth1', 'eth2'])], interface_configurator.init_iface_conf)
-    add_command(interpreter, ['address', basic_types.StringType()], interface_configurator.address, context_name='iface_conf')
-    add_command(interpreter, ['netmask', basic_types.StringType()], interface_configurator.netmask, context_name='iface_conf')
-    add_command(interpreter, ['network', basic_types.StringType()], interface_configurator.network, context_name='iface_conf')
-    add_command(interpreter, ['gateway', basic_types.StringType()], interface_configurator.gateway, context_name='iface_conf')
+    add_command(interpreter, ['address', basic_types.StringType(name='ip_address')], interface_configurator.address, context_name='iface_conf')
+    add_command(interpreter, ['netmask', basic_types.StringType(name='netmask')], interface_configurator.netmask, context_name='iface_conf')
+    add_command(interpreter, ['network', basic_types.StringType(name='network')], interface_configurator.network, context_name='iface_conf')
+    add_command(interpreter, ['gateway', basic_types.StringType(name='ip_address')], interface_configurator.gateway, context_name='iface_conf')
     add_command(interpreter, ['iface', 'commit'], interface_configurator.commit_iface_conf, context_name='iface_conf')
 
     cli = ReadlineCli(interpreter)

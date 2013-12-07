@@ -4,6 +4,8 @@ import re
 
 
 class BaseType(object):
+    def __init__(self, name=None):
+        self.name = name
 
     def complete(self, tokens):
         return []
@@ -13,6 +15,11 @@ class BaseType(object):
 
     def partial_match(self, word, partial_line=None):
         return False
+
+    def __str__(self):
+        if hasattr(self, 'name') and self.name:
+            return '<%s>' % self.name
+        return '<%s>' % self.__class__.__name__
 
 
 
@@ -33,11 +40,14 @@ class OptionsType(BaseType):
     def complete(self, tokens):
         return [option for option in self.valid_options if option.startswith(tokens[-1])]
 
+    def __str__(self):
+        return '<%s>' % ('|'.join(self.valid_options))
+
 
 class StringType(BaseType):
 
-    def __init__(self):
-        pass
+    def __init__(self, name=None):
+        self.name = name
 
     def match(self, word, partial_line=None):
         return True
@@ -46,8 +56,9 @@ class StringType(BaseType):
         return True
 
 class RegexType(BaseType):
-    def __init__(self, regex):
+    def __init__(self, regex, name=None):
         self.regex = re.compile(regex)
+        self.name = name
 
     def match(self, word, partial_line=None):
         return not self.regex.match(word) is None
