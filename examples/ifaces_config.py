@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import boscli
 
 from boscli import parser as parser_module
