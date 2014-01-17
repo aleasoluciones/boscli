@@ -5,7 +5,6 @@ from hamcrest import *
 from doublex import *
 
 import boscli
-from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 from boscli import basic_types
 
@@ -13,8 +12,7 @@ with describe('Autocomplete') as _:
 
     @before.each
     def set_up():
-        parser = parser_module.Parser()
-        _.interpreter = interpreter_module.Interpreter(parser)
+        _.interpreter = interpreter_module.Interpreter()
         _.implementation = Stub()
 
         _.interpreter.add_command(boscli.Command(['sys', 'reboot'], _.implementation.reboot))

@@ -5,7 +5,6 @@ from doublex import *
 
 import boscli
 from boscli import exceptions, basic_types
-from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 
 
@@ -13,8 +12,7 @@ with context('Interpreter context') as _:
 
     @before.each
     def setUp():
-        parser = parser_module.Parser()
-        _.interpreter = interpreter_module.Interpreter(parser)
+        _.interpreter = interpreter_module.Interpreter()
         _.main_commands = Spy()
         _.context_commands = Spy()
         _add_command(['exit'], _.main_commands.exit)

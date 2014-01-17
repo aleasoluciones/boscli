@@ -6,7 +6,6 @@ from hamcrest import *
 
 import boscli
 from boscli import basic_types
-from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 
 
@@ -14,8 +13,7 @@ with describe('Help') as _:
 
     @before.each
     def set_up():
-        parser = parser_module.Parser()
-        _.interpreter = interpreter_module.Interpreter(parser)
+        _.interpreter = interpreter_module.Interpreter()
         _.command_implementation = Spy()
         _.cmd1 = boscli.Command(['cmd', 'key1'], _.command_implementation.cmd1, help='help_cmd1')
         _.cmd_context = boscli.Command(['cmd', 'key2'], _.command_implementation.netmask, context_name='irrelevant_context', help='help_cmd_context')

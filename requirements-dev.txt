@@ -1,4 +1,4 @@
 pyhamcrest
 doublex
 mamba
-coverage
+coverage==3.7

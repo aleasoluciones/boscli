@@ -6,7 +6,6 @@ from doublex import *
 
 import boscli
 from boscli import exceptions, basic_types
-from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 
 
@@ -14,8 +13,7 @@ with describe('Interpreter') as _:
 
 	@before.each
 	def set_up():
-		parser = parser_module.Parser()
-		_.interpreter = interpreter_module.Interpreter(parser)
+		_.interpreter = interpreter_module.Interpreter()
 		_.cmds_implementation = Spy()
 		_add_command(['cmd', 'key'], _.cmds_implementation.cmd)
 		_add_command(['cmd_with_parameters', basic_types.StringType(), basic_types.StringType()],
