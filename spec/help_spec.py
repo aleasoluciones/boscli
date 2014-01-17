@@ -36,7 +36,7 @@ with describe('Help') as _:
                 _.interpreter.push_context('irrelevant_context')
 
                 result = _.interpreter.help('')
-                assert_that(result, has_entries(_.cmd1, contains_string('help_cmd1'), 
+                assert_that(result, has_entries(_.cmd1, contains_string('help_cmd1'),
                                                 _.cmd_context, contains_string('help_cmd_context'),
                                                 _.cmd_no_help, None))
 

@@ -36,14 +36,14 @@ with context('Interpreter context') as _:
                 _.interpreter.eval('cmd2')
             except exceptions.NotMatchingCommandFoundError:
                 pass
-        
+
         with describe('when pop context'):
             def it_raise_error_because_no_context_defined():
                 try:
                     _.interpreter.pop_context()
                 except exceptions.NotContextDefinedError:
                     pass
-        
+
     with describe('when inside a context'):
         def it_executes_commands_from_the_context():
             _.interpreter.push_context('context1')
@@ -72,7 +72,7 @@ with context('Interpreter context') as _:
             _.interpreter.push_context('context1')
             _.interpreter.push_context('context2')
             assert_that(_.interpreter.actual_context().context_name, is_('context2'))
-            
+
             _.interpreter.pop_context()
 
             assert_that(_.interpreter.actual_context().context_name, is_('context1'))
@@ -90,9 +90,3 @@ with context('Interpreter context') as _:
             _.interpreter.push_context('context1', prompt='prompt1')
 
             assert_that(_.interpreter.prompt, is_('prompt1'))
-
-
-
-
-    
-

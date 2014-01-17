@@ -24,15 +24,15 @@ class Context(object):
         return "Context%s"%self.context_name
 
 class Interpreter(object):
-    def __init__(self, 
-                 parser=parser.Parser(), 
-                 filter_factory=filters.FilterFactory(), 
+    def __init__(self,
+                 parser=parser.Parser(),
+                 filter_factory=filters.FilterFactory(),
                  output_stream=sys.stdout):
         self._commands = []
         self.parser = parser
         self.context = []
         self.filter_factory = filter_factory
-        self.output_stream = output_stream 
+        self.output_stream = output_stream
 
     def add_command(self, command):
         self._commands.append(command)
@@ -49,7 +49,7 @@ class Interpreter(object):
     def exit(self):
         raise exceptions.EndOfProgram()
 
-    
+
     def _extract_command_and_filter(self, tokens):
         FILTER_SEP = '|'
         command = []
@@ -60,9 +60,9 @@ class Interpreter(object):
                 if sep_found:
                     raise exceptions.SintaxError()
                 sep_found = True
-                continue    
+                continue
             if sep_found:
-                filter_command.append(token) 
+                filter_command.append(token)
             else:
                 command.append(token)
         return command, filter_command or None
@@ -88,7 +88,7 @@ class Interpreter(object):
                 return perfects_matchs[0]
             raise exceptions.AmbiguousCommandError(matching_commands)
         raise exceptions.NotMatchingCommandFoundError(line_text)
-    
+
     def eval(self, line_text):
         line_text = line_text.strip()
         if not line_text:
@@ -104,7 +104,7 @@ class Interpreter(object):
         else:
             return self._execute_command(matching_command, tokens)
 
-        
+
 
     def _execute_command(self, command, tokens):
         arguments = command.matching_parameters(tokens)
