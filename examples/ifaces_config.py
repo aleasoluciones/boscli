@@ -15,15 +15,10 @@ class ReadlineCli(object):
         self.interpreter = interpreter
 
     def complete(self, prefix, index):
-        try:
-            line = readline.get_line_buffer()
-            completions = list(self.interpreter.complete(line))
-            completions = completions + [None]
-            return completions[index]
-        except Exception as exc:
-            print "Error", exc
-            import traceback
-            traceback.print_bt()
+        line = readline.get_line_buffer()
+        completions = list(self.interpreter.complete(line))
+        completions = completions + [None]
+        return completions[index]
 
     def interact(self):
         while True:
@@ -42,9 +37,6 @@ class ReadlineCli(object):
             except (boscli.exceptions.EndOfProgram, EOFError, KeyboardInterrupt):
                 print "Exit"
                 break
-            except Exception:
-                import traceback
-                traceback.print_exc()
 
 class InterfaceConfigurator(object):
     def init_iface_conf(self, iface, interpreter, **kwargs):
@@ -74,8 +66,7 @@ def add_command(interpreter, keys, func, context_name=None):
     interpreter.add_command(boscli.Command(keys, func, context_name=context_name))
 
 def main():
-    parser = parser_module.Parser()
-    interpreter = interpreter_module.Interpreter(parser)
+    interpreter = interpreter_module.Interpreter()
     interface_configurator = InterfaceConfigurator()
 
     add_command(interpreter, ['exit'], lambda *args, **kwargs: interpreter.exit())
