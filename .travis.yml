@@ -8,7 +8,6 @@ install:
 before_script: python setup.py develop
 script: 
   - "mamba -f progress --enable-coverage"
-  - "coverage run --source=boscli setup.py test"
 after_success: 
   - 'coverage report --include="boscli/*","spec/*"'
   - coveralls
