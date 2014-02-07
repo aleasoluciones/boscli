@@ -2,7 +2,13 @@ language: python
 python:
   - "2.7"
   - "3.3"
-install: "pip install -r requirements.txt -r requirements-dev.txt --use-mirrors"
+install: 
+  - "pip install -r requirements.txt -r requirements-dev.txt --use-mirrors"
+  - "pip install coveralls"
 before_script: python setup.py develop
-script: mamba -f progress --enable-coverage
-after_success: 'coverage report --include="boscli/*","spec/*"'
+script: 
+  - "mamba -f progress --enable-coverage"
+  - "coverage run --surce=boscli setup.py test"
+after_success: 
+  - 'coverage report --include="boscli/*","spec/*"'
+  - coveralls
