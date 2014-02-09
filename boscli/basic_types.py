@@ -26,6 +26,7 @@ class BaseType(object):
 class OptionsType(BaseType):
 
     def __init__(self, valid_options):
+        super(OptionsType, self).__init__()
         self.valid_options = valid_options
 
     def match(self, word, partial_line=None):
@@ -47,7 +48,7 @@ class OptionsType(BaseType):
 class StringType(BaseType):
 
     def __init__(self, name=None):
-        self.name = name
+        super(StringType, self).__init__(name)
 
     def match(self, word, partial_line=None):
         return True
@@ -57,8 +58,8 @@ class StringType(BaseType):
 
 class RegexType(BaseType):
     def __init__(self, regex, name=None):
+        super(RegexType, self).__init__(name)
         self.regex = re.compile(regex)
-        self.name = name
 
     def match(self, word, partial_line=None):
         return not self.regex.match(word) is None
