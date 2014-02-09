@@ -22,7 +22,6 @@ class BaseType(object):
         return '<%s>' % self.__class__.__name__
 
 
-
 class OptionsType(BaseType):
 
     def __init__(self, valid_options):
@@ -56,6 +55,7 @@ class StringType(BaseType):
     def partial_match(self, word, partial_line=None):
         return True
 
+
 class RegexType(BaseType):
     def __init__(self, regex, name=None):
         super(RegexType, self).__init__(name)
@@ -65,4 +65,4 @@ class RegexType(BaseType):
         return not self.regex.match(word) is None
 
     def partial_match(self, word, partial_line=None):
-        return self.partial_match(word, partial_line)
+        return self.match(word, partial_line)
