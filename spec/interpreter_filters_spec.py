@@ -21,6 +21,7 @@ with describe('Interpreter filters') as _:
         _.cmds_implementation = Spy()
         _add_command(['cmd', 'key'], _.cmds_implementation.cmd)
 
+
     def _add_command(tokens, func):
         _.interpreter.add_command(boscli.Command(tokens, func))
 

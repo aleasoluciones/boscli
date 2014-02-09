@@ -65,7 +65,7 @@ class Interpreter(object):
                 filter_command.append(token)
             else:
                 command.append(token)
-        return command, filter_command or None
+        return command, filter_command or None, sep_found
 
     def _filter_command(self, filter_tokens):
         try:
@@ -94,7 +94,7 @@ class Interpreter(object):
         if not line_text:
             return
 
-        tokens, filter_tokens = self._extract_command_and_filter(self.parser.parse(line_text))
+        tokens, filter_tokens, _ = self._extract_command_and_filter(self.parser.parse(line_text))
         matching_command = self._matching_command(tokens, line_text)
 
         if filter_tokens:
@@ -136,10 +136,15 @@ class Interpreter(object):
 
     def complete(self, line_to_complete):
         completions = set()
-        tokens = self.parser.parse(line_to_complete)
-        for command in self.partial_match(line_to_complete):
-            completions.update(command.complete(tokens, self.actual_context()))
-        return completions
+        tokens, filter_tokens, sep_found = self._extract_command_and_filter(self.parser.parse(line_to_complete))
+        if filter_tokens is None:
+            if sep_found:
+                return {' '}
+            for command in self.partial_match(line_to_complete):
+                completions.update(command.complete(tokens, self.actual_context()))
+            return completions
+        else:
+            return {option for option in ['include', 'exclude'] if option.startswith(filter_tokens[-1])}
 
     @property
     def prompt(self):

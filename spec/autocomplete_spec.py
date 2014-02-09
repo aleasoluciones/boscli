@@ -50,3 +50,18 @@ with describe('Autocomplete') as _:
                                         _.implementation.show_net_conf))
 
             assert_that(_.interpreter.complete('cmd '), has_length(0))
+
+    with describe('Filter Autocomplete'):
+        def it_autocomplete_with_space_when_starting_a_filter():
+            assert_that(_.interpreter.complete('net show configuration |'), has_items(' '))
+
+        def it_autocomplete_all_available_filters():
+            assert_that(_.interpreter.complete('net show configuration | '), has_items('include'))
+            assert_that(_.interpreter.complete('net show configuration | '), has_items('exclude'))
+
+        def it_autocomplete_include():
+            assert_that(_.interpreter.complete('net show configuration | inclu'), has_items('include'))
+
+        def it_autocomplete_exclude():
+            assert_that(_.interpreter.complete('net show configuration | exclu'), has_items('exclude'))
+
