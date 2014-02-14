@@ -7,7 +7,7 @@ from doublex import Spy, assert_that, called, Stub
 import boscli
 from boscli import exceptions, basic_types
 from boscli import interpreter as interpreter_module
-
+from boscli.command import Command
 
 with describe('Interpreter') as _:
 
@@ -24,7 +24,7 @@ with describe('Interpreter') as _:
                                 _.cmds_implementation.cmd_with_regex)
 
     def _add_command(tokens, func):
-        _.interpreter.add_command(boscli.Command(tokens, func))
+        _.interpreter.add_command(Command(tokens, func))
 
     with context('command execution'):
 

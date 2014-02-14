@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import boscli
 
-from boscli import parser as parser_module
 from boscli import interpreter as interpreter_module
 from boscli import basic_types
 

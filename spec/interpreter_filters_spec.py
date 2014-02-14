@@ -4,8 +4,9 @@ from mamba import describe, before, context
 from doublex import Spy, Stub, assert_that, called
 
 import boscli
-from boscli import exceptions, basic_types
+from boscli import exceptions
 from boscli import interpreter as interpreter_module
+from boscli.command import Command
 
 
 with describe('Interpreter filters') as _:
@@ -22,7 +23,7 @@ with describe('Interpreter filters') as _:
 
 
     def _add_command(tokens, func):
-        _.interpreter.add_command(boscli.Command(tokens, func))
+        _.interpreter.add_command(Command(tokens, func))
 
     with context('malformed line'):
         def it_raise_sintax_error_when_two_filters():

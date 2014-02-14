@@ -4,9 +4,7 @@ from mamba import describe, context, before
 from hamcrest import has_length, contains_string, has_items, string_contains_in_order
 from doublex import assert_that, is_
 
-import boscli
-from boscli import exceptions, basic_types
-from boscli import interpreter as interpreter_module
+from boscli import basic_types
 
 
 with describe('Basic Types') as _:

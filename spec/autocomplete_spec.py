@@ -2,11 +2,12 @@
 
 from mamba import describe, before
 from hamcrest import assert_that, has_items, has_length
-from doublex import Spy, Stub
+from doublex import Stub
 
 import boscli
 from boscli import interpreter as interpreter_module
 from boscli import basic_types
+from boscli.command import Command
 
 with describe('Autocomplete') as _:
 
@@ -15,9 +16,9 @@ with describe('Autocomplete') as _:
         _.interpreter = interpreter_module.Interpreter()
         _.implementation = Stub()
 
-        _.interpreter.add_command(boscli.Command(['sys', 'reboot'], _.implementation.reboot))
-        _.interpreter.add_command(boscli.Command(['sys', 'shutdown'], _.implementation.shutdown))
-        _.interpreter.add_command(boscli.Command(['net', 'show', 'configuration'], _.implementation.show_net_conf))
+        _.interpreter.add_command(Command(['sys', 'reboot'], _.implementation.reboot))
+        _.interpreter.add_command(Command(['sys', 'shutdown'], _.implementation.shutdown))
+        _.interpreter.add_command(Command(['net', 'show', 'configuration'], _.implementation.show_net_conf))
 
     with describe('when autocompleting empty line'):
         def it_complete_with_initial_keywords():
@@ -39,14 +40,14 @@ with describe('Autocomplete') as _:
 
     with describe('when autocompleting options type'):
         def it_complete_with_all_matching_options():
-            _.interpreter.add_command(boscli.Command(['cmd', basic_types.OptionsType(['op1', 'op2'])],
+            _.interpreter.add_command(Command(['cmd', basic_types.OptionsType(['op1', 'op2'])],
                                     _.implementation.show_net_conf))
 
             assert_that(_.interpreter.complete('cmd o'), has_items('op1', 'op2'))
 
     with describe('when autocompleting a string type'):
         def it_no_autocomplete_at_all():
-            _.interpreter.add_command(boscli.Command(['cmd', basic_types.StringType()],
+            _.interpreter.add_command(Command(['cmd', basic_types.StringType()],
                                         _.implementation.show_net_conf))
 
             assert_that(_.interpreter.complete('cmd '), has_length(0))

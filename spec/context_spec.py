@@ -4,9 +4,9 @@ from mamba import context, before, describe
 from doublex import Spy, assert_that, called, ANY_ARG, is_
 
 import boscli
-from boscli import exceptions, basic_types
+from boscli import exceptions
 from boscli import interpreter as interpreter_module
-
+from boscli.command import Command
 
 with context('Interpreter context') as _:
 
@@ -21,7 +21,7 @@ with context('Interpreter context') as _:
         _add_command(['exit'], _.context_commands.exit, context_name='context1')
 
     def _add_command(tokens, func, context_name=None):
-        _.interpreter.add_command(boscli.Command(tokens, func, context_name=context_name))
+        _.interpreter.add_command(Command(tokens, func, context_name=context_name))
 
     with describe('when not in the required context'):
         def it_execute_main_commands():

@@ -7,7 +7,7 @@ from hamcrest import assert_that, has_entries, contains_string, is_not
 import boscli
 from boscli import basic_types
 from boscli import interpreter as interpreter_module
-
+from boscli.command import Command
 
 with describe('Help') as _:
 
@@ -15,9 +15,9 @@ with describe('Help') as _:
     def set_up():
         _.interpreter = interpreter_module.Interpreter()
         _.command_implementation = Spy()
-        _.cmd1 = boscli.Command(['cmd', 'key1'], _.command_implementation.cmd1, help='help_cmd1')
-        _.cmd_context = boscli.Command(['cmd', 'key2'], _.command_implementation.netmask, context_name='irrelevant_context', help='help_cmd_context')
-        _.cmd_no_help = boscli.Command(['description', basic_types.StringType()], _.command_implementation.description)
+        _.cmd1 = Command(['cmd', 'key1'], _.command_implementation.cmd1, help='help_cmd1')
+        _.cmd_context = Command(['cmd', 'key2'], _.command_implementation.netmask, context_name='irrelevant_context', help='help_cmd_context')
+        _.cmd_no_help = Command(['description', basic_types.StringType()], _.command_implementation.description)
 
         _.interpreter.add_command(_.cmd1)
         _.interpreter.add_command(_.cmd_context)

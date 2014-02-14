@@ -2,7 +2,6 @@
 
 import sys
 import re
-import subprocess
 
 class ByLineBaseFilter(object):
     def __init__(self):
