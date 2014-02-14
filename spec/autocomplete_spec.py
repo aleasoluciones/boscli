@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from mamba import *
-from hamcrest import *
-from doublex import *
+from mamba import describe, before
+from hamcrest import assert_that, has_items, has_length
+from doublex import Spy, Stub
 
 import boscli
 from boscli import interpreter as interpreter_module

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from mamba import *
-from hamcrest import *
-from doublex import *
+from mamba import describe, before, context
+from hamcrest import none
+from doublex import Spy, assert_that, called, Stub
 
 import boscli
 from boscli import exceptions, basic_types

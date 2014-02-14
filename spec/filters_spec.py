@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from mamba import *
-from hamcrest import *
-from doublex import *
+from mamba import describe, before
+from hamcrest import assert_that
+from doublex import Spy, called, never
 
 from boscli import filters
 

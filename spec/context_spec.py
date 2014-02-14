@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from mamba import *
-from doublex import *
+from mamba import context, before, describe
+from doublex import Spy, assert_that, called, ANY_ARG, is_
 
 import boscli
 from boscli import exceptions, basic_types

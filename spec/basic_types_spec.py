@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from mamba import *
-from hamcrest import *
-from doublex import *
+from mamba import describe, context, before
+from hamcrest import has_length, contains_string, has_items, string_contains_in_order
+from doublex import assert_that, is_
 
 import boscli
 from boscli import exceptions, basic_types
