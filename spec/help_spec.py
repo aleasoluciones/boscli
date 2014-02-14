@@ -4,7 +4,6 @@ from mamba import describe, before, context
 from doublex import Spy
 from hamcrest import assert_that, has_entries, contains_string, is_not
 
-import boscli
 from boscli import basic_types
 from boscli import interpreter as interpreter_module
 from boscli.command import Command

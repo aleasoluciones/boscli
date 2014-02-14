@@ -4,7 +4,6 @@ from mamba import describe, before
 from hamcrest import assert_that, has_items, has_length
 from doublex import Stub
 
-import boscli
 from boscli import interpreter as interpreter_module
 from boscli import basic_types
 from boscli.command import Command

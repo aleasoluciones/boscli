@@ -111,6 +111,5 @@ with describe('Interpreter') as _:
 
                     try:
                         _.interpreter.eval('cmd_with_regex not_matching_parameter')
-                        pass
                     except exceptions.NotMatchingCommandFoundError:
                         pass

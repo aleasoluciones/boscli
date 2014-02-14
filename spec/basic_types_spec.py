@@ -38,7 +38,7 @@ with describe('Basic Types') as _:
 
     with context('String types'):
 
-        def it_has_no_autocompletion():
+        def string_type_has_no_autocompletion():
             assert_that(_.string_type.complete(['']), has_length(0))
 
         def it_match_always():
@@ -51,14 +51,14 @@ with describe('Basic Types') as _:
             assert_that(_.string_type.partial_match('whatever'), is_(True))
             assert_that(_.string_type.partial_match('1'), is_(True))
 
-        def it_include_its_name_at_its_representation():
+        def string_type_include_its_name_at_its_representation():
             assert_that(str(_.string_type), contains_string('String'))
 
 
     with context('Regex types'):
         #_.regex_type = basic_types.RegexType(name='op[1-3]', name='ops1-3')
 
-        def it_has_no_autocompletion():
+        def regex_type_has_no_autocompletion():
             assert_that(_.regex_type.complete(['']), has_length(0))
 
         def it_match_when_the_regexp_match():
@@ -73,6 +73,6 @@ with describe('Basic Types') as _:
             assert_that(_.regex_type.partial_match('op3'), is_(True))
             assert_that(_.regex_type.partial_match('op4'), is_(False))
 
-        def it_include_its_name_at_its_representation():
+        def regex_type_include_its_name_at_its_representation():
             assert_that(str(_.regex_type), contains_string('ops1-3'))
 

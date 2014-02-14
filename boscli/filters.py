@@ -20,6 +20,9 @@ class ByLineBaseFilter(object):
         # only works by line, so ignore any flush
         pass
 
+    def process_line(self, line):
+        pass
+
 class IncludeFilter(ByLineBaseFilter):
     def __init__(self, regex, stdout):
         self.regex = re.compile(regex)
@@ -42,7 +45,7 @@ class ExcludeFilter(ByLineBaseFilter):
             self.stdout.write(line + '\n')
 
 
-class RedirectStdout:
+class RedirectStdout(object):
     ''' Create a context manager for redirecting sys.stdout
         to another file.
     '''

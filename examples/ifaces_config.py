@@ -3,6 +3,7 @@ import boscli
 
 from boscli import interpreter as interpreter_module
 from boscli import basic_types
+from boscli.command import Command
 
 import readline
 import six
@@ -62,7 +63,7 @@ class InterfaceConfigurator(object):
 
 
 def add_command(interpreter, keys, func, context_name=None):
-    interpreter.add_command(boscli.Command(keys, func, context_name=context_name))
+    interpreter.add_command(Command(keys, func, context_name=context_name))
 
 def main():
     interpreter = interpreter_module.Interpreter()

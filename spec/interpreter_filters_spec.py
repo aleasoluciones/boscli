@@ -3,7 +3,6 @@
 from mamba import describe, before, context
 from doublex import Spy, Stub, assert_that, called
 
-import boscli
 from boscli import exceptions
 from boscli import interpreter as interpreter_module
 from boscli.command import Command
