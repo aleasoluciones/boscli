@@ -49,7 +49,6 @@ class Interpreter(object):
     def exit(self):
         raise exceptions.EndOfProgram()
 
-
     def _extract_command_and_filter(self, tokens):
         FILTER_SEP = '|'
         command = []
