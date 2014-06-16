@@ -5,7 +5,9 @@ from boscli import exceptions
 from boscli import parser
 from boscli import filters
 
+
 class Context(object):
+
     def __init__(self, context_name, prompt=None):
         self.context_name = context_name
         self._prompt = prompt
@@ -21,9 +23,11 @@ class Context(object):
         return self.context_name
 
     def __str__(self):
-        return "Context%s"%self.context_name
+        return "Context%s" % self.context_name
+
 
 class Interpreter(object):
+
     def __init__(self,
                  parser=parser.Parser(),
                  filter_factory=filters.FilterFactory(),
@@ -70,10 +74,9 @@ class Interpreter(object):
         try:
             if filter_tokens[0] == 'include':
                 return self.filter_factory.create_include_filter(filter_tokens[1], self.output_stream)
-            elif filter_tokens[0] == 'exclude':
+            if filter_tokens[0] == 'exclude':
                 return self.filter_factory.create_exclude_filter(filter_tokens[1], self.output_stream)
-            else:
-                raise exceptions.SintaxError()
+            raise exceptions.SintaxError()
         except IndexError:
             raise exceptions.SintaxError()
 
@@ -93,17 +96,16 @@ class Interpreter(object):
         if not line_text:
             return
 
-        tokens, filter_tokens, _ = self._extract_command_and_filter(self.parser.parse(line_text))
+        tokens, filter_tokens, _ = self._extract_command_and_filter(
+            self.parser.parse(line_text))
         matching_command = self._matching_command(tokens, line_text)
 
-        if filter_tokens:
-            output_filter = self._filter_command(filter_tokens)
-            with filters.RedirectStdout(output_filter):
-                return self._execute_command(matching_command, tokens)
-        else:
+        if not filter_tokens:
             return self._execute_command(matching_command, tokens)
 
-
+        output_filter = self._filter_command(filter_tokens)
+        with filters.RedirectStdout(output_filter):
+            return self._execute_command(matching_command, tokens)
 
     def _execute_command(self, command, tokens):
         arguments = command.matching_parameters(tokens)
@@ -128,22 +130,19 @@ class Interpreter(object):
         return [command for command in self.active_commands() if command.partial_match(tokens)]
 
     def help(self, line_text):
-        result = {}
-        for command in self.partial_match(line_text):
-            result[command] = command.help
-        return result
+        return {command: command.help for command in self.partial_match(line_text)}
 
     def complete(self, line_to_complete):
         completions = set()
-        tokens, filter_tokens, sep_found = self._extract_command_and_filter(self.parser.parse(line_to_complete))
-        if filter_tokens is None:
-            if sep_found:
-                return {' '}
-            for command in self.partial_match(line_to_complete):
-                completions.update(command.complete(tokens, self.actual_context()))
-            return completions
-        else:
+        tokens, filter_tokens, sep_found = self._extract_command_and_filter(
+            self.parser.parse(line_to_complete))
+        if filter_tokens:
             return {option for option in ['include', 'exclude'] if option.startswith(filter_tokens[-1])}
+        if sep_found:
+            return {' '}
+        for command in self.partial_match(line_to_complete):
+            completions.update(command.complete(tokens, self.actual_context()))
+        return completions
 
     @property
     def prompt(self):
