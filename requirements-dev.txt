@@ -2,3 +2,4 @@ pyhamcrest
 doublex
 mamba<0.8
 coverage==3.7
+coveralls

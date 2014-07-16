@@ -5,11 +5,10 @@ python:
   - 3.4
   - pypy
 install:
-  - "pip install -r requirements.txt -r requirements-dev.txt --use-mirrors"
-  - "pip install coveralls"
-before_script: python setup.py develop
+  - pip install -r requirements.txt -r requirements-dev.txt
+before_script: pip install .
 script:
-  - "mamba --enable-coverage"
-after_success:
-  - 'coverage report --include="boscli/*","spec/*"'
-  - coveralls
+  - coverage run --source boscli mamba
+  - coverage report -m
+after_script:
+  - coveralls --verbose
