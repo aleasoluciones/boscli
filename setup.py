@@ -5,6 +5,7 @@ from setuptools.command.test import test as TestCommand
 
 import mamba.cli
 
+long_description = open('README.rst').read()
 
 class MambaTest(TestCommand):
     def finalize_options(self):
@@ -20,7 +21,9 @@ class MambaTest(TestCommand):
 setup(name='boscli',
       version='0.0.1',
       author='Alea Soluciones SLL',
-      description ='',
+      description ='Extensible command line processor for "ad hoc" shells creation',
+      long_description=long_description,
+      license='MIT',
       platforms = 'Linux',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests', 'spec']),
       cmdclass={'test': MambaTest}
