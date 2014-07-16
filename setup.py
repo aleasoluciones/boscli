@@ -3,9 +3,8 @@
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
-import mamba.cli
-
 long_description = open('README.rst').read()
+
 
 class MambaTest(TestCommand):
     def finalize_options(self):
@@ -15,6 +14,7 @@ class MambaTest(TestCommand):
 
     def run_tests(self):
         import sys
+        import mamba.cli
         sys.argv = ['mamba']
         mamba.cli.main()
 
