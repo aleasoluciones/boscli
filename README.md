@@ -2,7 +2,7 @@ boscli
 ======
 
 [![Build Status](https://travis-ci.org/aleasoluciones/boscli.svg)](https://travis-ci.org/aleasoluciones/boscli)
-[![Coverage Status](https://coveralls.io/repos/eferro/boscli/badge.png)](https://coveralls.io/r/eferro/boscli)
+[![Coverage Status](https://img.shields.io/coveralls/aleasoluciones/boscli.svg)](https://coveralls.io/r/aleasoluciones/boscli?branch=master)
 
 For running the tests/specs:
 
