@@ -15,7 +15,7 @@ shells or command line interfaces using Python. It includes an useless shell wit
 Installation
 ------------
 
-You can install the latest sources from Github.
+You can install the latest sources from GitHub.
 
 .. code-block:: bash
 

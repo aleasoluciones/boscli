@@ -1,5 +1,5 @@
 pyhamcrest
 doublex
-mamba<0.8
+mamba
 coverage==3.7
 coveralls
