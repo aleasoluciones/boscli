@@ -22,6 +22,6 @@ setup(name='boscli',
       author='Alea Soluciones SLL',
       description ='',
       platforms = 'Linux',
-      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      packages=find_packages(exclude=['ez_setup', 'examples', 'tests', 'spec']),
       cmdclass={'test': MambaTest}
 )
