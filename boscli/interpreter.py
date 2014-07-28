@@ -127,7 +127,7 @@ class Interpreter(object):
 
     def partial_match(self, line_text):
         tokens = self.parser.parse(line_text)
-        return [command for command in self.active_commands() if command.partial_match(tokens)]
+        return [command for command in self.active_commands() if command.partial_match(tokens, self.actual_context())]
 
     def help(self, line_text):
         return {command: command.help for command in self.partial_match(line_text)}

@@ -15,30 +15,30 @@ class Command(object):
     def __repr__(self):
         return str(self)
 
-    def _match_word(self, index, token, partial_line):
+    def _match_word(self, index, token, context, partial_line):
         definition_for_that_index = self.keywords[index]
         if self._is_keyword(definition_for_that_index):
             return definition_for_that_index == token
         else:
-            return definition_for_that_index.match(token, partial_line=partial_line)
+            return definition_for_that_index.match(token, context, partial_line=partial_line)
 
-    def _partial_match_last_word(self, index, word, partial_line):
+    def _partial_match_last_word(self, index, word, context, partial_line):
         definition_for_that_index = self.keywords[index]
         if self._is_keyword(definition_for_that_index):
             return definition_for_that_index.startswith(word)
         else:
-            return definition_for_that_index.partial_match(word, partial_line=partial_line)
+            return definition_for_that_index.partial_match(word, context, partial_line=partial_line)
 
-    def partial_match(self, tokens):
+    def partial_match(self, tokens, context):
         if len(tokens) > len(self.keywords):
             return False
 
         for index, word in enumerate(tokens):
             if index == len(tokens) -1:
-                if not self._partial_match_last_word(index, word, partial_line=tokens):
+                if not self._partial_match_last_word(index, word, context, partial_line=tokens):
                     return False
             else:
-                if not self._match_word(index, word, partial_line=tokens):
+                if not self._match_word(index, word, context, partial_line=tokens):
                     return False
         return True
 
@@ -55,7 +55,7 @@ class Command(object):
         if len(tokens) != len(self.keywords):
             return False
         for index, word in enumerate(tokens):
-            if not self._match_word(index, word, partial_line=tokens):
+            if not self._match_word(index, word, context, partial_line=tokens):
                 return False
         return True
 
@@ -97,7 +97,7 @@ class Command(object):
             if definition_for_that_index.startswith(token_to_complete):
                 return [definition_for_that_index + ' ']
         else:
-            return definition_for_that_index.complete(tokens)
+            return definition_for_that_index.complete(tokens, context)
         return []
 
     def _is_keyword(self, definition):

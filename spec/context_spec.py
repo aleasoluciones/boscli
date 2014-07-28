@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from doublex import Spy, assert_that, called, ANY_ARG, is_
+from doublex import Spy, assert_that, called, ANY_ARG, is_, when
 
-from boscli import exceptions
+from boscli import exceptions, basic_types
 from boscli import interpreter as interpreter_module
 from boscli.command import Command
 
@@ -16,6 +16,7 @@ with context('Interpreter context'):
         self._add_command(['cmd1'], self.context_commands.cmd1, context_name='context1')
         self._add_command(['cmd2'], self.context_commands.cmd2, context_name='context1')
         self._add_command(['exit'], self.context_commands.exit, context_name='context1')
+
 
     def _add_command(self, tokens, func, context_name=None):
         self.interpreter.add_command(Command(tokens, func, context_name=context_name))
@@ -87,3 +88,21 @@ with context('Interpreter context'):
             self.interpreter.push_context('context1', prompt='prompt1')
 
             assert_that(self.interpreter.prompt, is_('prompt1'))
+
+    with describe('when autocompleting or matching lines'):
+        with it('pass context to the type'):
+
+            self.interpreter.push_context('context1', prompt='prompt1')
+            fake_type = Spy(basic_types.BaseType)
+            self._add_command([fake_type], lambda x: None, context_name='context1')
+            
+            when(fake_type).complete(ANY_ARG).returns([])
+            when(fake_type).partial_match(ANY_ARG).returns(True)
+
+            actual_context = self.interpreter.actual_context()
+
+            self.interpreter.complete('test')
+            assert_that(fake_type.partial_match, called().with_args('test', actual_context, partial_line=['test']))
+            assert_that(fake_type.complete, called().with_args(['test'], actual_context))
+            assert_that(fake_type.match, called().with_args('test', actual_context, partial_line=['test']))
+
