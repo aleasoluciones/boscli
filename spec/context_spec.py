@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from doublex import Spy, assert_that, called, ANY_ARG, is_, when
+from doublex import Spy, assert_that, called, ANY_ARG, is_, when, never
 
 from boscli import exceptions, basic_types
 from boscli import interpreter as interpreter_module
@@ -10,22 +10,34 @@ with context('Interpreter context'):
 
     with before.each:
         self.interpreter = interpreter_module.Interpreter()
+        self.allways_present = Spy()
         self.main_commands = Spy()
         self.context_commands = Spy()
         self._add_command(['exit'], self.main_commands.exit)
+        self._add_command(['allways_present'], self.allways_present.allways_present, allways=True)
         self._add_command(['cmd1'], self.context_commands.cmd1, context_name='context1')
         self._add_command(['cmd2'], self.context_commands.cmd2, context_name='context1')
         self._add_command(['exit'], self.context_commands.exit, context_name='context1')
 
 
-    def _add_command(self, tokens, func, context_name=None):
-        self.interpreter.add_command(Command(tokens, func, context_name=context_name))
+    def _add_command(self, tokens, func, context_name=None, allways=False):
+        self.interpreter.add_command(Command(tokens, func, context_name=context_name, allways=allways))
 
     with describe('when not in the required context'):
-        with it('execute main commands'):
-            self.interpreter.eval('exit')
+        with it('not execute main command'):
+            try:
+                self.interpreter.push_context('context1')
+                self.interpreter.eval('exit')
+            except exceptions.NotMatchingCommandFoundError:
+                pass
+            assert_that(self.main_commands.exit, never(called()))
 
-            assert_that(self.main_commands.exit, called().with_args(ANY_ARG))
+
+        with it('execute allways present commands'):
+            self.interpreter.push_context('context1')
+            self.interpreter.eval('allways_present')
+
+            assert_that(self.allways_present.allways_present, called().with_args(ANY_ARG))
 
     with describe('when not in any context'):
         with it('not execute command from other context'):
@@ -34,11 +46,14 @@ with context('Interpreter context'):
                 self.interpreter.eval('cmd2')
             except exceptions.NotMatchingCommandFoundError:
                 pass
+            assert_that(self.context_commands.cmd1, never(called()))
+            assert_that(self.context_commands.cmd2, never(called()))
 
         with describe('when pop context'):
             with it('raise error because no context defined'):
                 try:
                     self.interpreter.pop_context()
+                    raise "Should raise exception"
                 except exceptions.NotContextDefinedError:
                     pass
 

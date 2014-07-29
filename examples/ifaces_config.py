@@ -65,8 +65,8 @@ class InterfaceConfigurator(object):
         interpreter.pop_context()
 
 
-def add_command(interpreter, keys, func, context_name=None):
-    interpreter.add_command(Command(keys, func, context_name=context_name))
+def add_command(interpreter, keys, func, context_name=None, allways=False):
+    interpreter.add_command(Command(keys, func, context_name=context_name, allways=allways))
 
 
 def main():
@@ -74,7 +74,7 @@ def main():
     interface_configurator = InterfaceConfigurator()
 
     add_command(
-        interpreter, ['exit'], lambda *args, **kwargs: interpreter.exit())
+        interpreter, ['exit'], lambda *args, **kwargs: interpreter.exit(), allways=True)
     add_command(interpreter, ['iface', basic_types.OptionsType(
         ['eth0', 'eth1', 'eth2'])], interface_configurator.init_iface_conf)
     add_command(

@@ -3,11 +3,12 @@
 import six
 
 class Command(object):
-    def __init__(self, keywords, command_function = None, help=None, context_name=None):
+    def __init__(self, keywords, command_function = None, help=None, context_name=None, allways=False):
         self.keywords = keywords
         self.command_function = command_function
         self.help = help
         self.context_name = context_name
+        self.allways = allways
 
     def __str__(self):
         return " ".join(str(token_definition) for token_definition in self.keywords)
@@ -43,11 +44,16 @@ class Command(object):
         return True
 
     def context_match(self, context):
+        if self.allways is True:
+            return True
         if self.context_name and not context:
             return False
-        if self.context_name and context and not context.has_name(self.context_name):
-            return False
-        return True
+
+        if context and context.has_name(self.context_name):
+            return True
+        if context is None:
+            return True
+        return False
 
     def match(self, tokens, context):
         if not self.context_match(context):
