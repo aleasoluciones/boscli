@@ -12,6 +12,7 @@ with describe('Basic Types'):
         self.options_type = basic_types.OptionsType(['op1', 'op2'])
         self.string_type = basic_types.StringType(name='String')
         self.regex_type = basic_types.RegexType('op[1-3]', name='ops1-3')
+        self.integer_type = basic_types.IntegerType(min=5, max=10)
         self.context = 'irrelevant_context'
 
     with context('Options types'):
@@ -51,6 +52,34 @@ with describe('Basic Types'):
 
         with it('string type include its name at its representation'):
             assert_that(str(self.string_type), contains_string('String'))
+
+    with context('Integer types'):
+
+        with it('integer type has no autocompletion'):
+            assert_that(self.integer_type.complete([''], self.context), has_length(0))
+
+        with it('does not match strings'):
+            assert_that(self.integer_type.match('whatever', self.context), is_(False))
+
+        with describe('when min limit defined'):
+            with it('match any number greater than limit'):
+                assert_that(self.integer_type.match('5', self.context), is_(False))
+                assert_that(self.integer_type.match('6', self.context), is_(True))
+            with it('partial match any number greater than limit'):
+                assert_that(self.integer_type.partial_match('5', self.context), is_(False))
+                assert_that(self.integer_type.partial_match('6', self.context), is_(True))
+
+        with describe('when max limit defined'):
+            with it('match any number lesser than limit'):
+                assert_that(self.integer_type.match('10', self.context), is_(False))
+                assert_that(self.integer_type.match('6', self.context), is_(True))
+            with it('partial match any number greater than limit'):
+                self.integer_type = basic_types.IntegerType(max=10)
+                assert_that(self.integer_type.partial_match('10', self.context), is_(False))
+                assert_that(self.integer_type.partial_match('6', self.context), is_(True))
+
+        with it('string type include its name at its representation'):
+            assert_that(str(self.integer_type), contains_string('Integer'))
 
 
     with context('Regex types'):

@@ -56,6 +56,28 @@ class StringType(BaseType):
         return True
 
 
+class IntegerType(BaseType):
+
+    def __init__(self, min=None, max=None, name=None):
+        super(IntegerType, self).__init__(name)
+        self.min = min
+        self.max = max
+
+    def match(self, word, context, partial_line=None):
+        try:
+            if self.min is not None:
+                if int(word) <= self.min:
+                    return False
+            if self.max is not None:
+                if int(word) >= self.max:
+                    return False
+            return True
+        except ValueError as exc:
+            return False
+    def partial_match(self, word, context, partial_line=None):
+        return self.match(word, context, partial_line)
+
+
 class RegexType(BaseType):
     def __init__(self, regex, name=None):
         super(RegexType, self).__init__(name)
