@@ -31,10 +31,12 @@ class Interpreter(object):
     def __init__(self,
                  parser=parser.Parser(),
                  filter_factory=filters.FilterFactory(),
-                 output_stream=sys.stdout):
+                 output_stream=sys.stdout,
+                 prompt=''):
         self._commands = []
         self.parser = parser
         self.context = []
+        self._prompt = prompt
         self.filter_factory = filter_factory
         self.output_stream = output_stream
 
@@ -146,4 +148,8 @@ class Interpreter(object):
 
     @property
     def prompt(self):
-        return self.actual_context().prompt if self.actual_context() else ''
+        return self.actual_context().prompt if self.actual_context() else self._prompt
+    
+    @prompt.setter
+    def prompt(self, value):
+        self._prompt = value

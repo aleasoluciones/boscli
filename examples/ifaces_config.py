@@ -70,7 +70,7 @@ def add_command(interpreter, keys, func, context_name=None, allways=False):
 
 
 def main():
-    interpreter = interpreter_module.Interpreter()
+    interpreter = interpreter_module.Interpreter(prompt='ifaces')
     interface_configurator = InterfaceConfigurator()
 
     add_command(

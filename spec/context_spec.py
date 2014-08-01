@@ -9,7 +9,7 @@ from boscli.command import Command
 with context('Interpreter context'):
 
     with before.each:
-        self.interpreter = interpreter_module.Interpreter()
+        self.interpreter = interpreter_module.Interpreter(prompt='irrelevant_prompt')
         self.allways_present = Spy()
         self.main_commands = Spy()
         self.context_commands = Spy()
@@ -90,8 +90,8 @@ with context('Interpreter context'):
 
             assert_that(self.interpreter.actual_context().context_name, is_('context1'))
 
-        with it('the default prompt is empty'):
-            assert_that(self.interpreter.prompt, is_(''))
+        with it('the default prompt is interpreter initial prompt'):
+            assert_that(self.interpreter.prompt, is_('irrelevant_prompt'))
 
         with it('the default context prompt is the context name'):
             self.interpreter.push_context('context1')
