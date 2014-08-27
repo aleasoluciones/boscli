@@ -34,6 +34,12 @@ with describe('Interpreter'):
 
                 assert_that(self.cmds_implementation.cmd,
                                         called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+        with describe('when all keyword partial match'):
+            with it('executes command'):
+                self.interpreter.eval('cm ke')
+
+                assert_that(self.cmds_implementation.cmd,
+                                        called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
 
         with describe('when a line does not match any command'):
             with it('raises exception'):

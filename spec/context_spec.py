@@ -104,20 +104,32 @@ with context('Interpreter context'):
 
             assert_that(self.interpreter.prompt, is_('prompt1'))
 
-    with describe('when autocompleting or matching lines'):
+
+
+with context('Types can use context'):
+
+    with before.each:
+        self.interpreter = interpreter_module.Interpreter(prompt='irrelevant_prompt')
+        self.type = Spy(basic_types.BaseType)
+        self.command = Spy()
+        self.interpreter.add_command(Command([self.type], self.command.command, context_name='context1'))       
+        
+        self.interpreter.push_context('context1', prompt='prompt1')
+        self.actual_context = self.interpreter.actual_context()
+
+        when(self.type).complete(ANY_ARG).returns([])
+        when(self.type).partial_match(ANY_ARG).returns(True)
+        when(self.type).match(ANY_ARG).returns(True)
+
+    with describe('when autocompleting'):
         with it('pass context to the type'):
-
-            self.interpreter.push_context('context1', prompt='prompt1')
-            fake_type = Spy(basic_types.BaseType)
-            self._add_command([fake_type], lambda x: None, context_name='context1')
-            
-            when(fake_type).complete(ANY_ARG).returns([])
-            when(fake_type).partial_match(ANY_ARG).returns(True)
-
-            actual_context = self.interpreter.actual_context()
-
             self.interpreter.complete('test')
-            assert_that(fake_type.partial_match, called().with_args('test', actual_context, partial_line=['test']))
-            assert_that(fake_type.complete, called().with_args(['test'], actual_context))
-            assert_that(fake_type.match, called().with_args('test', actual_context, partial_line=['test']))
 
+            assert_that(self.type.partial_match, called().with_args('test', self.actual_context, partial_line=['test']))
+            assert_that(self.type.complete, called().with_args(['test'], self.actual_context))
+            
+    with describe('when executing command'):
+        with it('pass context to the type (to verify if match)'):
+            self.interpreter.eval('test')
+
+            assert_that(self.type.match, called().with_args('test', self.actual_context, partial_line=['test']))

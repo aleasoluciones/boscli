@@ -103,11 +103,12 @@ class Interpreter(object):
         matching_command = self._matching_command(tokens, line_text)
 
         if not filter_tokens:
-            return self._execute_command(matching_command, tokens)
+            return self._execute_command(matching_command, matching_command.normalize_tokens(tokens))
 
         output_filter = self._filter_command(filter_tokens)
         with filters.RedirectStdout(output_filter):
-            return self._execute_command(matching_command, tokens)
+            return self._execute_command(matching_command, matching_command.normalize_tokens(tokens))
+
 
     def _execute_command(self, command, tokens):
         arguments = command.matching_parameters(tokens)

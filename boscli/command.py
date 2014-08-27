@@ -16,10 +16,20 @@ class Command(object):
     def __repr__(self):
         return str(self)
 
+    def normalize_tokens(self, tokens):
+        result = []
+        for index, word in enumerate(tokens):
+            definition_for_that_index = self.keywords[index]
+            if self._is_keyword(definition_for_that_index):
+                result.append(definition_for_that_index)
+            else:
+                result.append(word)
+        return result
+
     def _match_word(self, index, token, context, partial_line):
         definition_for_that_index = self.keywords[index]
         if self._is_keyword(definition_for_that_index):
-            return definition_for_that_index == token
+            return token in definition_for_that_index
         else:
             return definition_for_that_index.match(token, context, partial_line=partial_line)
 
@@ -86,9 +96,6 @@ class Command(object):
             return self.command_function(*args, **kwargs)
 
     def complete(self, tokens, context):
-        if self.match(tokens, context):
-            return []
-
         if not len(tokens):
             token_to_complete_index = 0
             token_to_complete = ''
@@ -99,7 +106,10 @@ class Command(object):
         definition_for_that_index = self.keywords[token_to_complete_index]
         if self._is_keyword(definition_for_that_index):
             if definition_for_that_index == token_to_complete:
-                return [token_to_complete + ' ']
+                if self.match(tokens, context):
+                    return []
+                else:
+                    return [token_to_complete + ' ']
             if definition_for_that_index.startswith(token_to_complete):
                 return [definition_for_that_index + ' ']
         else:
