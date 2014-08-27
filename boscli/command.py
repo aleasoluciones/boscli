@@ -29,11 +29,11 @@ class Command(object):
     def _match_word(self, index, token, context, partial_line):
         definition_for_that_index = self.keywords[index]
         if self._is_keyword(definition_for_that_index):
-            return token in definition_for_that_index
+            return definition_for_that_index.startswith(token)
         else:
             return definition_for_that_index.match(token, context, partial_line=partial_line)
 
-    def _partial_match_last_word(self, index, word, context, partial_line):
+    def _partial_match(self, index, word, context, partial_line):
         definition_for_that_index = self.keywords[index]
         if self._is_keyword(definition_for_that_index):
             return definition_for_that_index.startswith(word)
@@ -46,7 +46,7 @@ class Command(object):
 
         for index, word in enumerate(tokens):
             if index == len(tokens) -1:
-                if not self._partial_match_last_word(index, word, context, partial_line=tokens):
+                if not self._partial_match(index, word, context, partial_line=tokens):
                     return False
             else:
                 if not self._match_word(index, word, context, partial_line=tokens):

@@ -23,6 +23,7 @@ with describe('Interpreter'):
     def _add_command(self, tokens, func):
         self.interpreter.add_command(Command(tokens, func))
 
+
     with context('command execution'):
         with describe('when evaluating emptyline'):
             with it('returns_none'):
@@ -57,6 +58,7 @@ with describe('Interpreter'):
                 except exceptions.AmbiguousCommandError:
                     pass
 
+
         with context('string parameters'):
             with describe('when two string parameters are given'):
 
@@ -65,8 +67,8 @@ with describe('Interpreter'):
 
                     assert_that(self.cmds_implementation.cmd_with_parameters,
                                             called().with_args('param1', 'param2',
-                                                                                    tokens=['cmd_with_parameters', 'param1', 'param2'],
-                                                                                    interpreter=self.interpreter))
+                                                                tokens=['cmd_with_parameters', 'param1', 'param2'],
+                                                                interpreter=self.interpreter))
 
 
             with describe('when string parameters use quotes'):
@@ -75,8 +77,8 @@ with describe('Interpreter'):
 
                     assert_that(self.cmds_implementation.cmd_with_parameters,
                                             called().with_args('param1', "param with spaces",
-                                                                                    tokens=['cmd_with_parameters', 'param1', "param with spaces"],
-                                                                                    interpreter=self.interpreter))
+                                                                tokens=['cmd_with_parameters', 'param1', "param with spaces"],
+                                                                interpreter=self.interpreter))
         with context('options parameters'):
 
             with describe('when a valid option is given'):
@@ -115,3 +117,42 @@ with describe('Interpreter'):
                         self.interpreter.eval('cmd_with_regex not_matching_parameter')
                     except exceptions.NotMatchingCommandFoundError:
                         pass
+
+    with context('command execution (using abbreviations for keywords'):
+        with describe('when all keyword are abbreviated'):
+            with it('executes command'):
+                self.interpreter.eval('cm ke')
+
+                assert_that(self.cmds_implementation.cmd,
+                                        called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+        with describe('when only a keyword is abbreviated'):
+            with it('executes command'):
+                self.interpreter.eval('cmd ke')
+
+                assert_that(self.cmds_implementation.cmd,
+                                        called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+
+        
+        with describe('when two command matchs (the abbreviated keyword)'):
+            with it('raises ambiguous command exception'):
+                try:
+                    self._add_command(['configure'], Stub().cmd1)
+                    self._add_command(['consolidate'], Stub().cmd2)
+                    self.interpreter.eval('con')
+                except exceptions.AmbiguousCommandError:
+                    pass
+                else:
+                    assert False, 'expected AmbiguousCommandError raised'
+
+        with describe('when there is a perfect match and a match with abbreviated keyword'):
+            with it('executed perfect matching command'):
+
+                command = Spy()
+                self._add_command(['keyword1'], self.cmds_implementation.perfect_match)
+                self._add_command(['keyword1.1'], self.cmds_implementation.normal_match)
+                
+                self.interpreter.eval('keyword1')
+
+                assert_that(self.cmds_implementation.perfect_match,
+                            called().with_args(tokens=['keyword1'], interpreter=self.interpreter))
+                

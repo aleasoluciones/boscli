@@ -46,22 +46,29 @@ with describe('Interpreter filters'):
             with it('executed command connected to include filter'):
                 self.interpreter.eval('cmd key | include regexp')
 
-                assert_that(self.cmds_implementation.cmd,
-                                        called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+                self._assert_command_called_with_filter_connected_to_output(self.filter_factory.create_include_filter)
 
-            with it('create include filter connected to output stream'):
-                self.interpreter.eval('cmd key | include regexp')
-                assert_that(self.filter_factory.create_include_filter,
-                                        called().with_args('regexp', self.output_stream))
+        with describe('when abbreviated include keyword used'):
+            with it('executed command connected to include filter'):
+                self.interpreter.eval('cmd key | inc regexp')
+
+                self._assert_command_called_with_filter_connected_to_output(self.filter_factory.create_include_filter)
 
         with describe('when exclude filter used'):
             with it('executed command connected to exclude filter'):
                 self.interpreter.eval('cmd key | exclude regexp')
 
-                assert_that(self.cmds_implementation.cmd,
-                                        called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+                self._assert_command_called_with_filter_connected_to_output(self.filter_factory.create_exclude_filter)
 
-            with it('creates exclude filter connected to output stream'):
-                self.interpreter.eval('cmd key | exclude regexp')
-                assert_that(self.filter_factory.create_exclude_filter,
-                                        called().with_args('regexp', self.output_stream))
+        with describe('when abbreviated exclude keyword used'):
+            with it('executed command connected to exclude filter'):
+                self.interpreter.eval('cmd key | exc regexp')
+
+                self._assert_command_called_with_filter_connected_to_output(self.filter_factory.create_exclude_filter)
+
+
+        def _assert_command_called_with_filter_connected_to_output(self, create_filter_method):
+                assert_that(self.cmds_implementation.cmd,
+                            called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+                assert_that(create_filter_method,
+                            called().with_args('regexp', self.output_stream))

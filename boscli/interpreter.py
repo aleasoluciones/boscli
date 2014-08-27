@@ -74,9 +74,9 @@ class Interpreter(object):
 
     def _filter_command(self, filter_tokens):
         try:
-            if filter_tokens[0] == 'include':
+            if 'include'.startswith(filter_tokens[0]):
                 return self.filter_factory.create_include_filter(filter_tokens[1], self.output_stream)
-            if filter_tokens[0] == 'exclude':
+            if 'exclude'.startswith(filter_tokens[0]):
                 return self.filter_factory.create_exclude_filter(filter_tokens[1], self.output_stream)
             raise exceptions.SintaxError()
         except IndexError:
@@ -88,6 +88,9 @@ class Interpreter(object):
             return matching_commands[0]
         if len(matching_commands) > 0:
             perfects_matchs = self._select_exact_matching_commands(tokens)
+            if len(perfects_matchs) == 1:
+                return perfects_matchs[0]
+            perfects_matchs = [ match for match in perfects_matchs if match.normalize_tokens(tokens) == tokens]
             if len(perfects_matchs) == 1:
                 return perfects_matchs[0]
             raise exceptions.AmbiguousCommandError(matching_commands)
