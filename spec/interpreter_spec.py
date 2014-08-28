@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from hamcrest import none
+from hamcrest import none, has_length, has_items
 from doublex import Spy, assert_that, called, Stub
 
 import boscli
@@ -50,14 +50,20 @@ with describe('Interpreter'):
                     pass
 
         with describe('when two command matchs'):
-            with it('raises ambiguous command exception'):
+            with it('raises ambiguous command exception with the commands information'):
                 try:
-                    self._add_command(['ambigous_cmd'], Stub().cmd1)
-                    self._add_command(['ambigous_cmd'], Stub().cmd2)
-                    self.interpreter.eval('ambigous_cmd')
-                except exceptions.AmbiguousCommandError:
-                    pass
+                    cmd1 = Command(['ambigous_cmd1'], Stub().cmd1)
+                    self.interpreter.add_command(cmd1)
+                    cmd2 = Command(['ambigous_cmd2'], Stub().cmd2)
+                    self.interpreter.add_command(cmd2)
 
+                    self.interpreter.eval('ambigous_cmd')
+
+                    assert False, "Should raise AmbiguousCommandError"
+
+                except exceptions.AmbiguousCommandError as exc:
+                    assert_that(exc.matching_commands, has_length(2))
+                    assert_that(exc.matching_commands, has_items(cmd1, cmd2))
 
         with context('string parameters'):
             with describe('when two string parameters are given'):
