@@ -94,25 +94,27 @@ class Command(object):
             return self.command_function(*args, **kwargs)
 
     def complete(self, tokens, context):
-        if not len(tokens):
-            token_to_complete_index = 0
-            token_to_complete = ''
-        else:
-            token_to_complete_index = len(tokens) -1
-            token_to_complete = tokens[-1]
+        definition, token = self._select_token_to_complete(tokens)
+        return self.completions(definition, token, tokens, context)
 
-        definition_for_that_index = self.keywords[token_to_complete_index]
-        if self._is_keyword(definition_for_that_index):
-            if definition_for_that_index == token_to_complete:
+    def completions(self, definition, token, tokens, context):
+        if self._is_keyword(definition):
+            if definition == token:
                 if self.match(tokens, context):
                     return []
                 else:
-                    return [token_to_complete + ' ']
-            if definition_for_that_index.startswith(token_to_complete):
-                return [definition_for_that_index + ' ']
+                    return [token + ' ']
+            if definition.startswith(token):
+                return [definition + ' ']
         else:
-            return definition_for_that_index.complete(tokens, context)
-        return []
+            return definition.complete(tokens, context)
+        #return []
 
+    def _select_token_to_complete(self, tokens):
+        if not len(tokens):
+            return (self.keywords[0], '')
+        else:
+            return (self.keywords[len(tokens) -1], tokens[-1])
+            
     def _is_keyword(self, definition):
         return isinstance(definition, six.string_types)
