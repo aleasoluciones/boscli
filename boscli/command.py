@@ -78,9 +78,7 @@ class Command(object):
     def perfect_match(self, tokens, context):
         if not self.match(tokens, context):
             return False
-        if self.context_name and not context:
-            return False
-        if  context and not context.has_name(self.context_name):
+        if self.normalize_tokens(tokens) != tokens:
             return False
         return True
 

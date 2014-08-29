@@ -83,17 +83,17 @@ class Interpreter(object):
             raise exceptions.SintaxError()
 
     def _matching_command(self, tokens, line_text):
+        perfect_matching_commands = self._select_perfect_matching_commands(tokens)
+        if len(perfect_matching_commands) == 1:
+            return perfect_matching_commands[0]
+
         matching_commands = self._select_matching_commands(tokens)
         if len(matching_commands) == 1:
             return matching_commands[0]
+
         if len(matching_commands) > 0:
-            perfects_matchs = self._select_perfect_matching_commands(tokens)
-            if len(perfects_matchs) == 1:
-                return perfects_matchs[0]
-            perfects_matchs = [ match for match in perfects_matchs if match.normalize_tokens(tokens) == tokens]
-            if len(perfects_matchs) == 1:
-                return perfects_matchs[0]
             raise exceptions.AmbiguousCommandError(matching_commands)
+
         raise exceptions.NotMatchingCommandFoundError(line_text)
 
     def eval(self, line_text):
