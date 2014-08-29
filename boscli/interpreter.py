@@ -87,7 +87,7 @@ class Interpreter(object):
         if len(matching_commands) == 1:
             return matching_commands[0]
         if len(matching_commands) > 0:
-            perfects_matchs = self._select_exact_matching_commands(tokens)
+            perfects_matchs = self._select_perfect_matching_commands(tokens)
             if len(perfects_matchs) == 1:
                 return perfects_matchs[0]
             perfects_matchs = [ match for match in perfects_matchs if match.normalize_tokens(tokens) == tokens]
@@ -117,8 +117,8 @@ class Interpreter(object):
         arguments = command.matching_parameters(tokens)
         return command.execute(*arguments, tokens=tokens, interpreter=self)
 
-    def _select_exact_matching_commands(self, tokens):
-        return [command for command in self._commands if command.exact_match(tokens, self.actual_context())]
+    def _select_perfect_matching_commands(self, tokens):
+        return [command for command in self._commands if command.perfect_match(tokens, self.actual_context())]
 
     def _select_matching_commands(self, tokens):
         return [command for command in self._commands if command.match(tokens, self.actual_context())]

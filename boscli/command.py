@@ -75,7 +75,7 @@ class Command(object):
                 return False
         return True
 
-    def exact_match(self, tokens, context):
+    def perfect_match(self, tokens, context):
         if not self.match(tokens, context):
             return False
         if self.context_name and not context:
