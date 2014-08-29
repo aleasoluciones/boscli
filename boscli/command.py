@@ -26,19 +26,19 @@ class Command(object):
                 result.append(word)
         return result
 
-    def _match_word(self, index, token, context, partial_line):
-        definition_for_that_index = self.keywords[index]
-        if self._is_keyword(definition_for_that_index):
-            return definition_for_that_index.startswith(token)
+    def _match_word(self, index, word, context, partial_line):
+        definition = self.keywords[index]
+        if self._is_keyword(definition):
+            return definition.startswith(word)
         else:
-            return definition_for_that_index.match(token, context, partial_line=partial_line)
+            return definition.match(word, context, partial_line=partial_line)
 
     def _partial_match(self, index, word, context, partial_line):
-        definition_for_that_index = self.keywords[index]
-        if self._is_keyword(definition_for_that_index):
-            return definition_for_that_index.startswith(word)
+        definition = self.keywords[index]
+        if self._is_keyword(definition):
+            return definition.startswith(word)
         else:
-            return definition_for_that_index.partial_match(word, context, partial_line=partial_line)
+            return definition.partial_match(word, context, partial_line=partial_line)
 
     def partial_match(self, tokens, context):
         if len(tokens) > len(self.keywords):
