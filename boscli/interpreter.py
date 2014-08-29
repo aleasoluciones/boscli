@@ -131,12 +131,12 @@ class Interpreter(object):
     def active_commands(self):
         return [command for command in self._commands if command.context_match(self.actual_context())]
 
-    def partial_match(self, line_text):
+    def _partial_match(self, line_text):
         tokens = self.parser.parse(line_text)
         return [command for command in self.active_commands() if command.partial_match(tokens, self.actual_context())]
 
     def help(self, line_text):
-        return {command: command.help for command in self.partial_match(line_text)}
+        return {command: command.help for command in self._partial_match(line_text)}
 
     def complete(self, line_to_complete):
         completions = set()
@@ -146,7 +146,7 @@ class Interpreter(object):
             return {option for option in ['include', 'exclude'] if option.startswith(filter_tokens[-1])}
         if sep_found:
             return {' '}
-        for command in self.partial_match(line_to_complete):
+        for command in self._partial_match(line_to_complete):
             completions.update(command.complete(tokens, self.actual_context()))
         return completions
 
