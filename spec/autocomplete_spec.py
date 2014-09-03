@@ -26,7 +26,7 @@ with describe('Autocomplete'):
         with it('complete keywords'):
             assert_that(self.interpreter.complete('sy'), has_items('sys '))
             assert_that(self.interpreter.complete('sys'), has_items('sys '))
-            assert_that(self.interpreter.complete('sys r'), has_items('reboot '))
+            assert_that(self.interpreter.complete('sys r'), has_items('reboot'))
 
         with it('not complete when a command match'):
             assert_that(self.interpreter.complete('sys reboot'), has_length(0))

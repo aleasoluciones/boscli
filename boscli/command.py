@@ -98,23 +98,26 @@ class Command(object):
         return self.completions(definition, token, tokens, context)
 
     def completions(self, definition, token, tokens, context):
+        completions = []
+
         if self._is_keyword(definition):
             if definition == token:
-                if self.match(tokens, context):
-                    return []
-                else:
-                    return [token + ' ']
-            if definition.startswith(token):
-                return [definition + ' ']
+                if not self.match(tokens, context):
+                    completions = [token]
+            elif definition.startswith(token):
+                completions = [definition]
         else:
-            return definition.complete(tokens, context)
-        #return []
+            completions = definition.complete(tokens, context)
+
+        if len(tokens) == len(self.keywords):
+            return [c.strip() for c in completions]
+        return [c.strip() + ' ' for c in completions]
 
     def _select_token_to_complete(self, tokens):
         if not len(tokens):
             return (self.keywords[0], '')
         else:
             return (self.keywords[len(tokens) -1], tokens[-1])
-            
+
     def _is_keyword(self, definition):
         return isinstance(definition, six.string_types)
