@@ -18,7 +18,7 @@ with describe('Basic Types'):
     with context('Options types'):
 
         with it('autocomplete with options'):
-            assert_that(self.options_type.complete([''], self.context), has_items('op1', 'op2'))
+            assert_that(self.options_type.complete([''], self.context), has_items(('op1', True), ('op2', True)))
 
         with it('match if word in valid options'):
             assert_that(self.options_type.match('op1', self.context), is_(True))

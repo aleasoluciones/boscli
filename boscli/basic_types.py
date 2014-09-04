@@ -38,7 +38,7 @@ class OptionsType(BaseType):
         return False
 
     def complete(self, tokens, context):
-        return [option for option in self.valid_options if option.startswith(tokens[-1])]
+        return [(option, True) for option in self.valid_options if option.startswith(tokens[-1])]
 
     def __str__(self):
         return '<%s>' % ('|'.join(self.valid_options))
