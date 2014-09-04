@@ -98,25 +98,31 @@ class Command(object):
         return self.completions(definition, token, tokens, context)
 
     def completions(self, definition, token, tokens, context):
-        completions = []
-
         if self._is_keyword(definition):
-            if definition == token:
-                if not self.match(tokens, context):
-                    completions = [token]
-            elif definition.startswith(token):
-                completions = [definition]
+            raw_completions = self._complete_keyword(definition, token, tokens, context)
         else:
-            completions = definition.complete(tokens, context)
+            raw_completions = definition.complete(tokens, context)
 
-        completions2 = []
-        for completion in completions:
+        completions = []
+        for completion in raw_completions:
             if isinstance(completion, tuple):
-                completions2.append(completion[0] + (' ' if completion[1] else ''))
+                completions.append(completion[0] + (' ' if completion[1] else ''))
             else:
-                completions2.append(completion + (' ' if len(tokens) != len(self.keywords) else ''))
+                completions.append(completion + (' ' if not self._is_last_token(tokens) else ''))
 
-        return completions2
+        return completions
+
+    def _complete_keyword(self, definition, token, tokens, context):
+        if definition == token:
+            if not self.match(tokens, context):
+                return [token]
+        elif definition.startswith(token):
+            return [definition]
+
+        return []
+
+    def _is_last_token(self, tokens):
+        return len(tokens) == len(self.keywords)
 
     def _select_token_to_complete(self, tokens):
         if not len(tokens):
