@@ -109,9 +109,14 @@ class Command(object):
         else:
             completions = definition.complete(tokens, context)
 
-        if len(tokens) == len(self.keywords):
-            return [c.strip() for c in completions]
-        return [c.strip() + ' ' for c in completions]
+        completions2 = []
+        for completion in completions:
+            if isinstance(completion, tuple):
+                completions2.append(completion[0] + (' ' if completion[1] else ''))
+            else:
+                completions2.append(completion + (' ' if len(tokens) != len(self.keywords) else ''))
+
+        return completions2
 
     def _select_token_to_complete(self, tokens):
         if not len(tokens):

@@ -22,7 +22,6 @@ with describe('Autocomplete'):
             assert_that(self.interpreter.complete(''), has_items('sys ', 'net '))
 
     with describe('when autocompleting keywords'):
-
         with it('complete keywords'):
             assert_that(self.interpreter.complete('sy'), has_items('sys '))
             assert_that(self.interpreter.complete('sys'), has_items('sys '))
@@ -34,6 +33,27 @@ with describe('Autocomplete'):
 
         with it('not complete unknown command'):
             assert_that(self.interpreter.complete('unknown command'), has_length(0))
+
+    with describe('when autocompleting type with completions'):
+        with it('completes with the final space'):
+            self.interpreter.add_command(Command(['cmd', PlainCompletionsType(['op1', 'op2']), 'last'],
+                                         self.implementation.irrelevant_cmd))
+
+            assert_that(self.interpreter.complete('cmd o'), has_items('op1 ', 'op2 '))
+
+    with describe('when autocompleting type with complete completions'):
+        with it('completes with the final space'):
+            self.interpreter.add_command(Command(['cmd', CompleteCompletionsType(['op1', 'op2']), 'last'],
+                                         self.implementation.irrelevant_cmd))
+
+            assert_that(self.interpreter.complete('cmd o'), has_items('op1 ', 'op2 '))
+
+    with describe('when autocompleting type with partial completions'):
+        with it('completes without the final space'):
+            self.interpreter.add_command(Command(['cmd', PartialCompletionsType(['op1', 'op2']), 'last'],
+                                         self.implementation.irrelevant_cmd))
+
+            assert_that(self.interpreter.complete('cmd o'), has_items('op1', 'op2'))
 
     with describe('when autocompleting options type'):
         with it('complete with all matching options'):
@@ -63,3 +83,31 @@ with describe('Autocomplete'):
         with it('autocomplete exclude'):
             assert_that(self.interpreter.complete('net show configuration | exclu'), has_items('exclude'))
 
+
+class _TestCompletionsType(basic_types.BaseType):
+    def __init__(self, options):
+        self.options = options
+
+    def match(self, word, context, partial_line=None):
+        return word in self.options
+
+    def partial_match(self, word, context, partial_line=None):
+        for options in self.options:
+            if options.startswith(word):
+                return True
+        return False
+
+
+class PlainCompletionsType(_TestCompletionsType):
+    def complete(self, tokens, context):
+        return self.options
+
+
+class CompleteCompletionsType(_TestCompletionsType):
+    def complete(self, tokens, context):
+        return [(value, True) for value in self.options]
+
+
+class PartialCompletionsType(_TestCompletionsType):
+    def complete(self, tokens, context):
+        return [(value, False) for value in self.options]
