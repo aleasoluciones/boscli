@@ -35,21 +35,33 @@ with describe('Autocomplete'):
             assert_that(self.interpreter.complete('unknown command'), has_length(0))
 
     with describe('when autocompleting type with completions'):
-        with it('completes with the final space'):
+        with it('completes with the final space if is not the last token'):
             self.interpreter.add_command(Command(['cmd', PlainCompletionsType(['op1', 'op2']), 'last'],
                                          self.implementation.irrelevant_cmd))
 
             assert_that(self.interpreter.complete('cmd o'), has_items('op1 ', 'op2 '))
 
+        with it('completes without the final space if is the last token'):
+            self.interpreter.add_command(Command(['cmd', PlainCompletionsType(['op1', 'op2'])],
+                                         self.implementation.irrelevant_cmd))
+
+            assert_that(self.interpreter.complete('cmd o'), has_items('op1', 'op2'))
+
     with describe('when autocompleting type with complete completions'):
-        with it('completes with the final space'):
+        with it('completes with the final space if is not the last token'):
             self.interpreter.add_command(Command(['cmd', CompleteCompletionsType(['op1', 'op2']), 'last'],
                                          self.implementation.irrelevant_cmd))
 
             assert_that(self.interpreter.complete('cmd o'), has_items('op1 ', 'op2 '))
 
+        with it('completes without the final space if is the last token'):
+            self.interpreter.add_command(Command(['cmd', CompleteCompletionsType(['op1', 'op2'])],
+                                         self.implementation.irrelevant_cmd))
+
+            assert_that(self.interpreter.complete('cmd o'), has_items('op1', 'op2'))
+
     with describe('when autocompleting type with partial completions'):
-        with it('completes without the final space'):
+        with it('completes without the final space if is not the last token'):
             self.interpreter.add_command(Command(['cmd', PartialCompletionsType(['op1', 'op2']), 'last'],
                                          self.implementation.irrelevant_cmd))
 

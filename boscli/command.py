@@ -108,9 +108,11 @@ class Command(object):
             if isinstance(completion, tuple):
                 completions.append(completion[0] + (' ' if completion[1] else ''))
             else:
-                completions.append(completion + (' ' if not self._is_last_token(tokens) else ''))
+                completions.append(completion.strip() + ' ')
 
-        return completions
+        return [
+            completion.strip() if self._is_last_token(tokens) else completion for completion in completions
+        ]
 
     def _complete_keyword(self, definition, token, tokens, context):
         if definition == token:
