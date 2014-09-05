@@ -112,24 +112,27 @@ with context('Types can use context'):
         self.interpreter = interpreter_module.Interpreter(prompt='irrelevant_prompt')
         self.type = Spy(basic_types.BaseType)
         self.command = Spy()
-        self.interpreter.add_command(Command([self.type], self.command.command, context_name='context1'))       
-        
+        self.interpreter.add_command(Command([self.type], self.command.command, context_name='context1'))
+
         self.interpreter.push_context('context1', prompt='prompt1')
         self.actual_context = self.interpreter.actual_context()
 
         when(self.type).complete(ANY_ARG).returns([])
         when(self.type).partial_match(ANY_ARG).returns(True)
-        when(self.type).match(ANY_ARG).returns(True)
 
-    with describe('when autocompleting'):
+    with describe('when autocompleting command'):
         with it('pass context to the type'):
+            when(self.type).match(ANY_ARG).returns(False)
+
             self.interpreter.complete('test')
 
             assert_that(self.type.partial_match, called().with_args('test', self.actual_context, partial_line=['test']))
             assert_that(self.type.complete, called().with_args(['test'], self.actual_context))
-            
+
     with describe('when executing command'):
         with it('pass context to the type (to verify if match)'):
+            when(self.type).match(ANY_ARG).returns(True)
+
             self.interpreter.eval('test')
 
             assert_that(self.type.match, called().with_args('test', self.actual_context, partial_line=['test']))

@@ -58,10 +58,9 @@ class Command(object):
             return True
         if self.context_name and not context:
             return False
-
-        if context and context.has_name(self.context_name):
-            return True
         if context is None:
+            return True
+        if context.has_name(self.context_name):
             return True
         return False
 

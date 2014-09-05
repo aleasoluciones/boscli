@@ -146,14 +146,16 @@ class Interpreter(object):
             return {option for option in ['include', 'exclude'] if option.startswith(filter_tokens[-1])}
         if sep_found:
             return {' '}
+
         for command in self._partial_match(line_to_complete):
-            completions.update(command.complete(tokens, self.actual_context()))
+            if command not in self._select_perfect_matching_commands(tokens):
+                completions.update(command.complete(tokens, self.actual_context()))
         return completions
 
     @property
     def prompt(self):
         return self.actual_context().prompt if self.actual_context() else self._prompt
-    
+
     @prompt.setter
     def prompt(self, value):
         self._prompt = value
