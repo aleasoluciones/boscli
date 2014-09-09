@@ -18,7 +18,7 @@ with describe('Basic Types'):
     with context('Options types'):
 
         with it('autocomplete with options'):
-            assert_that(self.options_type.complete([''], self.context), has_items(('op1', True), ('op2', True)))
+            assert_that(self.options_type.complete('', [''], self.context), has_items(('op1', True), ('op2', True)))
 
         with it('match if word in valid options'):
             assert_that(self.options_type.match('op1', self.context), is_(True))
@@ -38,7 +38,7 @@ with describe('Basic Types'):
     with context('String types'):
 
         with it('string type has no autocompletion'):
-            assert_that(self.string_type.complete([''], self.context), has_length(0))
+            assert_that(self.string_type.complete('', [''], self.context), has_length(0))
 
         with it('match always'):
             assert_that(self.string_type.match('', self.context), is_(True))
@@ -56,7 +56,7 @@ with describe('Basic Types'):
     with context('Integer types'):
 
         with it('integer type has no autocompletion'):
-            assert_that(self.integer_type.complete([''], self.context), has_length(0))
+            assert_that(self.integer_type.complete('', [''], self.context), has_length(0))
 
         with it('does not match strings'):
             assert_that(self.integer_type.match('whatever', self.context), is_(False))
@@ -84,7 +84,7 @@ with describe('Basic Types'):
 
     with context('Regex types'):
         with it('regex type has no autocompletion'):
-            assert_that(self.regex_type.complete([''], self.context), has_length(0))
+            assert_that(self.regex_type.complete('', [''], self.context), has_length(0))
 
         with it('match when the regexp match'):
             assert_that(self.regex_type.match('op1', self.context), is_(True))

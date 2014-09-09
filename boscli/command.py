@@ -100,7 +100,7 @@ class Command(object):
         if self._is_keyword(definition):
             raw_completions = self._complete_keyword(definition, token, tokens, context)
         else:
-            raw_completions = definition.complete(tokens, context)
+            raw_completions = definition.complete(token, tokens, context)
 
         completions = []
         for completion in raw_completions:

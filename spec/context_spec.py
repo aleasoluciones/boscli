@@ -127,7 +127,7 @@ with context('Types can use context'):
             self.interpreter.complete('test')
 
             assert_that(self.type.partial_match, called().with_args('test', self.actual_context, partial_line=['test']))
-            assert_that(self.type.complete, called().with_args(['test'], self.actual_context))
+            assert_that(self.type.complete, called().with_args('test', ['test'], self.actual_context))
 
     with describe('when executing command'):
         with it('pass context to the type (to verify if match)'):

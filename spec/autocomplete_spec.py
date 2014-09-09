@@ -120,15 +120,15 @@ class _TestCompletionsType(basic_types.BaseType):
 
 
 class PlainCompletionsType(_TestCompletionsType):
-    def complete(self, tokens, context):
+    def complete(self, token, tokens, context):
         return self.options
 
 
 class CompleteCompletionsType(_TestCompletionsType):
-    def complete(self, tokens, context):
+    def complete(self, token, tokens, context):
         return [(value, True) for value in self.options if value.startswith(tokens[-1])]
 
 
 class PartialCompletionsType(_TestCompletionsType):
-    def complete(self, tokens, context):
+    def complete(self, token, tokens, context):
         return [(value, False) for value in self.options if value.startswith(tokens[-1])]

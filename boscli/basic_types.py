@@ -7,7 +7,7 @@ class BaseType(object):
     def __init__(self, name=None):
         self.name = name
 
-    def complete(self, tokens, context):
+    def complete(self, token, tokens, context):
         return []
 
     def match(self, word, context, partial_line=None):
@@ -23,7 +23,6 @@ class BaseType(object):
 
 
 class OptionsType(BaseType):
-
     def __init__(self, valid_options):
         super(OptionsType, self).__init__()
         self.valid_options = valid_options
@@ -37,8 +36,8 @@ class OptionsType(BaseType):
                 return True
         return False
 
-    def complete(self, tokens, context):
-        return [(option, True) for option in self.valid_options if option.startswith(tokens[-1])]
+    def complete(self, token, tokens, context):
+        return [(option, True) for option in self.valid_options if option.startswith(token)]
 
     def __str__(self):
         return '<%s>' % ('|'.join(self.valid_options))
