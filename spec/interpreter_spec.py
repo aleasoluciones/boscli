@@ -138,7 +138,7 @@ with describe('Interpreter'):
                 assert_that(self.cmds_implementation.cmd,
                                         called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
 
-        
+
         with describe('when two command matchs (the abbreviated keyword)'):
             with it('raises ambiguous command exception'):
                 try:
@@ -156,9 +156,9 @@ with describe('Interpreter'):
                 command = Spy()
                 self._add_command(['keyword1'], self.cmds_implementation.perfect_match)
                 self._add_command(['keyword1.1'], self.cmds_implementation.normal_match)
-                
+
                 self.interpreter.eval('keyword1')
 
                 assert_that(self.cmds_implementation.perfect_match,
                             called().with_args(tokens=['keyword1'], interpreter=self.interpreter))
-                
+

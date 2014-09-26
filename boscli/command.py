@@ -1,9 +1,40 @@
 # -*- coding: utf-8 -*-
 
 import six
+from boscli import basic_types
+
+
+class KeywordType(object):
+    def __init__(self, name=None):
+        self.name = name
+
+    def complete(self, token, tokens, context):
+        if self.name.startswith(token):
+            return [(self.name, True)]
+        return []
+
+    def match(self, word, context, partial_line=None):
+        return word == self.name
+
+    def partial_match(self, word, context, partial_line=None):
+        if self.name.startswith(word):
+            return True
+        return False
+
+    def __str__(self):
+        return '%s' % self.name
+
 
 class Command(object):
     def __init__(self, keywords, command_function = None, help=None, context_name=None, allways=False):
+        self.definitions = []
+        for definition in keywords:
+            if isinstance(definition, six.string_types):
+                self.definitions.append(KeywordType(definition))
+            else:
+                self.definitions.append(definition)
+
+        # FIXME remove pending...
         self.keywords = keywords
         self.command_function = command_function
         self.help = help
@@ -27,18 +58,14 @@ class Command(object):
         return result
 
     def _match_word(self, index, word, context, partial_line):
-        definition = self.keywords[index]
-        if self._is_keyword(definition):
-            return definition.startswith(word)
+        definition = self.definitions[index]
+        if isinstance(definition, KeywordType):
+            return definition.partial_match(word, context, partial_line=partial_line)
         else:
-            return definition.match(word, context, partial_line=partial_line)
+            return self.definitions[index].match(word, context, partial_line=partial_line)
 
     def _partial_match(self, index, word, context, partial_line):
-        definition = self.keywords[index]
-        if self._is_keyword(definition):
-            return definition.startswith(word)
-        else:
-            return definition.partial_match(word, context, partial_line=partial_line)
+        return self.definitions[index].partial_match(word, context, partial_line=partial_line)
 
     def partial_match(self, tokens, context):
         if len(tokens) > len(self.keywords):
