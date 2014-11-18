@@ -5,7 +5,10 @@ python:
   - 3.4
   - pypy
 install:
-  - pip install -r requirements.txt -r requirements-dev.txt
+  - python setup.py sdist
+  - pip install dist/`python setup.py --name`-`python setup.py --version`.tar.gz
+  - pip install -r requirements.txt
+  - pip install -r test-requirements.txt
 before_script: pip install .
 script:
   - coverage run --source boscli setup.py test
