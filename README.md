@@ -1,7 +1,7 @@
 # Boscli
-![Build status](https://secure.travis-ci.org/aleasoluciones/boscli.svg?branch=master)
-![Coverage Status](https://img.shields.io/coveralls/aleasoluciones/boscli.svg)
-    
+[![Build status](https://secure.travis-ci.org/aleasoluciones/boscli.svg?branch=master)](https://secure.travis-ci.org/aleasoluciones/boscli)
+[![Coverage Status](https://img.shields.io/coveralls/aleasoluciones/boscli.svg)](https://coveralls.io/r/aleasoluciones/boscli?branch=master)
+
 **Boscli** is the base infrastructure to create *ad hoc*
 shells or command line interfaces using Python. It includes an useless shell with a minimum set of commands. This shell can be extended using plugins that will be loaded during its own startup.
 
