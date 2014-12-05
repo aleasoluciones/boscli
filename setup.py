@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
-long_description = open('README.rst').read()
+long_description = open('README.md').read()
 
 
 class MambaTest(TestCommand):
