@@ -21,6 +21,7 @@ class MambaTest(TestCommand):
 setup(name='boscli',
       version='0.9.1',
       author='Alea Soluciones SLL',
+      author_email='eduardo.ferro.aldama@gmail.com',
       description ='Extensible command line processor for "ad hoc" shells creation',
       long_description=long_description,
       license='MIT',
