@@ -5,39 +5,10 @@ import boscli
 from boscli import interpreter as interpreter_module
 from boscli import basic_types
 from boscli.command import Command
-
+from boscli.readlinecli import readlinecli
 import readline
 import six
 
-
-class ReadlineCli(object):
-
-    def __init__(self, interpreter):
-        self.interpreter = interpreter
-
-    def complete(self, prefix, index):
-        line = readline.get_line_buffer()
-        completions = list(self.interpreter.complete(line))
-        completions = completions + [None]
-        return completions[index]
-
-    def interact(self):
-        while True:
-            try:
-                line = raw_input(self.interpreter.prompt + '>')
-                if line.endswith('?'):
-                    line = line[:-1]
-                    for command, help in six.iteritems(self.interpreter.help(line)):
-                        print str(command), ' ==> ', help
-                else:
-                    val = self.interpreter.eval(line)
-                    if val is not None:
-                        print str(val)
-            except boscli.exceptions.NotMatchingCommandFoundError:
-                print "Not matching command found"
-            except (boscli.exceptions.EndOfProgram, EOFError, KeyboardInterrupt):
-                print "Exit"
-                break
 
 
 class InterfaceConfigurator(object):
@@ -92,7 +63,7 @@ def main():
     add_command(interpreter, ['iface', 'commit'],
                 interface_configurator.commit_iface_conf, context_name='iface_conf')
 
-    cli = ReadlineCli(interpreter)
+    cli = readlinecli.ReadlineCli(interpreter)
 
     readline.parse_and_bind("tab: complete")
     readline.set_completer(cli.complete)
