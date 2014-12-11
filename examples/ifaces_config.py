@@ -6,7 +6,6 @@ from boscli import interpreter as interpreter_module
 from boscli import basic_types
 from boscli.command import Command
 from boscli.readlinecli import readlinecli
-import readline
 import six
 
 
@@ -64,9 +63,6 @@ def main():
                 interface_configurator.commit_iface_conf, context_name='iface_conf')
 
     cli = readlinecli.ReadlineCli(interpreter)
-
-    readline.parse_and_bind("tab: complete")
-    readline.set_completer(cli.complete)
     cli.interact()
 
 if __name__ == '__main__':

@@ -15,12 +15,19 @@ class ReadlineCli(object):
         self.init_readline()
 
     def init_readline(self):
-        readline.parse_and_bind("tab: complete")
-        readline.set_completer(self.complete)
+        self._default_parse_and_bind()
         readline.parse_and_bind("set bell-style none")
         readline.parse_and_bind("set show-all-if-ambiguous")
         readline.parse_and_bind("set completion-query-items -1")
         readline.set_completer_delims(' \t\n')
+	readline.set_completer(self.complete)
+
+    def _default_parse_and_bind(self):
+        if 'libedit' in readline.__doc__:
+            readline.parse_and_bind("bind ^I rl_complete")
+        else:
+            readline.parse_and_bind("tab: complete")
+
 
     def init_history(self):
         histfile=os.path.expanduser("~/.aleacli_history")
