@@ -1,5 +1,5 @@
 pyhamcrest
 doublex
 mamba
-coverage==3.7
+coverage
 coveralls
