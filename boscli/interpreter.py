@@ -96,6 +96,12 @@ class Interpreter(object):
 
         raise exceptions.NotMatchingCommandFoundError(line_text)
 
+    def eval_multiple(self, lines):
+        results = []
+        for line in lines:
+            results.append(self.eval(line))
+        return results
+
     def eval(self, line_text):
         line_text = line_text.strip()
         if not line_text:

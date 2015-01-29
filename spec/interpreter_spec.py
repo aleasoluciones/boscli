@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from hamcrest import none, has_length, has_items
-from doublex import Spy, assert_that, called, Stub
+from doublex import Spy, assert_that, called, Stub, when, ANY_ARG
 
 import boscli
 from boscli import exceptions, basic_types
@@ -25,6 +25,25 @@ with describe('Interpreter'):
 
 
     with context('command execution'):
+        with describe('when evaluating multiple lines'):
+            with it('execute each line / command'):
+                lines = ['cmd key', 'cmd_with_parameters s1 s2']
+                self.interpreter.eval_multiple(lines)
+
+                assert_that(self.cmds_implementation.cmd,
+                                        called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+                assert_that(self.cmds_implementation.cmd_with_parameters,
+                                        called().with_args('s1', 's2', tokens=['cmd_with_parameters', 's1', 's2'], interpreter=self.interpreter))
+
+            with it('returns the result for each line'):
+                when(self.cmds_implementation).cmd(ANY_ARG).returns('a_result')
+                lines = ['cmd key', 'cmd_with_parameters s1 s2']
+
+                result = self.interpreter.eval_multiple(lines)
+
+                assert_that(result, has_items('a_result', None))
+
+
         with describe('when evaluating emptyline'):
             with it('returns_none'):
                 assert_that(self.interpreter.eval(''), none())
