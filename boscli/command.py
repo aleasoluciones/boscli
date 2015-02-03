@@ -53,10 +53,7 @@ class Command(object):
             if self._is_keyword(definition_for_that_index):
                 result.append(definition_for_that_index)
             else:
-                completions = self.definitions[index].complete(word, tokens, context)
-                if len(completions) == 1:
-                    word = completions[0][0]
-                result.append(word)
+                result.append(self._expand_parameter(self.definitions[index], word, tokens, context))
         return result
 
     def _match_word(self, index, word, context, partial_line):
@@ -64,10 +61,14 @@ class Command(object):
         if isinstance(definition, KeywordType):
             return definition.partial_match(word, context, partial_line=partial_line)
         else:
-            completions = self.definitions[index].complete(word, partial_line, context)
-            if len(completions) == 1:
-                word = completions[0][0]
+            word = self._expand_parameter(self.definitions[index], word, partial_line, context)
             return self.definitions[index].match(word, context, partial_line=partial_line)
+
+    def _expand_parameter(self, definition, word, tokens, context):
+        completions = definition.complete(word, tokens, context)
+        if len(completions) == 1:
+            return completions[0][0]
+        return word
 
     def _partial_match(self, index, word, context, partial_line):
         return self.definitions[index].partial_match(word, context, partial_line=partial_line)
