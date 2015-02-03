@@ -181,3 +181,24 @@ with describe('Interpreter'):
                 assert_that(self.cmds_implementation.perfect_match,
                             called().with_args(tokens=['keyword1'], interpreter=self.interpreter))
 
+    with context('command execution with autoexpansion of parameters'):
+        with describe('when there is a uniq autocompletion'):
+            with it('expand the parameter to the autocompletion and execute the command'):
+                self._add_command(['cmd1', basic_types.OptionsType(['firstOp', 'secondOp'])],
+                                self.cmds_implementation.cmd1)
+
+                self.interpreter.eval('cmd1 first')
+
+                assert_that(self.cmds_implementation.cmd1,
+                                        called().with_args('firstOp', tokens=['cmd1', 'firstOp'], interpreter=self.interpreter))
+
+            with it('expand all parameters with uniques autocompletions and execute the command'):
+
+                self._add_command(['cmd1', basic_types.OptionsType(['firstOp', 'secondOp']), basic_types.OptionsType(['firstOp', 'secondOp'])],
+                                self.cmds_implementation.cmd1)
+
+                self.interpreter.eval('cmd1 first second')
+
+                assert_that(self.cmds_implementation.cmd1,
+                                        called().with_args('firstOp', 'secondOp', tokens=['cmd1', 'firstOp', 'secondOp'], interpreter=self.interpreter))
+

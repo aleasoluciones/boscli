@@ -34,7 +34,6 @@ class Command(object):
             else:
                 self.definitions.append(definition)
 
-        # FIXME remove pending...
         self.keywords = keywords
         self.command_function = command_function
         self.help = help
@@ -47,13 +46,16 @@ class Command(object):
     def __repr__(self):
         return str(self)
 
-    def normalize_tokens(self, tokens):
+    def normalize_tokens(self, tokens, context):
         result = []
         for index, word in enumerate(tokens):
             definition_for_that_index = self.keywords[index]
             if self._is_keyword(definition_for_that_index):
                 result.append(definition_for_that_index)
             else:
+                completions = self.definitions[index].complete(word, tokens, context)
+                if len(completions) == 1:
+                    word = completions[0][0]
                 result.append(word)
         return result
 
@@ -62,6 +64,9 @@ class Command(object):
         if isinstance(definition, KeywordType):
             return definition.partial_match(word, context, partial_line=partial_line)
         else:
+            completions = self.definitions[index].complete(word, partial_line, context)
+            if len(completions) == 1:
+                word = completions[0][0]
             return self.definitions[index].match(word, context, partial_line=partial_line)
 
     def _partial_match(self, index, word, context, partial_line):
@@ -78,6 +83,7 @@ class Command(object):
             else:
                 if not self._match_word(index, word, context, partial_line=tokens):
                     return False
+
         return True
 
     def context_match(self, context):
@@ -104,7 +110,7 @@ class Command(object):
     def perfect_match(self, tokens, context):
         if not self.match(tokens, context):
             return False
-        if self.normalize_tokens(tokens) != tokens:
+        if self.normalize_tokens(tokens, context) != tokens:
             return False
         return True
 

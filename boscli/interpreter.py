@@ -93,7 +93,6 @@ class Interpreter(object):
 
         if len(matching_commands) > 0:
             raise exceptions.AmbiguousCommandError(matching_commands)
-
         raise exceptions.NotMatchingCommandFoundError(line_text)
 
     def eval_multiple(self, lines):
@@ -112,11 +111,11 @@ class Interpreter(object):
         matching_command = self._matching_command(tokens, line_text)
 
         if not filter_tokens:
-            return self._execute_command(matching_command, matching_command.normalize_tokens(tokens))
+            return self._execute_command(matching_command, matching_command.normalize_tokens(tokens, self.actual_context()))
 
         output_filter = self._filter_command(filter_tokens)
         with filters.RedirectStdout(output_filter):
-            return self._execute_command(matching_command, matching_command.normalize_tokens(tokens))
+            return self._execute_command(matching_command, matching_command.normalize_tokens(tokens, self.actual_context()))
 
 
     def _execute_command(self, command, tokens):
