@@ -58,8 +58,14 @@ with describe('Basic Types'):
             assert_that(self.string_type.partial_match('whatever', self.context), is_(True))
             assert_that(self.string_type.partial_match('1', self.context), is_(True))
 
-        with it('string type include its name at its representation'):
-            assert_that(str(self.string_type), contains_string('String'))
+        with context('Representation'):
+            with it('has a default representation'):
+                assert_that(str(basic_types.StringType()), contains_string('StringType'))
+
+            with context('when name provided'):
+                with it('has name as representation'):
+                    assert_that(str(basic_types.StringType(name='name')), contains_string('name'))
+
 
     with context('Integer types'):
 
@@ -86,8 +92,13 @@ with describe('Basic Types'):
                 assert_that(self.integer_type.partial_match('10', self.context), is_(False))
                 assert_that(self.integer_type.partial_match('6', self.context), is_(True))
 
-        with it('string type include its name at its representation'):
-            assert_that(str(self.integer_type), contains_string('Integer'))
+        with context('Representation'):
+            with it('has a default representation'):
+                assert_that(str(basic_types.IntegerType()), contains_string('IntegerType'))
+
+            with context('when name provided'):
+                with it('has name as representation'):
+                    assert_that(str(basic_types.IntegerType(name='name')), contains_string('name'))
 
 
     with context('Regex types'):
@@ -106,5 +117,10 @@ with describe('Basic Types'):
             assert_that(self.regex_type.partial_match('op3', self.context), is_(True))
             assert_that(self.regex_type.partial_match('op4', self.context), is_(False))
 
-        with it('regex type include its name at its representation'):
-            assert_that(str(self.regex_type), contains_string('ops1-3'))
+        with context('Representation'):
+            with it('has a default representation'):
+                assert_that(str(basic_types.RegexType('regEx')), contains_string('RegexType'))
+
+            with context('when name provided'):
+                with it('has name as representation'):
+                    assert_that(str(basic_types.RegexType('regEx', name='name')), contains_string('name'))
