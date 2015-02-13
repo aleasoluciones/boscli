@@ -23,8 +23,9 @@ class BaseType(object):
 
 
 class OptionsType(BaseType):
-    def __init__(self, valid_options):
+    def __init__(self, valid_options, name=None):
         super(OptionsType, self).__init__()
+        self.name = name
         self.valid_options = valid_options
 
     def match(self, word, context, partial_line=None):
@@ -40,6 +41,8 @@ class OptionsType(BaseType):
         return [(option, True) for option in self.valid_options if option.startswith(token)]
 
     def __str__(self):
+        if not self.name is None:
+            return '<%s>' % self.name
         return '<%s>' % ('|'.join(self.valid_options))
 
 

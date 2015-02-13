@@ -26,14 +26,22 @@ with describe('Basic Types'):
         with it('does not math if word not in valid options'):
             assert_that(self.options_type.match('invalid_option', self.context), is_(False))
 
-        with it('include options at its representation'):
-            assert_that(str(self.options_type), string_contains_in_order('op1', 'op2'))
 
         with it('partial match if word starts like any valid options'):
             assert_that(self.options_type.partial_match('o', self.context), is_(True))
 
         with it('does not partial match if word does not starts like any valid options'):
             assert_that(self.options_type.partial_match('inv', self.context), is_(False))
+
+        with context('Representation'):
+            with it('include options at its representation'):
+                assert_that(str(self.options_type), string_contains_in_order('op1', 'op2'))
+
+            with context('when name provided'):
+                with it('string type include its name at its representation'):
+                    options_type = basic_types.OptionsType(['op1', 'op2'], name='name')
+                    assert_that(str(options_type), contains_string('name'))
+
 
     with context('String types'):
 
