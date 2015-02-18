@@ -21,6 +21,35 @@ class BaseType(object):
             return '<%s>' % self.name
         return '<%s>' % self.__class__.__name__
 
+class OrType(object):
+    def __init__(self, *types, **kwargs):
+        self.types = types
+        self.name = kwargs.get('name', None)
+
+    def complete(self, token, tokens, context):
+        completions = []
+        for t in self.types:
+            completions.extend(t.complete(token, tokens, context))
+        return completions
+
+    def match(self, word, context, partial_line=None):
+        for t in self.types:
+            if t.match(word, context, partial_line):
+                return True
+        return False
+
+    def partial_match(self, word, context, partial_line=None):
+        for t in self.types:
+            if t.partial_match(word, context, partial_line):
+                return True
+        return False
+
+    def __str__(self):
+        if hasattr(self, 'name') and self.name:
+            return '<%s>' % self.name
+        return '<%s>' % self.__class__.__name__
+
+
 
 class OptionsType(BaseType):
     def __init__(self, valid_options, name=None):

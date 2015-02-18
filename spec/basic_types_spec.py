@@ -1,9 +1,70 @@
 # -*- coding: utf-8 -*-
 
-from hamcrest import has_length, contains_string, has_items, string_contains_in_order
-from doublex import assert_that, is_
+from hamcrest import has_length, contains_string, has_items, string_contains_in_order, contains
+from doublex import assert_that, is_, Spy, when
 
 from boscli import basic_types
+
+with describe('Or type'):
+    with before.each:
+        self.type1 = Spy(basic_types.BaseType)
+        self.type2 = Spy(basic_types.BaseType)
+        self.type3 = Spy(basic_types.BaseType)
+        self.context = 'irrelevant_context'
+        self.or_type = basic_types.OrType(self.type1, self.type2, self.type3)
+
+    with it('autocomplete with all the types autocompletions'):
+        when(self.type1).complete('token', ['token'], self.context).returns(['irrelevant_res1'])
+        when(self.type2).complete('token', ['token'], self.context).returns(['irrelevant_res2'])
+        when(self.type3).complete('token', ['token'], self.context).returns(['irrelevant_res3'])
+
+        result = self.or_type.complete('token', ['token'], self.context)
+
+        assert_that(result, contains('irrelevant_res1', 'irrelevant_res2', 'irrelevant_res3'))
+
+    with it('matchs if any of the types matchs'):
+        when(self.type1).match('token', self.context, partial_line=['token']).returns(False)
+        when(self.type2).match('token', self.context, partial_line=['token']).returns(True)
+        when(self.type3).match('token', self.context, partial_line=['token']).returns(False)
+
+        result = self.or_type.match('token', self.context, partial_line=['token'])
+
+        assert_that(result, is_(True))
+
+    with it('does not matchs when none matchs'):
+        when(self.type1).match('token', self.context, partial_line=['token']).returns(False)
+        when(self.type2).match('token', self.context, partial_line=['token']).returns(False)
+        when(self.type3).match('token', self.context, partial_line=['token']).returns(False)
+
+        result = self.or_type.match('token', self.context, partial_line=['token'])
+
+        assert_that(result, is_(False))
+
+    with it('partial matchs if any of the types matchs'):
+        when(self.type1).partial_match('token', self.context, partial_line=['token']).returns(False)
+        when(self.type2).partial_match('token', self.context, partial_line=['token']).returns(True)
+        when(self.type3).partial_match('token', self.context, partial_line=['token']).returns(False)
+
+        result = self.or_type.partial_match('token', self.context, partial_line=['token'])
+
+        assert_that(result, is_(True))
+
+    with it('does not partial matchs when none matchs'):
+        when(self.type1).partial_match('token', self.context, partial_line=['token']).returns(False)
+        when(self.type2).partial_match('token', self.context, partial_line=['token']).returns(False)
+        when(self.type3).partial_match('token', self.context, partial_line=['token']).returns(False)
+
+        result = self.or_type.partial_match('token', self.context, partial_line=['token'])
+
+        assert_that(result, is_(False))
+
+    with context('Representation'):
+        with context('when name provided'):
+            with it('contains the name at its representation'):
+                or_type = basic_types.OrType(self.type1, self.type2, self.type3, name='name')
+
+                assert_that(str(or_type), contains_string('name'))
+
 
 
 with describe('Basic Types'):
@@ -14,6 +75,7 @@ with describe('Basic Types'):
         self.regex_type = basic_types.RegexType('op[1-3]', name='ops1-3')
         self.integer_type = basic_types.IntegerType(min=5, max=10)
         self.context = 'irrelevant_context'
+
 
     with context('Options types'):
 
