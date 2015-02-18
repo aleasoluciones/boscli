@@ -28,7 +28,6 @@ class ReadlineCli(object):
         else:
             readline.parse_and_bind("tab: complete")
 
-
     def init_history(self):
         histfile=os.path.expanduser("~/.aleacli_history")
         try:
@@ -83,6 +82,10 @@ class ReadlineCli(object):
                         print str(val)
             except exceptions.NotMatchingCommandFoundError:
                 print "Not matching command found"
+                commands_help = self.interpreter.help(line.strip())
+                for command_str in sorted(commands_help.keys()):
+                    print str(command_str), ' ==> ', commands_help[command_str]
+
             except exceptions.AmbiguousCommandError as exc:
                 print "Ambigous command"
                 for command in exc.matching_commands:
