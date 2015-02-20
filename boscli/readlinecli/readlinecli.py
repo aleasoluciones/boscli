@@ -66,6 +66,14 @@ class ReadlineCli(object):
             response = None
         return response
         
+    def _print_help(self, line):
+        help_lines = []
+        commands_help = self.interpreter.help(line.strip())
+        for command_str in sorted(commands_help.keys()):
+            help_lines.append(str(command_str) + ' ==> ' + (commands_help[command_str] or 'No help'))
+
+        for p in sorted(help_lines):
+            print p
 
     def interact(self):
         while True:
@@ -73,19 +81,14 @@ class ReadlineCli(object):
                 line = raw_input(self.interpreter.prompt + '>')
                 if line.endswith('?'):
                     line = line[:-1]
-                    commands_help = self.interpreter.help(line.strip())
-                    for command_str in sorted(commands_help.keys()):
-                        print str(command_str), ' ==> ', commands_help[command_str]
+                    self._print_help(line)
                 else:
                     val = self.interpreter.eval(line)
                     if val is not None:
                         print str(val)
             except exceptions.NotMatchingCommandFoundError:
                 print "Not matching command found"
-                commands_help = self.interpreter.help(line.strip())
-                for command_str in sorted(commands_help.keys()):
-                    print str(command_str), ' ==> ', commands_help[command_str]
-
+                self._print_help(line)
             except exceptions.AmbiguousCommandError as exc:
                 print "Ambigous command"
                 for command in exc.matching_commands:
