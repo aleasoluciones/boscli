@@ -5,6 +5,8 @@
 **Boscli** is the base infrastructure to create *ad hoc*
 shells or command line interfaces using Python. It includes an useless shell with a minimum set of commands. This shell can be extended using plugins that will be loaded during its own startup.
 
+## use examples
+see examples Dir 
 ## Installation
 You can install the latest sources from GitHub.
 ```bash
