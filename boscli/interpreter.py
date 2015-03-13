@@ -120,7 +120,10 @@ class Interpreter(object):
 
     def _execute_command(self, command, tokens):
         arguments = command.matching_parameters(tokens)
-        return command.execute(*arguments, tokens=tokens, interpreter=self)
+        try:
+            return command.execute(*arguments, tokens=tokens, interpreter=self)
+        except KeyboardInterrupt:
+            pass
 
     def _select_perfect_matching_commands(self, tokens):
         return [command for command in self._commands if command.perfect_match(tokens, self.actual_context())]
