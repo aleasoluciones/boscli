@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from hamcrest import none, has_length, has_items
+from hamcrest import none, has_length, has_items, is_not
 from doublex import Spy, assert_that, called, Stub, when, ANY_ARG
 
 import boscli
@@ -22,7 +22,6 @@ with describe('Interpreter'):
 
     def _add_command(self, tokens, func):
         self.interpreter.add_command(Command(tokens, func))
-
 
     with context('command execution'):
         with describe('when evaluating multiple lines'):
@@ -54,6 +53,21 @@ with describe('Interpreter'):
 
                 assert_that(self.cmds_implementation.cmd,
                                         called().with_args(tokens=['cmd', 'key'], interpreter=self.interpreter))
+
+        with describe('ctrl+c when running a command'):
+            with it('stops the command'):
+                def an_interrupted_cmd(*args, **kwargs):
+                    self.cmds_implementation.cmd1()
+                    raise KeyboardInterrupt()
+                    self.cmds_implementation.cmd2()
+
+                self._add_command(['cmd', 'ctrl+c'], an_interrupted_cmd)
+
+                self.interpreter.eval("cmd ctrl+c")
+
+                assert_that(self.cmds_implementation.cmd1, called())
+                assert_that(self.cmds_implementation.cmd2, is_not(called()))
+
         with describe('when all keyword partial match'):
             with it('executes command'):
                 self.interpreter.eval('cm ke')
