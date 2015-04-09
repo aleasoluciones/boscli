@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import traceback
 import readline
 import atexit
 from boscli import exceptions
@@ -9,10 +10,11 @@ from boscli import exceptions
 
 class ReadlineCli(object):
 
-    def __init__(self, interpreter):
+    def __init__(self, interpreter, debug=False):
         self.interpreter = interpreter
         self.init_history()
         self.init_readline()
+        self.debug = debug
 
     def init_readline(self):
         self._default_parse_and_bind()
@@ -20,7 +22,7 @@ class ReadlineCli(object):
         readline.parse_and_bind("set show-all-if-ambiguous")
         readline.parse_and_bind("set completion-query-items -1")
         readline.set_completer_delims(' \t\n')
-	readline.set_completer(self.complete)
+        readline.set_completer(self.complete)
 
     def _default_parse_and_bind(self):
         if 'libedit' in readline.__doc__:
@@ -96,4 +98,10 @@ class ReadlineCli(object):
             except (exceptions.EndOfProgram, EOFError, KeyboardInterrupt):
                 print "Exit"
                 break
+            except Exception as exc:
+                print "Unknown exception", exc, exc.__class__.__name__
+                if self.debug:
+                    traceback.print_exc()
+               
+
 
