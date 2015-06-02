@@ -86,6 +86,11 @@ class StringType(BaseType):
     def partial_match(self, word, context, partial_line=None):
         return True
 
+class BoolType(OptionsType):
+
+    def __init__(self, name=None):
+        super(BoolType, self).__init__(['true', 'false'], name)
+
 
 class IntegerType(BaseType):
 

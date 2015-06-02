@@ -70,11 +70,36 @@ with describe('Or type'):
 with describe('Basic Types'):
 
     with before.each:
+        self.bool_type = basic_types.BoolType(name='Bool')
         self.options_type = basic_types.OptionsType(['op1', 'op2'])
         self.string_type = basic_types.StringType(name='String')
         self.regex_type = basic_types.RegexType('op[1-3]', name='ops1-3')
         self.integer_type = basic_types.IntegerType(min=5, max=10)
         self.context = 'irrelevant_context'
+
+    with context('Bool type'):
+
+        with it('autocomplete with options'):
+            assert_that(self.bool_type.complete('', [''], self.context), has_items(('true', True), ('false', True)))
+
+        with it('match if word is true or false'):
+            assert_that(self.bool_type.match('true', self.context), is_(True))
+            assert_that(self.bool_type.match('false', self.context), is_(True))
+
+        with it('does not math if word not in true or false'):
+            assert_that(self.bool_type.match('whatever', self.context), is_(False))
+
+        with it('partial match if word partial match true or false'):
+            assert_that(self.string_type.partial_match('tr', self.context), is_(True))
+            assert_that(self.string_type.partial_match('fa', self.context), is_(True))
+
+        with context('Representation'):
+            with it('has a default representation'):
+                assert_that(str(basic_types.BoolType()), string_contains_in_order('true', 'false'))
+
+            with context('when name provided'):
+                with it('has name as representation'):
+                    assert_that(str(basic_types.BoolType(name='name')), contains_string('name'))
 
 
     with context('Options types'):
