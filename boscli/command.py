@@ -40,6 +40,11 @@ class Command(object):
         self.context_name = context_name
         self.allways = allways
 
+    def __lt__(self, other):
+        # Dummy sort help function (to avoid problems sorting command
+        # sequences using python 3.x
+        return self.__str__().__lt__(other.__str__())
+
     def __str__(self):
         return " ".join(str(token_definition) for token_definition in self.keywords)
 
