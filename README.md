@@ -2,11 +2,12 @@
 [![Build status](https://secure.travis-ci.org/aleasoluciones/boscli.svg?branch=master)](https://secure.travis-ci.org/aleasoluciones/boscli)
 [![Coverage Status](https://img.shields.io/coveralls/aleasoluciones/boscli.svg)](https://coveralls.io/r/aleasoluciones/boscli?branch=master)
 
-**Boscli** is the base infrastructure to create *ad hoc*
-shells or command line interfaces using Python. It includes an useless shell with a minimum set of commands. This shell can be extended using plugins that will be loaded during its own startup.
+**Boscli** is the base infrastructure to create *ad hoc* shells or command line interfaces using Python.
+It includes an engine for command completion, types verification, command help and other useful features. It can be used with readline to provide advanced line editing, history and autocompletion.
 
 ## use examples
-see examples dir
+see examples dir for a minimal ad hoc shell using readline.
+
 ## Installation
 You can install the latest sources from GitHub.
 ```bash
