@@ -51,6 +51,7 @@ class RedirectStdout(object):
     '''
     def __init__(self, new_target):
         self.new_target = new_target
+        self.olt_target = None
 
     def __enter__(self):
         self.old_target = sys.stdout

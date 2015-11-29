@@ -15,6 +15,7 @@ class ReadlineCli(object):
         self.init_history()
         self.init_readline()
         self.debug = debug
+        self.completions = None
 
     def init_readline(self):
         self._default_parse_and_bind()
@@ -31,7 +32,7 @@ class ReadlineCli(object):
             readline.parse_and_bind("tab: complete")
 
     def init_history(self):
-        histfile=os.path.expanduser("~/.aleacli_history")
+        histfile = os.path.expanduser("~/.aleacli_history")
         try:
             readline.read_history_file(histfile)
         except IOError:
@@ -74,8 +75,8 @@ class ReadlineCli(object):
         for command_str in sorted(commands_help.keys()):
             help_lines.append(str(command_str) + ' ==> ' + (commands_help[command_str] or 'No help'))
 
-        for p in sorted(help_lines):
-            print p
+        for help_line in sorted(help_lines):
+            print help_line
 
     def interact(self):
         while True:

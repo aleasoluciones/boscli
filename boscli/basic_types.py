@@ -108,7 +108,7 @@ class IntegerType(BaseType):
                 if int(word) >= self.max:
                     return False
             return True
-        except ValueError as exc:
+        except ValueError:
             return False
     def partial_match(self, word, context, partial_line=None):
         return self.match(word, context, partial_line)

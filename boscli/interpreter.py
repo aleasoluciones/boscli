@@ -2,7 +2,7 @@
 
 import sys
 from boscli import exceptions
-from boscli import parser
+from boscli import parser as parser_module
 from boscli import filters
 
 
@@ -29,7 +29,7 @@ class Context(object):
 class Interpreter(object):
 
     def __init__(self,
-                 parser=parser.Parser(),
+                 parser=parser_module.Parser(),
                  filter_factory=filters.FilterFactory(),
                  output_stream=sys.stdout,
                  prompt=''):

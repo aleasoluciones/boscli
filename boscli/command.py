@@ -26,7 +26,7 @@ class KeywordType(object):
 
 
 class Command(object):
-    def __init__(self, keywords, command_function = None, help=None, context_name=None, allways=False):
+    def __init__(self, keywords, command_function=None, help=None, context_name=None, allways=False):
         self.definitions = []
         for definition in keywords:
             if isinstance(definition, six.string_types):
