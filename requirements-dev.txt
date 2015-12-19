@@ -1,5 +1,5 @@
+-e git+git://github.com/nestorsalceda/mamba.git#egg=mamba
 pyhamcrest
 doublex
-mamba==0.8.5
-coverage==3.7.1
+coverage
 coveralls
