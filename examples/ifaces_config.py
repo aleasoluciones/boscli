@@ -14,7 +14,7 @@ class InterfaceConfigurator(object):
 
     def init_iface_conf(self, iface, interpreter, **kwargs):
         interpreter.push_context('iface_conf', prompt='conf %s' % iface)
-        print "init_iface_conf"
+        six.print_("init_iface_conf")
 
     def address(self, address, interpreter, **kwargs):
         interpreter.actual_context().data['address'] = address
@@ -29,9 +29,9 @@ class InterfaceConfigurator(object):
         interpreter.actual_context().data['gateway'] = gateway
 
     def commit_iface_conf(self, interpreter, **kwargs):
-        print "commit_iface_conf", kwargs
-        print "Commit data"
-        print interpreter.actual_context().data
+        six.print_("commit_iface_conf", kwargs)
+        six.print_("Commit data")
+        six.print_(interpreter.actual_context().data)
         interpreter.pop_context()
 
 
