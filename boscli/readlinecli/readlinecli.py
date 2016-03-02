@@ -7,7 +7,10 @@ import readline
 import atexit
 from boscli import exceptions
 
-
+try:
+    input = raw_input
+except NameError:
+    pass
 
 class ReadlineCli(object):
 
@@ -82,7 +85,7 @@ class ReadlineCli(object):
     def interact(self):
         while True:
             try:
-                line = raw_input(self.interpreter.prompt + '>')
+                line = input(self.interpreter.prompt + '>')
                 if line.endswith('?'):
                     line = line[:-1]
                     self._print_help(line)
