@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from hamcrest import has_length, contains_string, has_items, string_contains_in_order, contains
-from doublex import assert_that, is_, Spy, when
+from doublex import assert_that, is_, Spy, Stub, when
 
 from boscli import basic_types
 
@@ -128,6 +128,57 @@ with describe('Basic Types'):
                 with it('string type include its name at its representation'):
                     options_type = basic_types.OptionsType(['op1', 'op2'], name='name')
                     assert_that(str(options_type), contains_string('name'))
+
+    with context('Dynamic Options type'):
+
+        with it('autocomplete with dynamic options'):
+            self.options = Stub()
+            when(self.options).get_options().returns(['op1', 'op2'])
+            self.dynamic_options_type = basic_types.DynamicOptionsType(self.options.get_options)
+
+            assert_that(self.dynamic_options_type.complete('', [''], self.context), has_items(('op1', True), ('op2', True)))
+
+        with it('match if word in valid options'):
+            self.options = Stub()
+            when(self.options).get_options().returns(['op1', 'op2'])
+            self.dynamic_options_type = basic_types.DynamicOptionsType(self.options.get_options)
+
+            assert_that(self.dynamic_options_type.match('op1', self.context), is_(True))
+
+        with it('does not math if word not in valid options'):
+            self.options = Stub()
+            when(self.options).get_options().returns(['op1', 'op2'])
+            self.dynamic_options_type = basic_types.DynamicOptionsType(self.options.get_options)
+
+            assert_that(self.dynamic_options_type.match('invalid_option', self.context), is_(False))
+
+        with it('partial match if word starts like any valid options'):
+            self.options = Stub()
+            when(self.options).get_options().returns(['op1', 'op2'])
+            self.dynamic_options_type = basic_types.DynamicOptionsType(self.options.get_options)
+            assert_that(self.dynamic_options_type.partial_match('o', self.context), is_(True))
+
+        with it('does not partial match if word does not starts like any valid options'):
+            self.options = Stub()
+            when(self.options).get_options().returns(['op1', 'op2'])
+            self.dynamic_options_type = basic_types.DynamicOptionsType(self.options.get_options)
+
+            assert_that(self.dynamic_options_type.partial_match('inv', self.context), is_(False))
+
+
+        with context('Representation'):
+            with it('include options at its representation'):
+                self.options = Stub()
+                when(self.options).get_options().returns(['op1', 'op2'])
+                self.dynamic_options_type = basic_types.DynamicOptionsType(self.options.get_options)
+
+                assert_that(str(self.dynamic_options_type), string_contains_in_order('op1', 'op2'))
+
+            with context('when name provided'):
+                with it('string type include its name at its representation'):
+                    dynamic_options_type = basic_types.DynamicOptionsType(Stub().get_options, name='name')
+
+                    assert_that(str(dynamic_options_type), contains_string('name'))
 
 
     with context('String types'):

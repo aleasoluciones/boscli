@@ -52,27 +52,38 @@ class OrType(object):
 
 
 class OptionsType(BaseType):
-    def __init__(self, valid_options, name=None):
+    def __init__(self, valid_options=None, name=None):
         super(OptionsType, self).__init__()
         self.name = name
-        self.valid_options = valid_options
+        self.valid_options = valid_options or []
 
     def match(self, word, context, partial_line=None):
-        return word in self.valid_options
+        return word in self.get_valid_options()
 
     def partial_match(self, word, context, partial_line=None):
-        for op in self.valid_options:
+        for op in self.get_valid_options():
             if op.startswith(word):
                 return True
         return False
 
     def complete(self, token, tokens, context):
-        return [(option, True) for option in self.valid_options if option.startswith(token)]
+        return [(option, True) for option in self.get_valid_options() if option.startswith(token)]
+
+    def get_valid_options(self):
+        return self.valid_options
 
     def __str__(self):
         if not self.name is None:
             return '<%s>' % self.name
-        return '<%s>' % ('|'.join(self.valid_options))
+        return '<%s>' % ('|'.join(self.get_valid_options()))
+
+class DynamicOptionsType(OptionsType):
+    def __init__(self, valid_options_func, name=None):
+        self.name = name
+        self.valid_options_func = valid_options_func
+
+    def get_valid_options(self):
+        return self.valid_options_func()
 
 
 class StringType(BaseType):
