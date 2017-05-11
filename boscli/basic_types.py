@@ -92,10 +92,10 @@ class StringType(BaseType):
         super(StringType, self).__init__(name)
 
     def match(self, word, context, partial_line=None):
-        return True
+        return len(word) > 0
 
     def partial_match(self, word, context, partial_line=None):
-        return True
+        return len(word) > 0
 
 class BoolType(OptionsType):
 
