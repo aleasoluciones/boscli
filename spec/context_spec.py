@@ -28,7 +28,7 @@ with context('Interpreter context'):
             try:
                 self.interpreter.push_context('context1')
                 self.interpreter.eval('exit')
-            except exceptions.NotMatchingCommandFoundError:
+            except exceptions.NoMatchingCommandFoundError:
                 pass
             assert_that(self.main_commands.exit, never(called()))
 
@@ -44,7 +44,7 @@ with context('Interpreter context'):
             try:
                 self.interpreter.eval('cmd1')
                 self.interpreter.eval('cmd2')
-            except exceptions.NotMatchingCommandFoundError:
+            except exceptions.NoMatchingCommandFoundError:
                 pass
             assert_that(self.context_commands.cmd1, never(called()))
             assert_that(self.context_commands.cmd2, never(called()))

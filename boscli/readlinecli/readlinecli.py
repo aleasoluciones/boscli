@@ -95,8 +95,8 @@ class ReadlineCli(object):
                     val = self.interpreter.eval(line)
                     if val is not None:
                         six.print_(str(val))
-            except exceptions.NotMatchingCommandFoundError:
-                six.print_("Not matching command found")
+            except exceptions.NoMatchingCommandFoundError:
+                six.print_("No matching command found")
                 self._print_help(line)
             except exceptions.AmbiguousCommandError as exc:
                 six.print_("Ambigous command")
