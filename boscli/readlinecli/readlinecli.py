@@ -87,7 +87,7 @@ class ReadlineCli(object):
     def interact(self):
         while True:
             try:
-                line = input(self.interpreter.prompt + '>')
+                line = input(self.interpreter.prompt + ' > ')
                 if line.endswith('?'):
                     line = line[:-1]
                     self._print_help(line)
