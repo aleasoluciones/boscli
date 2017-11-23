@@ -79,7 +79,7 @@ with describe('Interpreter'):
             with it('raises exception'):
                 try:
                     self.interpreter.eval('unknown command')
-                except exceptions.NotMatchingCommandFoundError:
+                except exceptions.NoMatchingCommandFoundError:
                     pass
 
         with describe('when two command matchs'):
@@ -134,7 +134,7 @@ with describe('Interpreter'):
                     try:
                         self.interpreter.eval('cmd_with_ops invalid_op')
 
-                    except exceptions.NotMatchingCommandFoundError:
+                    except exceptions.NoMatchingCommandFoundError:
                         pass
 
         with context('regex parameter'):
@@ -154,7 +154,7 @@ with describe('Interpreter'):
 
                     try:
                         self.interpreter.eval('cmd_with_regex not_matching_parameter')
-                    except exceptions.NotMatchingCommandFoundError:
+                    except exceptions.NoMatchingCommandFoundError:
                         pass
 
     with context('command execution (using abbreviations for keywords'):
