@@ -61,7 +61,7 @@ def main():
     add_command(interpreter, ['iface', 'commit'],
                 interface_configurator.commit_iface_conf, context_name='iface_conf')
 
-    cli = readlinecli.ReadlineCli(interpreter, histfile='.history')
+    cli = readlinecli.ReadlineCli(interpreter, histfile='~/.history')
     cli.interact()
 
 if __name__ == '__main__':
