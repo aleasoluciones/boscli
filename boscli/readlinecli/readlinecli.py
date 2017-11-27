@@ -12,11 +12,12 @@ try:
 except NameError:
     pass
 
+
 class ReadlineCli(object):
 
-    def __init__(self, interpreter, debug=False):
+    def __init__(self, interpreter, debug=False, histfile="~/.history"):
         self.interpreter = interpreter
-        self.init_history()
+        self.init_history(histfile)
         self.init_readline()
         self.debug = debug
         self.completions = None
@@ -35,8 +36,9 @@ class ReadlineCli(object):
         else:
             readline.parse_and_bind("tab: complete")
 
-    def init_history(self):
-        histfile = os.path.expanduser("~/.aleacli_history")
+    def init_history(self, histfile):
+        histfile = os.path.expanduser(histfile)
+        histfile = os.path.expandvars(histfile)
         try:
             readline.read_history_file(histfile)
         except IOError:
@@ -72,7 +74,7 @@ class ReadlineCli(object):
         except IndexError:
             response = None
         return response
-        
+
     def _print_help(self, line):
         help_lines = []
         commands_help = self.interpreter.help(line.strip())
@@ -85,7 +87,7 @@ class ReadlineCli(object):
     def interact(self):
         while True:
             try:
-                line = input(self.interpreter.prompt + '>')
+                line = input(self.interpreter.prompt + ' > ')
                 if line.endswith('?'):
                     line = line[:-1]
                     self._print_help(line)
@@ -93,8 +95,8 @@ class ReadlineCli(object):
                     val = self.interpreter.eval(line)
                     if val is not None:
                         six.print_(str(val))
-            except exceptions.NotMatchingCommandFoundError:
-                six.print_("Not matching command found")
+            except exceptions.NoMatchingCommandFoundError:
+                six.print_("No matching command found")
                 self._print_help(line)
             except exceptions.AmbiguousCommandError as exc:
                 six.print_("Ambigous command")
@@ -107,6 +109,3 @@ class ReadlineCli(object):
                 six.print_("Unknown exception", exc, exc.__class__.__name__)
                 if self.debug:
                     traceback.print_exc()
-               
-
-

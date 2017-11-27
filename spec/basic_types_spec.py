@@ -186,13 +186,17 @@ with describe('Basic Types'):
         with it('string type has no autocompletion'):
             assert_that(self.string_type.complete('', [''], self.context), has_length(0))
 
+        with it('not match empty value'):
+            assert_that(self.string_type.match('', self.context), is_(False))
+
         with it('match always'):
-            assert_that(self.string_type.match('', self.context), is_(True))
             assert_that(self.string_type.match('whatever', self.context), is_(True))
             assert_that(self.string_type.match('1', self.context), is_(True))
 
+        with it('do not partial match empty value'):
+            assert_that(self.string_type.partial_match('', self.context), is_(False))
+
         with it('partial match always'):
-            assert_that(self.string_type.partial_match('', self.context), is_(True))
             assert_that(self.string_type.partial_match('whatever', self.context), is_(True))
             assert_that(self.string_type.partial_match('1', self.context), is_(True))
 

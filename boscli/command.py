@@ -26,7 +26,7 @@ class KeywordType(object):
 
 
 class Command(object):
-    def __init__(self, keywords, command_function=None, help=None, context_name=None, allways=False):
+    def __init__(self, keywords, command_function=None, help=None, context_name=None, always=False):
         self.definitions = []
         for definition in keywords:
             if isinstance(definition, six.string_types):
@@ -38,7 +38,7 @@ class Command(object):
         self.command_function = command_function
         self.help = help
         self.context_name = context_name
-        self.allways = allways
+        self.always = always
 
     def __lt__(self, other):
         # Dummy sort help function (to avoid problems sorting command
@@ -93,7 +93,7 @@ class Command(object):
         return True
 
     def context_match(self, context):
-        if self.allways is True:
+        if self.always is True:
             return True
         if self.context_name and not context:
             return False

@@ -93,7 +93,7 @@ class Interpreter(object):
 
         if len(matching_commands) > 0:
             raise exceptions.AmbiguousCommandError(matching_commands)
-        raise exceptions.NotMatchingCommandFoundError(line_text)
+        raise exceptions.NoMatchingCommandFoundError(line_text)
 
     def eval_multiple(self, lines):
         results = []

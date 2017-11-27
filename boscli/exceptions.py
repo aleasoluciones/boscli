@@ -5,7 +5,7 @@ class EvalError(Exception):
     pass
 
 
-class NotMatchingCommandFoundError(EvalError):
+class NoMatchingCommandFoundError(EvalError):
     pass
 
 
