@@ -17,3 +17,7 @@ script:
   - coverage report -m
 after_script:
   - coveralls --verbose
+
+notifications:
+  email:
+    - bifer@alea-soluciones.com
