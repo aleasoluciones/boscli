@@ -55,11 +55,8 @@ with context('Interpreter context'):
             assert_that(self.main_commands.exit, called().with_args(ANY_ARG))
 
         with describe('when pop context'):
-            with it('raise error because no context defined'):
+            with it('raise error when we already are at top/initial level'):
                 try:
-                    # pop the default context
-                    self.interpreter.pop_context()
-
                     self.interpreter.pop_context()
                     raise "Should raise exception"
                 except exceptions.NotContextDefinedError:
