@@ -1,11 +1,12 @@
-dist: xenial
+dist: bionic
 language: python
 
 python:
-  - 2.7
+  - 2.8
   - 3.5
   - 3.6
   - 3.7
+  - 3.8
   - pypy
 
 # safelist branch to build
