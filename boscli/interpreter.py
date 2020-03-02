@@ -58,10 +58,10 @@ class Interpreter(object):
         self.context.append(Context(context_name, prompt))
 
     def pop_context(self):
-        try:
-            self.context.pop()
-        except IndexError:
+        # We never let the default context be removed
+        if len(self.context) == 1:
             raise exceptions.NotContextDefinedError()
+        self.context.pop()
 
     def exit(self):
         raise exceptions.EndOfProgram()
