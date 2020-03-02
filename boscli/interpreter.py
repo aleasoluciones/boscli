@@ -13,6 +13,9 @@ class Context(object):
         self._prompt = prompt
         self.data = {}
 
+    def is_default(self):
+        return False
+
     def has_name(self, context_name):
         return self.context_name == context_name
 
@@ -23,7 +26,15 @@ class Context(object):
         return self.context_name
 
     def __str__(self):
-        return "Context%s" % self.context_name
+        return "Context:%s" % self.context_name
+
+
+class DefaultContext(Context):
+    def __init__(self, prompt=None):
+        super().__init__('Default', prompt=prompt)
+
+    def is_default(self):
+        return True
 
 
 class Interpreter(object):
@@ -35,7 +46,7 @@ class Interpreter(object):
                  prompt=''):
         self._commands = []
         self.parser = parser
-        self.context = []
+        self.context = [DefaultContext(prompt)]
         self._prompt = prompt
         self.filter_factory = filter_factory
         self.output_stream = output_stream

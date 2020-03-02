@@ -95,10 +95,13 @@ class Command(object):
     def context_match(self, context):
         if self.always is True:
             return True
-        if self.context_name and not context:
+
+        if self.context_name and context.is_default():
             return False
-        if context is None:
+
+        if not self.context_name and context.is_default():
             return True
+
         if context.has_name(self.context_name):
             return True
         return False

@@ -49,9 +49,17 @@ with context('Interpreter context'):
             assert_that(self.context_commands.cmd1, never(called()))
             assert_that(self.context_commands.cmd2, never(called()))
 
+        with it('execute commands in the defualt context'):
+            self.interpreter.eval('exit')
+
+            assert_that(self.main_commands.exit, called().with_args(ANY_ARG))
+
         with describe('when pop context'):
             with it('raise error because no context defined'):
                 try:
+                    # pop the default context
+                    self.interpreter.pop_context()
+
                     self.interpreter.pop_context()
                     raise "Should raise exception"
                 except exceptions.NotContextDefinedError:
