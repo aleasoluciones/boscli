@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from hamcrest import none, has_length, has_items, is_not
+from hamcrest import none, has_length, has_items, is_not, is_
 from doublex import Spy, assert_that, called, Stub, when, ANY_ARG
 
 import boscli
@@ -216,3 +216,29 @@ with describe('Interpreter'):
                 assert_that(self.cmds_implementation.cmd1,
                                         called().with_args('firstOp', 'secondOp', tokens=['cmd1', 'firstOp', 'secondOp'], interpreter=self.interpreter))
 
+    with context('prompt management'):
+        with describe('when we are at the initial context'):
+            with it('have a default prompt'):
+                assert_that(self.interpreter.prompt, is_('Default'))
+
+            with it('allow change the prompt'):
+                self.interpreter.prompt = 'prompt1'
+
+                assert_that(self.interpreter.prompt, is_('prompt1'))
+
+            with it('maintain the prompts of previous contexts'):
+                self.interpreter.prompt = 'default'
+
+                assert_that(self.interpreter.prompt, is_('default'))
+
+                self.interpreter.push_context('context1', "prompt_context1")
+                assert_that(self.interpreter.prompt, is_('prompt_context1'))
+
+                self.interpreter.push_context('context2', "prompt_context2")
+                assert_that(self.interpreter.prompt, is_('prompt_context2'))
+
+                self.interpreter.pop_context()
+                assert_that(self.interpreter.prompt, is_('prompt_context1'))
+
+                self.interpreter.pop_context()
+                assert_that(self.interpreter.prompt, is_('default'))
