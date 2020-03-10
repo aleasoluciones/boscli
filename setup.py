@@ -19,7 +19,7 @@ class MambaTest(TestCommand):
         mamba.cli.main()
 
 setup(name='boscli',
-      version='0.9.2',
+      version='0.9.3',
       author='Alea Soluciones SLL',
       author_email='eduardo.ferro.aldama@gmail.com',
       description ='Extensible command line processor for "ad hoc" shells creation',
