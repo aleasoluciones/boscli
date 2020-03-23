@@ -24,6 +24,6 @@ $ mamba
 
 Boscli is released under the `MIT license <http://en.wikipedia.org/wiki/MIT_License>`_.
 
-##Contribute
+## Contribute
 
 If you'd like to contribute, fork [repository](http://github.com/aleasoluciones/boscli), and send a pull request.
