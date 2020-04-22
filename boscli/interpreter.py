@@ -24,8 +24,9 @@ class Context(object):
 
 
 class DefaultContext(Context):
+
     def __init__(self, prompt=None):
-        super().__init__('Default', prompt=prompt)
+        super(DefaultContext, self).__init__('Default', prompt=prompt)
 
     def is_default(self):
         return True
