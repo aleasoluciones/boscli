@@ -1,17 +1,33 @@
 dist: bionic
 language: python
+
 python:
+  - 2.8
   - 3.5
   - 3.6
   - 3.7
+  - 3.8
+
+# safelist branch to build
+branches:
+  only:
+    - master
+
 install:
   - python setup.py sdist
   - pip install dist/`python setup.py --name`-`python setup.py --version`.tar.gz
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
+
 before_script: pip install .
+
 script:
   - coverage run --source boscli setup.py test
   - coverage report -m
+
 after_script:
   - coveralls --verbose
+
+notifications:
+  email:
+    - bifer@alea-soluciones.com
