@@ -1,4 +1,4 @@
-mamba
+mamba==0.10
 pyhamcrest
 doublex
 coverage
