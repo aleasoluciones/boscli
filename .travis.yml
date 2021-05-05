@@ -1,5 +1,7 @@
 dist: bionic
+
 language: python
+
 python:
   - 3.5
   - 3.6
@@ -16,9 +18,16 @@ install:
   - pip install dist/`python setup.py --name`-`python setup.py --version`.tar.gz
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
+
 before_script: pip install .
+
 script:
   - coverage run --source boscli setup.py test
   - coverage report -m
+
 after_script:
   - coveralls --verbose
+
+notifications:
+  email:
+    - bifer@alea-soluciones.com
