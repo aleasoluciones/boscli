@@ -4,6 +4,13 @@ python:
   - 3.5
   - 3.6
   - 3.7
+  - 3.8
+
+# safelist branch to build
+branches:
+  only:
+    - master
+
 install:
   - python setup.py sdist
   - pip install dist/`python setup.py --name`-`python setup.py --version`.tar.gz
