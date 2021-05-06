@@ -26,7 +26,7 @@ class KeywordType(object):
 
 
 class Command(object):
-    def __init__(self, keywords, command_function=None, help=None, context_name=None, always=False):
+    def __init__(self, keywords, command_function=None, help=None, context_name=None, always=False, cmd_id=None):
         self.definitions = []
         for definition in keywords:
             if isinstance(definition, six.string_types):
@@ -39,6 +39,7 @@ class Command(object):
         self.help = help
         self.context_name = context_name
         self.always = always
+        self.cmd_id = cmd_id
 
     def __lt__(self, other):
         # Dummy sort help function (to avoid problems sorting command
