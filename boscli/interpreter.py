@@ -107,7 +107,6 @@ class Interpreter(object):
 
     def parse(self, line_text):
         _, _, result = self._parse(line_text)
-
         return result.cmd_id if result else None
 
     def eval(self, line_text):
