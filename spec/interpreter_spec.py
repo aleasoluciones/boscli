@@ -269,8 +269,8 @@ with describe('Interpreter parse mode'):
     with it('raise an exception if there is no match'):
         try:
             self.interpreter.eval('unknown command')
-            assert False, "Should raise NoMatchingCommandFoundError"
+            assert False, "Should raise Exception"
         except exceptions.NoMatchingCommandFoundError:
             pass
         except Exception as ex:
-            assert False, f"Should raise NoMatchingCommandFoundError, but {type(ex)}"
+            assert False, f"Should raise NoMatchingCommandFoundError"
