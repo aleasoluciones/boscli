@@ -40,6 +40,3 @@ nosetests.xml
 
 # PyCharm
 .idea/*
-
-# vim
-tags
