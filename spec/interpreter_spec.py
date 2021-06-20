@@ -242,3 +242,35 @@ with describe('Interpreter'):
 
                 self.interpreter.pop_context()
                 assert_that(self.interpreter.prompt, is_('default'))
+
+with describe('Interpreter parse mode'):
+    with before.each:
+        self.interpreter = interpreter_module.Interpreter()
+        self.interpreter.add_command(Command(['cmd', 'key1'], Spy().irrelevant_func, cmd_id='id1'))
+        self.interpreter.add_command(Command(['cmd', 'key2'],  Spy().irrelevant_func, cmd_id='id2'))
+
+    with it('parse a line'):
+        result1 = self.interpreter.parse('cmd key1')
+        result2 = self.interpreter.parse('cmd key2')
+
+        assert_that(result1, is_('id1'))
+        assert_that(result2, is_('id2'))
+
+    with it('parse a line with spaces'):
+        result = self.interpreter.parse(' cmd key1 ')
+
+        assert_that(result, is_('id1'))
+
+    with it('return None for the empty line'):
+        result = self.interpreter.parse('')
+
+        assert_that(result, is_(None))
+
+    with it('raise an exception if there is no match'):
+        try:
+            self.interpreter.eval('unknown command')
+            assert False, "Should raise NoMatchingCommandFoundError"
+        except exceptions.NoMatchingCommandFoundError:
+            pass
+        except Exception as ex:
+            assert False, f"Should raise NoMatchingCommandFoundError, but {type(ex)}"
