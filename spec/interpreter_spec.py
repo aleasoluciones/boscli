@@ -273,4 +273,4 @@ with describe('Interpreter parse mode'):
         except exceptions.NoMatchingCommandFoundError:
             pass
         except Exception as ex:
-            assert False, f"Should raise NoMatchingCommandFoundError"
+            assert False, "Should raise NoMatchingCommandFoundError"
