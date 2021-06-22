@@ -105,14 +105,14 @@ class Interpreter(object):
             results.append(self.eval(line))
         return results
 
-    def eval(self, line_text):
-        line_text = line_text.strip()
-        if not line_text:
-            return
+    def parse(self, line_text):
+        _, _, result = self._parse(line_text)
+        return result.cmd_id if result else None
 
-        tokens, filter_tokens, _ = self._extract_command_and_filter(
-            self.parser.parse(line_text))
-        matching_command = self._matching_command(tokens, line_text)
+    def eval(self, line_text):
+        tokens, filter_tokens, matching_command = self._parse(line_text)
+        if not matching_command:
+            return
 
         if not filter_tokens:
             return self._execute_command(matching_command, matching_command.normalize_tokens(tokens, self.actual_context()))
@@ -121,6 +121,13 @@ class Interpreter(object):
         with filters.RedirectStdout(output_filter):
             return self._execute_command(matching_command, matching_command.normalize_tokens(tokens, self.actual_context()))
 
+    def _parse(self, line_text):
+        line_text = line_text.strip()
+        if not line_text:
+            return [], None, None
+
+        tokens, filter_tokens, _ = self._extract_command_and_filter(self.parser.parse(line_text))
+        return tokens, filter_tokens, self._matching_command(tokens, line_text)
 
     def _execute_command(self, command, tokens):
         arguments = command.matching_parameters(tokens)
