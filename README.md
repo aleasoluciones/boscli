@@ -1,6 +1,7 @@
 # Boscli
 [![Build status](https://travis-ci.com/aleasoluciones/boscli.svg?branch=master)](https://travis-ci.com/aleasoluciones/boscli)
 [![Coverage Status](https://img.shields.io/coveralls/aleasoluciones/boscli.svg)](https://coveralls.io/r/aleasoluciones/boscli?branch=master)
+![Python versions supported](https://img.shields.io/badge/supports%20python-3.7%20|%203.8%20|%203.9-blue.svg)
 
 **Boscli** is the base infrastructure to create *ad hoc* shells or command line interfaces using Python.
 It includes an engine for command completion, types verification, command help and other useful features. It can be used with readline to provide advanced line editing, history and autocompletion.
