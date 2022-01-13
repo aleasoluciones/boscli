@@ -1,4 +1,6 @@
-dist: bionic
+os: linux
+
+dist: focal
 
 language: python
 
@@ -7,24 +9,19 @@ python:
   - 3.8
   - 3.9
 
-# safelist branch to build
 branches:
   only:
     - master
 
 install:
-  - python setup.py sdist
-  - pip install dist/`python setup.py --name`-`python setup.py --version`.tar.gz
-  - pip install -r requirements.txt
-  - pip install -r requirements-dev.txt
-
-before_script: pip install .
+  - python -m pip install --no-cache-dir --upgrade pip wheel setuptools
+  - python -m pip install --no-cache-dir -r requirements.txt
+  - python -m pip install --no-cache-dir -r requirements-dev.txt
+  - python -m pip install -e .
 
 script:
   - coverage run --source boscli setup.py test
   - coverage report -m
-
-after_script:
   - coveralls --verbose
 
 notifications:
