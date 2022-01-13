@@ -1,5 +1,4 @@
 import os
-import six
 import traceback
 import readline
 import atexit
@@ -80,7 +79,7 @@ class ReadlineCli:
             help_lines.append(str(command_str) + ' ==> ' + (commands_help[command_str] or 'No help'))
 
         for help_line in sorted(help_lines):
-            six.print_(help_line)
+            print(help_line)
 
     def interact(self):
         while True:
@@ -92,18 +91,18 @@ class ReadlineCli:
                 else:
                     val = self.interpreter.eval(line)
                     if val is not None:
-                        six.print_(str(val))
+                        print(str(val))
             except exceptions.NoMatchingCommandFoundError:
-                six.print_("No matching command found")
+                print("No matching command found")
                 self._print_help(line)
             except exceptions.AmbiguousCommandError as exc:
-                six.print_("Ambigous command")
+                print("Ambigous command")
                 for command in exc.matching_commands:
-                    six.print_("\t", command)
+                    print("\t", command)
             except (exceptions.EndOfProgram, EOFError, KeyboardInterrupt):
-                six.print_("Exit")
+                print("Exit")
                 break
             except Exception as exc:
-                six.print_("Unknown exception", exc, exc.__class__.__name__)
+                print("Unknown exception", exc, exc.__class__.__name__)
                 if self.debug:
                     traceback.print_exc()

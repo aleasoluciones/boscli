@@ -4,14 +4,13 @@ from boscli import interpreter as interpreter_module
 from boscli import basic_types
 from boscli.command import Command
 from boscli.readlinecli import readlinecli
-import six
 
 
 class InterfaceConfigurator:
 
     def init_iface_conf(self, iface, interpreter, **kwargs):
         interpreter.push_context('iface_conf', prompt='conf %s' % iface)
-        six.print_("init_iface_conf")
+        print("init_iface_conf")
 
     def address(self, address, interpreter, **kwargs):
         interpreter.actual_context().data['address'] = address
@@ -26,9 +25,9 @@ class InterfaceConfigurator:
         interpreter.actual_context().data['gateway'] = gateway
 
     def commit_iface_conf(self, interpreter, **kwargs):
-        six.print_("commit_iface_conf", kwargs)
-        six.print_("Commit data")
-        six.print_(interpreter.actual_context().data)
+        print("commit_iface_conf", kwargs)
+        print("Commit data")
+        print(interpreter.actual_context().data)
         interpreter.pop_context()
 
 

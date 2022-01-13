@@ -15,7 +15,6 @@ branches:
 
 install:
   - python -m pip install --no-cache-dir --upgrade pip wheel setuptools
-  - python -m pip install --no-cache-dir -r requirements.txt
   - python -m pip install --no-cache-dir -r requirements-dev.txt
   - python -m pip install -e .
 

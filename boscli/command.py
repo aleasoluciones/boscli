@@ -1,4 +1,3 @@
-import six
 from boscli import basic_types
 
 
@@ -27,7 +26,7 @@ class Command:
     def __init__(self, keywords, command_function=None, help=None, context_name=None, always=False, cmd_id=None):
         self.definitions = []
         for definition in keywords:
-            if isinstance(definition, six.string_types):
+            if isinstance(definition, str):
                 self.definitions.append(KeywordType(definition))
             else:
                 self.definitions.append(definition)
@@ -125,7 +124,7 @@ class Command:
     def matching_parameters(self, tokens):
         parameters=[]
         for index, token in enumerate(tokens):
-            if not isinstance(self.keywords[index], six.string_types):
+            if not isinstance(self.keywords[index], str):
                 parameters.append(token)
         return parameters
 
@@ -173,4 +172,4 @@ class Command:
             return (self.keywords[len(tokens) -1], tokens[-1])
 
     def _is_keyword(self, definition):
-        return isinstance(definition, six.string_types)
+        return isinstance(definition, str)

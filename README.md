@@ -23,7 +23,7 @@ python -m pip install -e git+git://github.com/aleasoluciones/boscli.git#egg=bosc
 
 ## Specs
 
-To run the Boscli specs you should install the development requirements in your virtual environment and then run `mamba`.
+To run the Boscli specs you should create a virtual environment, install the development requirements and then run `mamba`.
 
 ```bash
 python -m pip install -r requirements-dev.txt
