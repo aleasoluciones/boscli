@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from hamcrest import assert_that
 from doublex import Spy, called, never
 

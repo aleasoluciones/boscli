@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from hamcrest import is_
 from doublex import assert_that
 

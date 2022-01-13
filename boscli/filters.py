@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
 import sys
 import re
 
-class ByLineBaseFilter(object):
+class ByLineBaseFilter:
     def __init__(self):
         self.output = ''
 
@@ -45,7 +43,7 @@ class ExcludeFilter(ByLineBaseFilter):
             self.stdout.write(line + '\n')
 
 
-class RedirectStdout(object):
+class RedirectStdout:
     ''' Create a context manager for redirecting sys.stdout
         to another file.
     '''
@@ -62,7 +60,7 @@ class RedirectStdout(object):
         sys.stdout = self.old_target
 
 
-class FilterFactory(object):
+class FilterFactory:
     def create_include_filter(self, reg_ex, output):
         return IncludeFilter(reg_ex, output)
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from doublex import Spy, assert_that, called, ANY_ARG, is_, when, never
 
 from boscli import exceptions, basic_types

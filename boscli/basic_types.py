@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
 import re
 
 
-class BaseType(object):
+class BaseType:
     def __init__(self, name=None):
         self.name = name
 
@@ -21,7 +19,7 @@ class BaseType(object):
             return '<%s>' % self.name
         return '<%s>' % self.__class__.__name__
 
-class OrType(object):
+class OrType:
     def __init__(self, *types, **kwargs):
         self.types = types
         self.name = kwargs.get('name', None)
@@ -67,7 +65,9 @@ class OptionsType(BaseType):
         return False
 
     def complete(self, token, tokens, context):
-        return [(option, True) for option in self.get_valid_options() if option.startswith(token)]
+        return [(option, True)
+                for option in self.get_valid_options()
+                if option.startswith(token)]
 
     def get_valid_options(self):
         return self.valid_options

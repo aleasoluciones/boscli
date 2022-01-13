@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 import six
 from boscli import basic_types
 
 
-class KeywordType(object):
+class KeywordType:
     def __init__(self, name=None):
         self.name = name
 
@@ -25,7 +23,7 @@ class KeywordType(object):
         return '%s' % self.name
 
 
-class Command(object):
+class Command:
     def __init__(self, keywords, command_function=None, help=None, context_name=None, always=False, cmd_id=None):
         self.definitions = []
         for definition in keywords:

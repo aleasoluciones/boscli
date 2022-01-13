@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 import sys
 from boscli import exceptions
 from boscli import parser as parser_module
 from boscli import filters
 
 
-class Context(object):
+class Context:
 
     def __init__(self, context_name, prompt=None):
         self.context_name = context_name
@@ -31,7 +29,7 @@ class DefaultContext(Context):
         return True
 
 
-class Interpreter(object):
+class Interpreter:
 
     def __init__(self,
                  parser=parser_module.Parser(),

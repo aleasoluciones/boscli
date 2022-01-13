@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import six
 import traceback
@@ -13,7 +11,7 @@ except NameError:
     pass
 
 
-class ReadlineCli(object):
+class ReadlineCli:
 
     def __init__(self, interpreter, debug=False, histfile="~/.history"):
         self.interpreter = interpreter

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from doublex import Spy
 from hamcrest import assert_that, has_entries, has_entry, contains_string, is_not
 

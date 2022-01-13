@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from hamcrest import assert_that, has_items, has_length, contains
 from doublex import Stub
 

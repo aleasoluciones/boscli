@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from doublex import Spy, Stub, assert_that, called
 
 from boscli import exceptions
@@ -12,9 +10,8 @@ with describe('Interpreter filters'):
     with before.each:
         self.filter_factory = Spy()
         self.output_stream = Stub()
-        self.interpreter = interpreter_module.Interpreter(
-                                                        filter_factory=self.filter_factory,
-                                                        output_stream=self.output_stream)
+        self.interpreter = interpreter_module.Interpreter(filter_factory=self.filter_factory,
+                                                          output_stream=self.output_stream)
         self.cmds_implementation = Spy()
         self._add_command(['cmd', 'key'], self.cmds_implementation.cmd)
 

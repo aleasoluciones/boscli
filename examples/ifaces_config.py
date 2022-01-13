@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import boscli
 
 from boscli import interpreter as interpreter_module
@@ -9,7 +7,7 @@ from boscli.readlinecli import readlinecli
 import six
 
 
-class InterfaceConfigurator(object):
+class InterfaceConfigurator:
 
     def init_iface_conf(self, iface, interpreter, **kwargs):
         interpreter.push_context('iface_conf', prompt='conf %s' % iface)
