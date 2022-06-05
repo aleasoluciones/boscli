@@ -10,16 +10,16 @@ with describe('Interpreter'):
     with before.each:
         self.interpreter = interpreter_module.Interpreter()
         self.cmds_implementation = Spy()
-        self._add_command(['cmd', 'key'], self.cmds_implementation.cmd)
+        self._add_command(['cmd', 'key'], self.cmds_implementation.cmd, cmd_id='id1')
         self._add_command(['cmd_with_parameters', basic_types.StringType(), basic_types.StringType()],
-                                self.cmds_implementation.cmd_with_parameters)
+                                self.cmds_implementation.cmd_with_parameters, cmd_id='id2')
         self._add_command(['cmd_with_ops', basic_types.OptionsType(['op1', 'op2'])],
-                                self.cmds_implementation.cmd_with_ops)
+                                self.cmds_implementation.cmd_with_ops, cmd_id='id3')
         self._add_command(['cmd_with_regex', basic_types.RegexType('^start.*')],
-                                self.cmds_implementation.cmd_with_regex)
+                                self.cmds_implementation.cmd_with_regex, cmd_id='id4')
 
-    def _add_command(self, tokens, func):
-        self.interpreter.add_command(Command(tokens, func))
+    def _add_command(self, tokens, func, cmd_id=None):
+        self.interpreter.add_command(Command(tokens, func, cmd_id=cmd_id))
 
     with context('command execution'):
         with describe('when evaluating multiple lines'):
@@ -29,12 +29,14 @@ with describe('Interpreter'):
 
                 assert_that(self.cmds_implementation.cmd,
                             called().with_args(tokens=['cmd', 'key'],
-                                               interpreter=self.interpreter))
+                                               interpreter=self.interpreter,
+                                               cmd_id='id1'))
                 assert_that(self.cmds_implementation.cmd_with_parameters,
                             called().with_args('s1',
                                                's2',
                                                tokens=['cmd_with_parameters', 's1', 's2'],
-                                               interpreter=self.interpreter))
+                                               interpreter=self.interpreter,
+                                               cmd_id='id2'))
 
             with it('returns the result for each line'):
                 when(self.cmds_implementation).cmd(ANY_ARG).returns('a_result')
@@ -55,7 +57,8 @@ with describe('Interpreter'):
 
                 assert_that(self.cmds_implementation.cmd,
                             called().with_args(tokens=['cmd', 'key'],
-                                               interpreter=self.interpreter))
+                                               interpreter=self.interpreter,
+                                               cmd_id='id1'))
 
         with describe('ctrl+c when running a command'):
             with it('stops the command'):
@@ -77,7 +80,8 @@ with describe('Interpreter'):
 
                 assert_that(self.cmds_implementation.cmd,
                             called().with_args(tokens=['cmd', 'key'],
-                                               interpreter=self.interpreter))
+                                               interpreter=self.interpreter,
+                                               cmd_id='id1'))
 
         with describe('when a line does not match any command'):
             with it('raises exception'):
@@ -112,7 +116,8 @@ with describe('Interpreter'):
                                 called().with_args('param1',
                                                    'param2',
                                                    tokens=['cmd_with_parameters', 'param1', 'param2'],
-                                                   interpreter=self.interpreter))
+                                                   interpreter=self.interpreter,
+                                                   cmd_id='id2'))
 
             with describe('when string parameters use quotes'):
                 with it('can contains spaces inside'):
@@ -122,7 +127,8 @@ with describe('Interpreter'):
                                 called().with_args('param1',
                                                    'param with spaces',
                                                    tokens=['cmd_with_parameters', 'param1', "param with spaces"],
-                                                   interpreter=self.interpreter))
+                                                   interpreter=self.interpreter,
+                                                   cmd_id='id2'))
 
         with context('options parameters'):
             with describe('when a valid option is given'):
@@ -132,7 +138,8 @@ with describe('Interpreter'):
                     assert_that(self.cmds_implementation.cmd_with_ops,
                                 called().with_args('op1',
                                                    tokens=['cmd_with_ops', 'op1'],
-                                                   interpreter=self.interpreter))
+                                                   interpreter=self.interpreter,
+                                                   cmd_id='id3'))
 
             with describe('when a invalid option is given'):
                 with it('not excute the command'):
@@ -151,7 +158,8 @@ with describe('Interpreter'):
                     assert_that(self.cmds_implementation.cmd_with_regex,
                                 called().with_args('start_whatever',
                                                    tokens=['cmd_with_regex', 'start_whatever'],
-                                                   interpreter=self.interpreter))
+                                                   interpreter=self.interpreter,
+                                                   cmd_id='id4'))
 
             with describe('when parameter does not match with defined regex'):
                 with it('not execute any command'):
@@ -168,7 +176,8 @@ with describe('Interpreter'):
 
                 assert_that(self.cmds_implementation.cmd,
                             called().with_args(tokens=['cmd', 'key'],
-                                               interpreter=self.interpreter))
+                                               interpreter=self.interpreter,
+                                               cmd_id='id1'))
 
         with describe('when only a keyword is abbreviated'):
             with it('executes command'):
@@ -176,7 +185,8 @@ with describe('Interpreter'):
 
                 assert_that(self.cmds_implementation.cmd,
                             called().with_args(tokens=['cmd', 'key'],
-                                               interpreter=self.interpreter))
+                                               interpreter=self.interpreter,
+                                               cmd_id='id1'))
 
         with describe('when two command matchs (the abbreviated keyword)'):
             with it('raises ambiguous command exception'):

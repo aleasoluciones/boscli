@@ -130,7 +130,11 @@ class Interpreter:
     def _execute_command(self, command, tokens):
         arguments = command.matching_parameters(tokens)
         try:
-            return command.execute(*arguments, tokens=tokens, interpreter=self)
+            cmd_id = command.cmd_id
+            if cmd_id is None:
+                return command.execute(*arguments, tokens=tokens, interpreter=self)
+            else:
+                return command.execute(*arguments, tokens=tokens, interpreter=self, cmd_id=cmd_id)
         except KeyboardInterrupt:
             pass
 
