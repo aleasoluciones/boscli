@@ -33,10 +33,6 @@ jobs:
       - name: Coverage report
         run: coverage report -m
 
-
-      - name: coveralls --verbose
-        run: coveralls --verbose
-
       - name: use coveralls
         uses: coverallsapp/github-action@v2
         with:
