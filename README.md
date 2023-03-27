@@ -1,7 +1,7 @@
 # Boscli
 
 [![Build status](https://travis-ci.com/aleasoluciones/boscli.svg?branch=master)](https://travis-ci.com/aleasoluciones/boscli)
-[![Coverage Status](https://img.shields.io/coveralls/aleasoluciones/boscli.svg)](https://coveralls.io/r/aleasoluciones/boscli?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/aleasoluciones/boscli/badge.svg)](https://coveralls.io/github/aleasoluciones/boscli)
 ![Python versions supported](https://img.shields.io/badge/supports%20python-3.7%20|%203.8%20|%203.9-blue.svg)
 [![License](https://img.shields.io/github/license/aleasoluciones/boscli)](https://github.com/aleasoluciones/boscli/blob/master/LICENSE)
 
