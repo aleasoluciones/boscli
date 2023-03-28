@@ -43,3 +43,6 @@ nosetests.xml
 
 # vim
 tags
+
+# pyenv
+.python-version
