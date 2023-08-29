@@ -159,6 +159,9 @@ class Interpreter:
     def help(self, line_text):
         return {command: command.help for command in self._partial_match(line_text)}
 
+    def all_commands_help(self):
+        return {command: command.help for command in self._commands}
+
     def complete(self, line_to_complete):
         completions = set()
         tokens, filter_tokens, sep_found = self._extract_command_and_filter(

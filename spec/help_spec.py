@@ -62,3 +62,13 @@ with describe('Help'):
                 self.cmd2, contains_string('help_normal')))
             assert_that(result, is_not(has_entries(self.cmd_no_help, None)))
             assert_that(result, is_not(has_entries(self.cmd_context, contains_string('help_cmd_context'))))
+
+    with context('when asking for help for all commands'):
+        with it('returns help for all commands even if them require a context'):
+            result = self.interpreter.all_commands_help()
+
+            assert_that(result, has_entries(
+                    self.cmd1, contains_string('help_cmd1'),
+                    self.cmd2, contains_string('help_normal'),
+                    self.cmd_no_help, None,
+                    self.cmd_context, contains_string('help_cmd_context')))
