@@ -172,8 +172,7 @@ class Interpreter:
             return {' '}
 
         for command in self._partial_match(line_to_complete):
-            if command not in self._select_perfect_matching_commands(tokens):
-                completions.update(command.complete(tokens, self.actual_context()))
+            completions.update(command.complete(tokens, self.actual_context()))
         return completions
 
     @property
