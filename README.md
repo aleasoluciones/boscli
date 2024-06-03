@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/aleasoluciones/boscli/actions/workflows/ci.yml/badge.svg)](https://github.com/aleasoluciones/boscli/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/aleasoluciones/boscli/badge.svg)](https://coveralls.io/github/aleasoluciones/boscli)
-![Python versions supported](https://img.shields.io/badge/supports%20python-3.9%20|%203.10%20|%203.11-blue.svg)
+![Python versions supported](https://img.shields.io/badge/supports%20python-3.9%20|%203.10%20|%203.11%20|%203.12-blue.svg)
 [![License](https://img.shields.io/github/license/aleasoluciones/boscli)](https://github.com/aleasoluciones/boscli/blob/master/LICENSE)
 
 **Boscli** is the base infrastructure to create *ad hoc* shells or command line interfaces using Python.
