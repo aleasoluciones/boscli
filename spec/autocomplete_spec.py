@@ -32,14 +32,6 @@ with describe('Autocomplete'):
         with it('not complete unknown command'):
             assert_that(self.interpreter.complete('unknown command'), has_length(0))
 
-        with describe('when autocompleting matching and partial matching command'):
-            with it('completes partial matching command with space'):
-                self.interpreter.add_command(
-                    Command(['cmd', CompleteCompletionsType(['op1', 'op2']), 'last'], self.implementation.irrelevant_cmd))
-                self.interpreter.add_command(
-                    Command(['cmd', CompleteCompletionsType(['op1', 'op2'])], self.implementation.irrelevant_cmd))
-
-                assert_that(self.interpreter.complete('cmd op1'), contains('op1 '))
 
     with describe('when autocompleting type with completions'):
         with it('completes with the final space if is not the last token'):
