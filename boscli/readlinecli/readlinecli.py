@@ -1,4 +1,5 @@
 import os
+import time
 import traceback
 import readline
 import atexit
@@ -18,6 +19,7 @@ class ReadlineCli:
         self.init_readline()
         self.debug = debug
         self.completions = None
+        self.histfile = histfile
 
     def init_readline(self):
         self._default_parse_and_bind()
@@ -81,6 +83,14 @@ class ReadlineCli:
         for help_line in sorted(help_lines):
             print(help_line)
 
+    def _save_command_with_timestamp(self, command):
+        if not command:
+            return
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        filename = os.path.expanduser(self.histfile + ".audit")
+        with open(filename, "a") as file:
+            file.write(f"{timestamp} - {command}\n")
+
     def interact(self):
         while True:
             try:
@@ -90,6 +100,7 @@ class ReadlineCli:
                     self._print_help(line)
                 else:
                     val = self.interpreter.eval(line)
+                    self._save_command_with_timestamp(line)
                     if val is not None:
                         print(str(val))
             except exceptions.NoMatchingCommandFoundError:
