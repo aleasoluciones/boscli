@@ -28,7 +28,7 @@ jobs:
           python -m pip install -e .
 
       - name: coverage run
-        run: coverage run --source boscli setup.py test
+        run: mamba --enable-coverage .
 
       - name: Coverage report
         run: coverage report -m
