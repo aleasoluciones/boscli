@@ -89,7 +89,7 @@ class ReadlineCli:
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
         filename = os.path.expanduser(self.histfile + ".audit")
         with open(filename, "a") as file:
-            file.write(f"{timestamp} - {command}\n")
+            file.write("{} - {}\n".format(timestamp, command))
 
     def interact(self):
         while True:
