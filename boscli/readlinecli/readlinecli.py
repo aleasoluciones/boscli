@@ -107,7 +107,7 @@ class ReadlineCli:
                 print("No matching command found")
                 self._print_help(line)
             except exceptions.AmbiguousCommandError as exc:
-                print("Ambigous command")
+                print("Ambiguous command")
                 for command in exc.matching_commands:
                     print("\t", command)
             except (exceptions.EndOfProgram, EOFError, KeyboardInterrupt):
