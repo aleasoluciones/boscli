@@ -257,6 +257,23 @@ with describe('Basic Types'):
             assert_that(self.regex_type.partial_match('op3', self.context), is_(True))
             assert_that(self.regex_type.partial_match('op4', self.context), is_(False))
 
+        with it('propagates context and partial_line to match'):
+            class TestRegexType(basic_types.RegexType):
+                def __init__(self):
+                    super(TestRegexType, self).__init__('op[1-3]')
+                    self.recorded = None
+
+                def match(self, word, context, partial_line=None):
+                    self.recorded = (word, context, partial_line)
+                    return True
+
+            regex_type = TestRegexType()
+
+            result = regex_type.partial_match('op1', self.context, partial_line=['op'])
+
+            assert_that(result, is_(True))
+            assert_that(regex_type.recorded, is_(('op1', self.context, ['op'])))
+
         with context('Representation'):
             with it('has a default representation'):
                 assert_that(str(basic_types.RegexType('regEx')), contains_string('RegexType'))

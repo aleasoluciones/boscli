@@ -134,4 +134,4 @@ class RegexType(BaseType):
         return not self.regex.match(word) is None
 
     def partial_match(self, word, context, partial_line=None):
-        return self.match(word, partial_line)
+        return self.match(word, context, partial_line)
