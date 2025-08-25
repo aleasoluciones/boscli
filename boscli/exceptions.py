@@ -12,7 +12,7 @@ class AmbiguousCommandError(EvalError):
         super(AmbiguousCommandError, self).__init__(matching_commands)
 
 
-class SintaxError(EvalError):
+class SyntaxError(EvalError):
     pass
 
 

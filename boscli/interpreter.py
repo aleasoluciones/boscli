@@ -65,7 +65,7 @@ class Interpreter:
         for token in tokens:
             if token == FILTER_SEP:
                 if sep_found:
-                    raise exceptions.SintaxError()
+                    raise exceptions.SyntaxError()
                 sep_found = True
                 continue
             if sep_found:
@@ -80,9 +80,9 @@ class Interpreter:
                 return self.filter_factory.create_include_filter(filter_tokens[1], self.output_stream)
             if 'exclude'.startswith(filter_tokens[0]):
                 return self.filter_factory.create_exclude_filter(filter_tokens[1], self.output_stream)
-            raise exceptions.SintaxError()
+            raise exceptions.SyntaxError()
         except IndexError:
-            raise exceptions.SintaxError()
+            raise exceptions.SyntaxError()
 
     def _matching_command(self, tokens, line_text):
         perfect_matching_commands = self._select_perfect_matching_commands(tokens)
