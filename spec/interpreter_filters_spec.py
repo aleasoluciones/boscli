@@ -23,19 +23,19 @@ with describe('Interpreter filters'):
         with it('raise sintax error when two filters'):
             try:
                 self.interpreter.eval('cmd key | include regexp | exclude regexp')
-            except exceptions.SintaxError:
+            except exceptions.SyntaxError:
                 pass
 
         with it('raise sintax error when incomplete filter'):
             try:
                 self.interpreter.eval('cmd key | include')
-            except exceptions.SintaxError:
+            except exceptions.SyntaxError:
                 pass
 
         with it('raise sintax error when unknown filter'):
             try:
                 self.interpreter.eval('cmd key | unknown_filter regexp')
-            except exceptions.SintaxError:
+            except exceptions.SyntaxError:
                 pass
 
     with context('command execution'):
