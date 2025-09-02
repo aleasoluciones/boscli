@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "boscli"
+version = "0.9.3"
+description = "Extensible command line processor for \"ad hoc\" shells creation"
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Eduardo Ferro Aldama", email = "eduardo.ferro.aldama@gmail.com"}
+]
+maintainers = [
+    {name = "Eduardo Ferro Aldama", email = "eduardo.ferro.aldama@gmail.com"}
+]
+keywords = ["cli", "command-line", "shell", "parser", "completion"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Shells",
+    "Topic :: Software Development :: User Interfaces",
+]
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/aleasoluciones/boscli"
+Repository = "https://github.com/aleasoluciones/boscli"
+Issues = "https://github.com/aleasoluciones/boscli/issues"
+Changelog = "https://github.com/aleasoluciones/boscli/blob/master/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = [
+    "mamba",
+]
+
+[tool.setuptools]
+packages = ["boscli", "boscli.readlinecli"]
+
+[tool.setuptools.package-dir]
+"" = "."
+
+[tool.setuptools.exclude-package-data]
+"*" = ["spec/*", "examples/*", "tests/*"]
