@@ -5,11 +5,6 @@ import readline
 import atexit
 from boscli import exceptions
 
-try:
-    input = raw_input
-except NameError:
-    pass
-
 
 class ReadlineCli:
 
@@ -40,7 +35,7 @@ class ReadlineCli:
         histfile = os.path.expandvars(histfile)
         try:
             readline.read_history_file(histfile)
-        except IOError:
+        except OSError:
             pass
         atexit.register(self._save_history, histfile)
 

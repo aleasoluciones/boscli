@@ -91,7 +91,7 @@ class Command:
         return True
 
     def context_match(self, context):
-        if self.always is True:
+        if self.always:
             return True
 
         if self.context_name and context.is_default():
@@ -122,7 +122,7 @@ class Command:
         return True
 
     def matching_parameters(self, tokens):
-        parameters=[]
+        parameters = []
         for index, token in enumerate(tokens):
             if not isinstance(self.keywords[index], str):
                 parameters.append(token)
@@ -166,7 +166,7 @@ class Command:
         return len(tokens) == len(self.keywords)
 
     def _select_token_to_complete(self, tokens):
-        if not len(tokens):
+        if not tokens:
             return (self.keywords[0], '')
         else:
             return (self.keywords[len(tokens) -1], tokens[-1])
