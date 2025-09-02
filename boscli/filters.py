@@ -25,7 +25,7 @@ class IncludeFilter(ByLineBaseFilter):
     def __init__(self, regex, stdout):
         self.regex = re.compile(regex)
         self.stdout = stdout
-        super(IncludeFilter, self).__init__()
+        super().__init__()
 
     def process_line(self, line):
         if self.regex.search(line):
@@ -36,7 +36,7 @@ class ExcludeFilter(ByLineBaseFilter):
     def __init__(self, regex, stdout):
         self.regex = re.compile(regex)
         self.stdout = stdout
-        super(ExcludeFilter, self).__init__()
+        super().__init__()
 
     def process_line(self, line):
         if not self.regex.search(line):

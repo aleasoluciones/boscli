@@ -51,7 +51,7 @@ class OrType:
 
 class OptionsType(BaseType):
     def __init__(self, valid_options=None, name=None):
-        super(OptionsType, self).__init__()
+        super().__init__()
         self.name = name
         self.valid_options = valid_options or []
 
@@ -73,7 +73,7 @@ class OptionsType(BaseType):
         return self.valid_options
 
     def __str__(self):
-        if not self.name is None:
+        if self.name is not None:
             return '<%s>' % self.name
         return '<%s>' % ('|'.join(self.get_valid_options()))
 
@@ -89,7 +89,7 @@ class DynamicOptionsType(OptionsType):
 class StringType(BaseType):
 
     def __init__(self, name=None):
-        super(StringType, self).__init__(name)
+        super().__init__(name)
 
     def match(self, word, context, partial_line=None):
         return len(word) > 0
@@ -100,13 +100,13 @@ class StringType(BaseType):
 class BoolType(OptionsType):
 
     def __init__(self, name=None):
-        super(BoolType, self).__init__(['true', 'false'], name)
+        super().__init__(['true', 'false'], name)
 
 
 class IntegerType(BaseType):
 
     def __init__(self, min=None, max=None, name=None):
-        super(IntegerType, self).__init__(name)
+        super().__init__(name)
         self.min = min
         self.max = max
 
@@ -127,11 +127,11 @@ class IntegerType(BaseType):
 
 class RegexType(BaseType):
     def __init__(self, regex, name=None):
-        super(RegexType, self).__init__(name)
+        super().__init__(name)
         self.regex = re.compile(regex)
 
     def match(self, word, context, partial_line=None):
-        return not self.regex.match(word) is None
+        return self.regex.match(word) is not None
 
     def partial_match(self, word, context, partial_line=None):
         return self.match(word, context, partial_line)

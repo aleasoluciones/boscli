@@ -260,7 +260,7 @@ with describe('Basic Types'):
         with it('propagates context and partial_line to match'):
             class TestRegexType(basic_types.RegexType):
                 def __init__(self):
-                    super(TestRegexType, self).__init__('op[1-3]')
+                    super().__init__('op[1-3]')
                     self.recorded = None
 
                 def match(self, word, context, partial_line=None):
