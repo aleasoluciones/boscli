@@ -7,7 +7,7 @@ name = "boscli"
 version = "0.9.3"
 description = "Extensible command line processor for \"ad hoc\" shells creation"
 readme = "README.md"
-license = "MIT"
+license = { text = "MIT" }
 authors = [
     {name = "Eduardo Ferro Aldama", email = "eduardo.ferro.aldama@gmail.com"}
 ]
