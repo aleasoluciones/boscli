@@ -4,17 +4,19 @@ import traceback
 import readline
 import atexit
 from boscli import exceptions
+from boscli.idle_watchdog import IdleWatchdog
 
 
 class ReadlineCli:
 
-    def __init__(self, interpreter, debug=False, histfile="~/.history"):
+    def __init__(self, interpreter, debug=False, histfile="~/.history", idle_timeout=None):
         self.interpreter = interpreter
         self.init_history(histfile)
         self.init_readline()
         self.debug = debug
         self.completions = None
         self.histfile = histfile
+        self._idle_timeout = idle_timeout
 
     def init_readline(self):
         self._default_parse_and_bind()
@@ -87,9 +89,16 @@ class ReadlineCli:
             file.write("{} - {}\n".format(timestamp, command))
 
     def interact(self):
+        watchdog = None
+        if self._idle_timeout:
+            watchdog = IdleWatchdog(self._idle_timeout)
+            watchdog.start()
+
         while True:
             try:
                 line = input(self.interpreter.prompt + ' > ')
+                if watchdog:
+                    watchdog.touch()
                 if line.endswith('?'):
                     line = line[:-1]
                     self._print_help(line)
@@ -112,3 +121,6 @@ class ReadlineCli:
                 print("Unknown exception", exc, exc.__class__.__name__)
                 if self.debug:
                     traceback.print_exc()
+
+        if watchdog:
+            watchdog.stop()
