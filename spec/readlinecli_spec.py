@@ -51,6 +51,38 @@ with describe('ReadlineCli'):
 
                     assert mock_instance.touch.call_count == 2
 
+            with it('pauses the watchdog while the command runs and resumes it afterwards'):
+                interpreter = MagicMock()
+                interpreter.prompt = 'test'
+                cli = readlinecli.ReadlineCli(interpreter, histfile='/tmp/.test_hist', idle_timeout=300)
+
+                with patch('boscli.readlinecli.readlinecli.IdleWatchdog') as MockWatchdog, \
+                     patch('builtins.input', side_effect=['some_command', EOFError]):
+                    mock_instance = MagicMock()
+                    MockWatchdog.return_value = mock_instance
+                    interpreter.eval.side_effect = lambda line: mock_instance.pause.assert_called_once()
+
+                    cli.interact()
+
+                    assert mock_instance.pause.call_count == 1
+                    assert mock_instance.resume.call_count == 2
+
+        with context('when a command raises'):
+            with it('resumes the watchdog anyway'):
+                interpreter = MagicMock()
+                interpreter.prompt = 'test'
+                interpreter.eval.side_effect = RuntimeError('boom')
+                cli = readlinecli.ReadlineCli(interpreter, histfile='/tmp/.test_hist', idle_timeout=300)
+
+                with patch('boscli.readlinecli.readlinecli.IdleWatchdog') as MockWatchdog, \
+                     patch('builtins.input', side_effect=['fail_cmd', EOFError]):
+                    mock_instance = MagicMock()
+                    MockWatchdog.return_value = mock_instance
+
+                    cli.interact()
+
+                    assert mock_instance.resume.call_count == 2
+
     with context('interact loop'):
 
         with context('when line ends with ?'):

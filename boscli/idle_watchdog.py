@@ -8,6 +8,7 @@ class IdleWatchdog:
     def __init__(self, timeout_seconds):
         self._timeout = timeout_seconds
         self._last_activity = time.monotonic()
+        self._paused = False
         self._stop_event = threading.Event()
         self._thread = threading.Thread(target=self._watch, daemon=True)
 
@@ -17,6 +18,13 @@ class IdleWatchdog:
     def touch(self):
         self._last_activity = time.monotonic()
 
+    def pause(self):
+        self._paused = True
+
+    def resume(self):
+        self._paused = False
+        self.touch()
+
     def stop(self):
         self._stop_event.set()
 
@@ -24,7 +32,7 @@ class IdleWatchdog:
         check_interval = min(60, self._timeout)
         while not self._stop_event.is_set():
             idle = time.monotonic() - self._last_activity
-            if idle >= self._timeout:
+            if not self._paused and idle >= self._timeout:
                 print(f"\nSession timed out after {self._timeout}s of inactivity. Exiting.", flush=True)
                 os._exit(0)
             self._stop_event.wait(check_interval)

@@ -99,6 +99,7 @@ class ReadlineCli:
                 line = input(self.interpreter.prompt + ' > ')
                 if watchdog:
                     watchdog.touch()
+                    watchdog.pause()
                 if line.endswith('?'):
                     line = line[:-1]
                     self._print_help(line)
@@ -121,6 +122,9 @@ class ReadlineCli:
                 print("Unknown exception", exc, exc.__class__.__name__)
                 if self.debug:
                     traceback.print_exc()
+            finally:
+                if watchdog:
+                    watchdog.resume()
 
         if watchdog:
             watchdog.stop()

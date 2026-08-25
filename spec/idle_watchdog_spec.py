@@ -44,3 +44,27 @@ with describe('IdleWatchdog'):
                 time.sleep(2)
 
                 assert_that(mock_exit.call_count, is_(0))
+
+    with context('when paused while a command runs'):
+        with it('does not exit even if the timeout elapses'):
+            with patch('boscli.idle_watchdog.os._exit') as mock_exit:
+                watchdog = IdleWatchdog(timeout_seconds=1)
+                watchdog.start()
+                watchdog.pause()
+                time.sleep(2)
+                watchdog.stop()
+
+                assert_that(mock_exit.call_count, is_(0))
+
+    with context('when resumed after a long command'):
+        with it('restarts the idle timer'):
+            with patch('boscli.idle_watchdog.os._exit') as mock_exit:
+                watchdog = IdleWatchdog(timeout_seconds=2)
+                watchdog.start()
+                watchdog.pause()
+                time.sleep(3)
+                watchdog.resume()
+                time.sleep(1)
+                watchdog.stop()
+
+                assert_that(mock_exit.call_count, is_(0))
